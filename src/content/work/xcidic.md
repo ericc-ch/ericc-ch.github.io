@@ -1,8 +1,8 @@
 ---
-company: "Skilledd"
+company: "Xcidic"
 role: "Front End Web Developer"
-dateStart: "1 August 2021"
-dateEnd: "1 February 2022"
+dateStart: "1 February 2022"
+dateEnd: "Present"
 ---
 
-Voluptatem est quaerat voluptas praesentium ipsa dolorem dignissimos nulla ratione distinctio quae maiores eligendi nostrum? Quibusdam, debitis voluptatum, lorem ipsum dolor. Sit amet consectetur adipisicing elit. Iure illo neque tempora.
+I worked here for a while, so I'm going to list some things that I think worth mentioning:

@@ -67,6 +67,12 @@ const { title, description, image = "/og-image.png" } = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+<!-- Google Search Console Verification -->
+<meta
+  name="google-site-verification"
+  content="VY9VZSH-HIOM0lBqS8SPvWX6DIYjjnAbwCZ_-UGwrgc"
+/>
+
 <ViewTransitions />
 
 <script>

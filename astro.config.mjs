@@ -4,6 +4,6 @@ import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "ericc-ch.github.io",
+  site: "https://ericc-ch.github.io",
   integrations: [mdx(), sitemap(), tailwind()],
 });

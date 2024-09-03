@@ -1,6 +1,6 @@
 ---
 company: "CodePolitan"
-role: "Web Developer"
+role: "Fullstack Engineer"
 dateStart: "1 October 2020"
 dateEnd: "1 December 2020"
 ---

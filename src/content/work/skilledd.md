@@ -1,6 +1,6 @@
 ---
 company: "Skilledd"
-role: "Front End Web Developer"
+role: "Frontend Engineer"
 dateStart: "1 August 2021"
 dateEnd: "1 February 2022"
 ---

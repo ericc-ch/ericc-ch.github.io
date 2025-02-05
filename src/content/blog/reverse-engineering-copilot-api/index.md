@@ -9,7 +9,7 @@ draft: false
 
 TL;DR:
 
-> I built `npx copilot-api` to use GitHub Copilot as OpenAI compatible provider
+> I built `npx copilot-api` ([GitHub repo](https://github.com/ericc-ch/copilot-api)) to use GitHub Copilot as OpenAI compatible provider
 
 So there I was, messing around with GitHub Copilot on the web. I am familiar with web development so I got kinda curious how the API is structured. If only I can expose an OpenAI compatible chat completion endpoint...
 
@@ -145,4 +145,6 @@ Remember: don't be discouraged when you discover others have already built what 
 
 _obligatory disclaimer: This is all for educational purposes only. Please don't sue me, GitHub!_
 
-> Update: You can now try it yourself using `npx`!. Just run `npx copilot-api` and actually use it for something.
+---
+
+**Update**: You can now try it yourself using `npx`! Just run `npx copilot-api` and actually use it for something.

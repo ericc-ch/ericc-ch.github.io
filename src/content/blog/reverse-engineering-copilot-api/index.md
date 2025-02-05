@@ -2,8 +2,14 @@
 title: "Reverse Engineering GitHub Copilot"
 description: "Building a proxy server to make GitHub Copilot work with third-party tools"
 date: "5 Feb 2025"
-draft: true
+draft: false
 ---
+
+![Screenshot of copilot api running](./00-copilot-api.webp)
+
+TL;DR:
+
+> I built `npx copilot-api` to use GitHub Copilot as OpenAI compatible provider
 
 So there I was, messing around with GitHub Copilot on the web. I am familiar with web development so I got kinda curious how the API is structured. If only I can expose an OpenAI compatible chat completion endpoint...
 
@@ -138,3 +144,5 @@ I'm actually using this setup daily with Aider now (Cline still doesn't work, I'
 Remember: don't be discouraged when you discover others have already built what you're building. The learning experience is what matters!
 
 _obligatory disclaimer: This is all for educational purposes only. Please don't sue me, GitHub!_
+
+> Update: You can now try it yourself using `npx`!. Just run `npx copilot-api` and actually use it for something.

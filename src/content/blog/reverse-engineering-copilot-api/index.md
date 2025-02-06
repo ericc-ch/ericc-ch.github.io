@@ -17,6 +17,8 @@ Here's me using it with KoboldAI (ignore the password, you don't actually need i
 
 ![Megumin's response](./04-koboldai-response.webp)
 
+---
+
 So there I was, messing around with GitHub Copilot on the web. I am familiar with web development so I got kinda curious how the API is structured. If only I can expose an OpenAI compatible chat completion endpoint...
 
 I opened up the DevTools and immediately noticed that GitHub had completely abstracted away the OpenAI chat completion endpoint. Duh, of course they did! They're not gonna let us mess around with it that easily.

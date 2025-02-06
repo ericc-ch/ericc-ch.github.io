@@ -1,5 +1,5 @@
 ---
-title: "Reverse Engineering GitHub Copilot"
+title: "I Turned GitHub Copilot Into OpenAI Compatible API Provider"
 description: "Building a proxy server to make GitHub Copilot work with third-party tools"
 date: "5 Feb 2025"
 draft: false
@@ -10,6 +10,12 @@ draft: false
 TL;DR:
 
 > I built `npx copilot-api` ([GitHub repo](https://github.com/ericc-ch/copilot-api)) to use GitHub Copilot as OpenAI compatible provider
+
+Here's me using it with KoboldAI (ignore the password, you don't actually need it)
+
+![Using the API with KoboldAI](./03-koboldai-settings.webp)
+
+![Megumin's response](./04-koboldai-response.webp)
 
 So there I was, messing around with GitHub Copilot on the web. I am familiar with web development so I got kinda curious how the API is structured. If only I can expose an OpenAI compatible chat completion endpoint...
 

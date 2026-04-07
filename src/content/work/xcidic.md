@@ -5,12 +5,18 @@ dateStart: "1 February 2022"
 dateEnd: "Present"
 ---
 
-I worked here for a while, so I'm going to list some things that I think worth mentioning:
+I served as Acting Head of Technology Division for three months, where I managed human resources for approximately five projects and assisted in running a free Golang course offered by our company to two selected backend developers.
 
-- [**Fit.Cells**](https://www.fitcells.com), a gym platform that uses a pay-as-you-go payment model. I managed to migrate the codebase from using CRA/JavaScript to Vite/TypeScript (React, Material UI)
-- [**Xcidic Company Profile**](https://xcidic.com). We redesigned the website to make it look more modern. We also migrated the codebase from using CRA to Next.js. We also added a lot of cool animations! (React, Material UI)
-- [**Gelora**](https://www.gelora.id), a mobile app for sports venue booking. I learned a bit of React Native here.
-- [**Sribu**](https://www.sribu.com), an Indonesian freelancer platform. I was part of the team tasked to redesign/rewrite the entire platform for 2.0 release.
-- [**Voyage**](https://myvoyage.io/), A platform to help international student build connections and gain opportunities. I was part of the team as a backup and finally touched some real backend code.
+I built **Noxtara**, a continuous cyber attack surface monitoring platform that provides visibility between pentest cycles by watching apps, APIs, and devices around the clock. The platform includes asset discovery, website security scanning, code analysis, mobile security, AI security auditing, WAF checking, VPN security, and IoT security monitoring, with a Kanban-style issue tracker for managing findings.
 
-I served as the Acting Head of Technology Division for a month in January 2024. During this time, I gained experience managing human resources for approximately five projects. Additionally, I assisted in running a free Golang course offered by our company to two selected backend developers.
+I also optimized the **Voyage** CI/CD pipeline by reducing build times from 12 minutes to under 5 minutes through GitHub Actions optimization. For developer experience, I migrated our linting and formatting from ESLint/Prettier to **Biome**, reducing lint times from 40 seconds to 2 seconds. I published a shared ESLint configuration to our private NPM registry to standardize code quality across projects.
+
+For **Fit.Cells**, a gym platform using a pay-as-you-go model, I led the migration from Create React App and JavaScript to Vite and TypeScript, which resolved over 50 critical security vulnerabilities in the process.
+
+I contributed to the **Sribu.com** 2.0 release as a frontend developer, participating in the full rewrite using Next.js App Router, Tailwind CSS, and GraphQL.
+
+While working with **ProtosLabs** (outsourced via Xcidic), I worked on NEXUS, a unified cyber risk management platform, and later returned in 2024 to modernize the codebase, reducing the frontend bundle size from 3.5MB to 1.7MB through code splitting and dependency optimization.
+
+Other projects include the **Xcidic Company Profile** website redesign and migration from CRA to Next.js with React Spring animations for SVG and grid effects, **Gelora** (a sports venue booking mobile app where I learned React Native), and **Twofactr** (a secure client-only 2FA app that won Baparekraf Digital Talent 2024).
+
+I also overhauled our core Next.js project templates to include LLM/AI integration, automated Storybook generation, and WebSocket support to accelerate project kickoffs.

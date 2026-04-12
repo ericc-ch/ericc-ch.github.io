@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["**/dist/", "**/public/", "*.config.*"],
+    ignores: ["**/dist/", "**/public/", "**/.astro/", "src/env.d.ts", "*.config.*"],
   },
 
   {

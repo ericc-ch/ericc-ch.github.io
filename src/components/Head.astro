@@ -179,6 +179,8 @@ const { title, description, image = "/og-image.png", noindex = false } = Astro.p
       document.documentElement.classList.remove("dark");
     }
 
+    // Force reflow before removing no-transition CSS
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     window.getComputedStyle(css).opacity;
     document.head.removeChild(css);
   }

@@ -5,12 +5,12 @@ date: "Apr 7 2026"
 draft: true
 ---
 
-Im sure youve heard of cloudflare codemode mcp
+I'm sure you've heard of cloudflare codemode mcp
 And if you haven't checked out executor.sh, this is basically local version of that
 Theo also has an excellent video about the topic here
 
 Anyway this article won't really talk about code mode or execution layer itself
-This article will talk mostly about me, my "gripe" with executor + playwriter, my attempt at writing a similar thing, and realized that executor is the way it is, because well, it has to be the way it is
+This article will talk mostly about me, my "gripe" with executor + playwriter, my attempt at writing a similar thing, and realizing that executor is the way it is, because well, it has to be the way it is
 Basically I practiced https://www.neverjust.net/ by doing lol
 
 ## My gripe with executor + playwriter
@@ -23,7 +23,7 @@ the way playwriter mcp works is by the agent writing typescript code that's inje
 
 And the way executor works is the agent writing code, injected with tools that follows the supported schema (openapi graphql mcp, there might be more coming) . again basically codemode
 
-whatd you get when putting a codemode on top of a codemode?
+What'd you get when putting a codemode on top of a codemode?
 
 Ew
 Wtf is that

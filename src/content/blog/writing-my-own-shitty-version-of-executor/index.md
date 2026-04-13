@@ -5,147 +5,347 @@ date: "Apr 7 2026"
 draft: true
 ---
 
-I'm sure you've heard of cloudflare codemode mcp
-And if you haven't checked out executor.sh, this is basically local version of that
-Theo also has an excellent video about the topic here
+I'm sure you've heard of Cloudflare Codemode MCP.
+And if you haven't checked out [Executor](https://executor.sh/), it's basically a local version of that.
 
-Anyway this article won't really talk about code mode or execution layer itself
-This article will talk mostly about me, my "gripe" with executor + playwriter, my attempt at writing a similar thing, and realizing that executor is the way it is, because well, it has to be the way it is
-Basically I practiced https://www.neverjust.net/ by doing lol
+Theo also has an excellent video about the topic [here](https://www.youtube.com/watch?v=TilDSWeiAlw).
 
-## My gripe with executor + playwriter
+Anyway, this article won't really talk about Codemode or the concept of an execution layer itself.
+
+This article will talk mostly about me, my "gripe" with Executor + Playwriter, my attempt at writing a similar thing, and realizing that Executor is the way it is, because well, it has to be the way it is.
+
+I think I [never just](https://www.neverjust.net/)-ed myself lol.
+
+## My Gripe With Executor + Playwriter
 
 Codemode is awesome
+
 Playwriter is awesome
-Executor is awesome 
 
-the way playwriter mcp works is by the agent writing typescript code that's injected with browser state and stuff. Basically codemode
+Executor is awesome
 
-And the way executor works is the agent writing code, injected with tools that follows the supported schema (openapi graphql mcp, there might be more coming) . again basically codemode
+The way Playwriter MCP works is by letting the agent write TypeScript code that's injected with browser state and stuff. Basically the same idea as Codemode
 
-What'd you get when putting a codemode on top of a codemode?
+And the way Executor works is by letting the agent write TypeScript code, injected with tools (OpenAPI, GraphQL, Other MCPs, etc.). See the similarity? This is basically another Codemode.
 
-Ew
-Wtf is that
+What do you get when putting a Codemode on top of a Codemode?
 
-the agent might do it well, but idk, i dont like seeing code inside strings
+```typescript
+console.log("Page Snapshot");
 
-## my attempt at creating a "better" executor
+const result = await tools.playwriter.execute({
+  code: `
+    // Use the page from previous execution or get a new one
+    const page = context.pages().find(p => p.url() === 'https://example.com/');
+    if (!page) {
+      console.log("Page not found, navigating...");
+      state.page = await context.newPage();
+      await state.page.goto('https://example.com', { waitUntil: 'domcontentloaded' });
+    } else {
+      state.page = page;
+    }
+    
+    // Get full page snapshot
+    const snap = await snapshot({ page: state.page, showDiffSinceLastCall: false });
+    console.log(snap);
+    
+    // Get page content as markdown
+    console.log("\\n--- Page Markdown ---");
+    const md = await getPageMarkdown({ page: state.page, showDiffSinceLastCall: false });
+    console.log(md);
+  `,
+});
 
-Why dont we combine playwriter into executor directly?
-We can just inject browser object inside it, surely itll work just fine (spoiler alert not its not)
+console.log(result);
+```
 
-so my idea was
-core is just code -> exec -> result
-everything else is plugin
+That's a code string inside of another code string.
 
-need to add openapi tools? use fromOpenAPI() and youre good!
-need to inject playwriter like browser? write an extension for that
-typescript support?
-intercepting logs?
-search tool?
-switching between different runtime? (this one doesnt really work)
+The agent might still be able to do it well, but IDK, feels brittle to me. One wrong quote escape and it's a syntax error.
 
-EVERYTHING is plugin
+## My Attempt at Creating a "Better" Executor
 
----
+Why don't we combine Playwriter into Executor directly?
 
-of course as you can see this is what im most excited about
-which in hindsight is uh, wrong the approach. really shouldve focused on securing the runtime
-
-I designed the api, looked at pi and opencode extensions for inspirations. What hooks should be exposed? what context are provided? What can be modified? What about switching runtimes? What do I need to expose?
-
-Overall I'm pretty happy with how the plugin api is designed, even though I basically copied and pasted from opencode
-
-BUT THAT DOESNT FUCKING MATTER LMAO
-
-## why executor is complex
-
-lemme explain to you how the security model(?) works in this kinda thing (you running untrusted ts code, controlled by nodejs host)
-
-1. you want the runtime to have the least permission possible. deno is a good example where you can just not allow things
-2. you want memory isolation so the untrusted code cant mess with the things inside nodejs host. you can use isolate, or completely different process for this (isolated by the OS)
-
-This is how I run the untrusted code in my own version of executor
-
-as you can see, security is practically.... nonexistent
+We can just inject the `browser` object inside it. Surely it'll work just fine (spoiler alert: no, it's won't)
 
 ---
 
-I knew this isnt secure at all but my mind went like "oh yeah i'll figure this out later, my thing is about extensions"
+So the idea was
 
-and of course when I get to this problem, I genuinely have no idea what to do. so my solution was to just "claude clone executor and see how it does things"
-what i get back, was this
+- Core is just `code -> exec -> result`
+- Everything else will be a plugin
 
-1. it creates a js proxy for tools inside the untrusted code
-2. untrusted code calls the tools
-3. proxy intercept, communicate with host via ipc
-4. proxy returns the real value
+Need to add OpenAPI tools? Use `fromOpenAPI()` and you're good!
 
-this is fucking brilliant, no way in hell i would ever come up with that solution
-that said it comes with a few limitations
+```typescript
+// .runner/config.ts
+import { defineConfig } from "@ericc-ch/runner";
+import { fromOpenAPI } from "@ericc-ch/runner/openapi";
+export default defineConfig({
+  plugins: [
+    // Plugin that generates API client from OpenAPI spec
+    fromOpenAPI("https://example.com/openapi.json", {
+      baseUrl: "https://api.example.com/v1",
+      headers: {
+        Authorization: "Bearer token",
+      },
+      operations: ["listUsers", "getUser", "createUser"], // Optional whitelist
+    }),
+  ],
+});
 
-1. async proxy via ipc only supports function
+// When the runner executes code, the context now has:
+{
+  api: {
+    listUsers: Function & { description: "List all users", input: {...} },
+    getUser: Function & { description: "Get user by ID", input: {...} },
+    createUser: Function & { description: "Create a new user", input: {...} },
+    description: "Generated client for Example API (https://example.com/openapi.json)",
+    meta: { specVersion: "3.0.0", operations: ["listUsers", "getUser", "createUser"] }
+  }
+}
+```
 
-well it kinda supports property access via async get()
+Need to inject a Playwriter `browser`? Write an extension for that
 
-but then when accessing an object property the code would look like
+```typescript
+// .runner/plugins/playwright.ts
+import * as playwright from "playwright";
+import type { Plugin, RunInput } from "@ericc-ch/runner";
+interface PlaywrightPluginOptions {
+  headless?: boolean;
+  browser?: "chromium" | "firefox" | "webkit";
+}
+export const playwrightPlugin =
+  (options: PlaywrightPluginOptions = {}): Plugin =>
+  async () => {
+    const { headless = true, browser = "chromium" } = options;
+    // Initialize browser at plugin load time (once per session)
+    const browserInstance = await playwright[browser].launch({ headless });
+    const context = await browserInstance.newContext();
+    const page = await context.newPage();
+    return {
+      // Inject browser objects into the execution context
+      beforeRun: async (_input: RunRunInput) => ({
+        context: {
+          browser: Object.assign(browserInstance, {
+            description: "Playwright browser instance (shared across runs)",
+          }),
+          context: Object.assign(context, {
+            description:
+              "Browser context for this execution (isolated cookies/storage)",
+          }),
+          page: Object.assign(page, {
+            description: "Playwright page for browser automation",
+          }),
+        },
+      }),
+      // Cleanup when runner shuts down
+      teardown: async () => {
+        await browserInstance.close();
+      },
+    };
+  };
 
-const name = await object.name
+// .runner/config.ts
+import { defineConfig } from "@ericc-ch/runner";
+import { playwrightPlugin } from "./plugins/playwright.ts";
+export default defineConfig({
+  plugins: [playwrightPlugin({ headless: false })],
+});
 
-which is weird
-the agent wouldnt really get used to it, i dont think, i dont know, i did not actually write an eval and executor doesnt work like that so who cares alright
+// Agent's code
+await page.goto("https://example.com");
+await page.click("text=Sign in");
+await page.fill("input[name='email']", "user@example.com");
 
-so thats why every tools is a method call, no property access
+const title = await page.title();
+const items = await page.$$eval(".product", (els) =>
+  els.map((el) => el.textContent)
+);
 
-2. the ipc can only pass around serializable object
+await page.screenshot({ path: "result.png" });
+```
 
-i mean, duh
-you dont expect you can send a function to a server to execute
-same thing here
-closures arent serializable
-what if you include an in scope variable but is actually defined outside the function
-howd the server know about that? same here
-you just cant
+Typescript support? (Foreshadowing alert)
 
-and what about something like this
+```typescript
+// src/builtins/executor-new-fn.ts
+import { transformSync } from "amaro";
+import type { Executor, Plugin } from "@ericc-ch/runner";
 
-const button = page.locator(button)
+export const typescriptExecutor = (): Plugin => async () => ({
+  executor: {
+    name: "typescript",
+    async execute({ code, context }) {
+      const wrapped = `(async () => {\n${code}\n})()`;
+      const { code: js } = transformSync(wrapped, { mode: "strip-only" });
+      const fn = new Function(...Object.keys(context), `return ${js}`);
+      return await fn(...Object.values(context));
+    },
+  },
+});
+```
 
-can you send back button to the untrusted code? no you cant
-button contains both properties and methods
-well yes you can serialize it as object and properties
-but what about the methods? you cant really do that
-and this is part of playwright api design, so yeah, kinda sad in that regard
+Intercepting logs? Search tool? Switching between different runtimes? (This one doesn't really work)
+
+EVERYTHING is a plugin
 
 ---
 
-So after learning that, what did I do?
-Well, I tried everything that I know
+This is what I'm most excited about. Which in hindsight is uh..., kinda stupid. Really should've focused on securing the runtime.
+
+I looked at Pi and OpenCode plugin APIs for inspiration. What hooks should be exposed? What context are provided? What can be modified? What about switching runtimes? What do I need to expose?
+
+Overall I'm pretty happy with how the Plugin API is designed, even though I basically copied and pasted from opencode.
+
+BUT THAT DOESN'T FUCKING MATTER LMAO.
+
+## Why Executor is Complex (And Why Mine Doesn't Work)
+
+Let me explain to you how the security model(?) works in this kinda thing (Running untrusted TypeScript code, controlled by a Node.js host).
+
+1. You want the runtime to have the least permission possible. Deno is a good example where you can just not allow things.
+2. You want memory isolation so the untrusted code can't mess with the things inside Node.js host. You can use v8 isolate, or a completely different process for this (isolated by the OS)
+
+This is how I run the untrusted code in my own version of executor:
+
+```typescript
+import { transformSync } from "amaro";
+import type { Executor, ExecutorInput, RunOutput } from "../lib/types.ts";
+
+export const executorNewFn: Executor = {
+  name: "executorNewFn",
+  async execute({ code, context }: ExecutorInput): Promise<RunOutput> {
+    const wrappedCode = `(async () => {\n${code}\n})()`;
+    const { code: strippedCode } = transformSync(wrappedCode, {
+      mode: "strip-only",
+    });
+
+    const fn = new Function(...Object.keys(context), `return ${strippedCode}`);
+    const result = await fn(...Object.values(context));
+
+    return { result };
+  },
+};
+```
+
+This is the same as the TypeScript plugin above.
+As you can see, security is practically... nonexistent.
+
+---
+
+I knew this wasn't secure at all but my mind went like "Oh yeah sure, I'll figure this out later. My thing is all about extensions!"
+
+And of course when I got back to this problem, I genuinely had no idea what to do. So my first thought was to just "Claude, clone executor.sh and see how it does things"
+
+What I got back was this (don't worry I did double check, I don't 100% trust my clanker):
+
+1. It creates a proxy for the `tools` object inside the untrusted code.
+2. Untrusted code calls the methods inside `tools`.
+3. Proxy intercepts, communicates with host via IPC.
+4. Proxy returns the real value in untrusted code.
+
+My mind was blown, it fucking exploded. This is brilliant, no way in hell I would ever come up with that solution.
+
+That said it does come with a few limitations:
+
+1. Async Proxy via IPC only supports function. Sort of.
+
+Well it kinda supports property access via async `get()`
+
+But then when accessing an object property the code would look like:
+
+```typescript
+// Without async get():
+const width = page.viewportSize.width;
+
+// With async get():
+const viewportSize = await page.viewportSize;
+const width = await viewportSize.width;
+```
+
+Which IMO is weird.
+
+The agent won't really get used to it. I don't think. I don't know. I did not actually write an eval and Executor isn't really meant to work like that so that's not really the point.
+
+That's why in Executor, every tool is a method call, no property access on `tools`:
+
+```typescript
+const sources = await tools.executor.sources.list();
+console.log("Sources:", sources.map(s => s.name));
+
+const search = await tools.search({ query: "list" });
+console.log("Search results:", search.length);
+
+return { sources: sources.length, searchResults: search.length };
+]
+```
+
+2. The IPC Can Only Pass Around Serializable Objects.
+
+I mean, duh
+
+You can't pass over a function using JSON. Same thing applies here.
+
+What if you include a variable that is in scope, but is actually defined outside the function? How'd the server know about that?
+
+```typescript
+const multiplier = 3;
+// This function captures `multiplier` from outer scope
+const multiply = (x) => x * multiplier;
+// Try to send it over IPC...
+sendToOtherProcess(multiply);
+// On the other side, `multiplier` doesn't exist.
+
+// The other process receives a function that references `config`,
+// but `config` was never serialized.
+const config = { apiKey: "secret123" };
+const makeRequest = (url) =>
+  fetch(url, { headers: { Authorization: config.apiKey } });
+```
+
+You just cant.
+
+Well, at least we can do something like this, right? Surely we can serialize a playwright `Locator`.
+
+```typescript
+const button = page.locator(button);
+```
+
+No. No you can't. `button` contains both properties and methods.
+
+Well, yes, you can serialize it as an object and omit all the properties. But at that point, why use Playwright? The Playwright API is designed so you can do something like.
+
+```typescript
+await page.getByLabel("User Name").fill("John");
+```
+
+---
+
+After learning all of that, what did I do?
+Well, I tried everything that I knew.
 
 I tried
-- node:vm, not actually secure
-- isolated-vm, still cant pass playwright objects around
-- node:worker with Atomics.wait, same thing, needs serializable object
-- Deno child process, even harder IPC
-- Forking a JS engine and modify it to somehow support async get() proxy? Well I considered this but you still cant pass around objects
 
-My idea didnt really make any sense
-You can't have "secure" with "able to meddle around with host's memory"
+- `node:vm`. Not actually secure.
+- [`isolated-vm`](https://npmjs.com/package/isolated-vm). Still can't pass Playwright objects around.
+- `node:worker` with `Atomics.wait`. Same thing, needs serializable object.
+- Deno with `node:child_process`. Same thing.
+- Forking a JS engine and modify it to somehow support async `get()` proxy? Well I considered this but you still can't pass around objects.
 
-And that is when I think perhaps executor went and tried the same thing, found out the limitation, and decided on current design
-Or maybe Rhys knew what was possible, what was not. What was secure and what wasnt. Or any other consideration whatever
-What I definitely learned is Executor wasnt written the way I wrote it because, well, mine kinda sucks
+My idea didn't really make any sense in the first place.
+You can't have "secure" with "able to meddle around with the host's memory".
 
-Its not secure
-I like the extension api and design
-But its not secure
-Theres not really any point of using it if its not secure
+And that is when I thought perhaps Executor went and tried the same thing, found out about the limitations, and decided on current design. Or maybe Rhys knew what was possible and what was not, what was secure and what wasn't, beforehand. What I definitely learned is Executor wasn't designed the way I did it because, well, mine kinda sucks. It's not secure.
 
-Whats the bottom line?
-I guess, never just
+I liked the extension api and design. But it's still not secure. There's not really any point of using it if it's not secure.
 
-But if you want to learn stuff the hard and time wasting way, go on
-tbh its kinda fun
+What's the bottom line?
+I guess, [never just](https://www.neverjust.net/).
 
-just use executor
+But if you want to learn stuff the hard and time wasting way, go on.
+TBH it was kinda fun.
+
+Just use [Executor](http://executor.sh/).

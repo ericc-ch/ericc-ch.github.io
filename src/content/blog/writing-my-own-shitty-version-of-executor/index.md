@@ -1,8 +1,8 @@
 ---
 title: "Writing My Own (Shitty) Version of Executor"
 description: "I tried building my own executor"
-date: "Apr 7 2026"
-draft: true
+date: "Apr 14 2026"
+draft: false
 ---
 
 I'm sure you've heard of Cloudflare Codemode MCP.
@@ -12,19 +12,19 @@ Theo also has an excellent video about the topic [here](https://www.youtube.com/
 
 Anyway, this article won't really talk about Codemode or the concept of an execution layer itself.
 
-This article will talk mostly about me, my "gripe" with Executor + Playwriter, my attempt at writing a similar thing, and realizing that Executor is the way it is, because well, it has to be the way it is.
+This article will talk mostly about me, my "gripe" with Executor + Playwriter, my attempt at writing a similar thing, and realizing that Executor is the way it is, because, well, it has to be the way it is.
 
 I think I [never just](https://www.neverjust.net/)-ed myself lol.
 
 ## My Gripe With Executor + Playwriter
 
-Codemode is awesome
+Codemode is awesome.
 
-Playwriter is awesome
+Playwriter is awesome.
 
-Executor is awesome
+Executor is awesome.
 
-The way Playwriter MCP works is by letting the agent write TypeScript code that's injected with browser state and stuff. Basically the same idea as Codemode
+The way Playwriter MCP works is by letting the agent write TypeScript code that's injected with browser state and stuff. Basically the same idea as Codemode.
 
 And the way Executor works is by letting the agent write TypeScript code, injected with tools (OpenAPI, GraphQL, Other MCPs, etc.). See the similarity? This is basically another Codemode.
 
@@ -67,11 +67,11 @@ The agent might still be able to do it well, but IDK, feels brittle to me. One w
 
 Why don't we combine Playwriter into Executor directly?
 
-We can just inject the `browser` object inside it. Surely it'll work just fine (spoiler alert: no, it's won't)
+We can just inject the `browser` object inside it. Surely it'll work just fine (spoiler alert: no, it won't)
 
 ---
 
-So the idea was
+So the idea was:
 
 - Core is just `code -> exec -> result`
 - Everything else will be a plugin
@@ -107,7 +107,7 @@ export default defineConfig({
 }
 ```
 
-Need to inject a Playwriter `browser`? Write an extension for that
+Need to inject a Playwriter `browser`? Write an extension for that.
 
 ```typescript
 // .runner/plugins/playwright.ts
@@ -127,7 +127,7 @@ export const playwrightPlugin =
     const page = await context.newPage();
     return {
       // Inject browser objects into the execution context
-      beforeRun: async (_input: RunRunInput) => ({
+      beforeRun: async (_input: RunInput) => ({
         context: {
           browser: Object.assign(browserInstance, {
             description: "Playwright browser instance (shared across runs)",
@@ -168,7 +168,7 @@ const items = await page.$$eval(".product", (els) =>
 await page.screenshot({ path: "result.png" });
 ```
 
-Typescript support? (Foreshadowing alert)
+TypeScript support? (Foreshadowing alert)
 
 ```typescript
 // src/builtins/executor-new-fn.ts
@@ -190,24 +190,26 @@ export const typescriptExecutor = (): Plugin => async () => ({
 
 Intercepting logs? Search tool? Switching between different runtimes? (This one doesn't really work)
 
-EVERYTHING is a plugin
+EVERYTHING is a plugin.
+
+> I found out that Executor also ended up with a similar plugin approach: [GitHub link](https://github.com/RhysSullivan/executor/tree/main/packages/plugins/openapi)
 
 ---
 
-This is what I'm most excited about. Which in hindsight is uh..., kinda stupid. Really should've focused on securing the runtime.
+This is what I'm most excited about. Which, in hindsight, is uh... kinda stupid. Really should've focused on securing the runtime.
 
-I looked at Pi and OpenCode plugin APIs for inspiration. What hooks should be exposed? What context are provided? What can be modified? What about switching runtimes? What do I need to expose?
+I looked at Pi and OpenCode plugin APIs for inspiration. What hooks should be exposed? What context is provided? What can be modified? What about switching runtimes? What do I need to expose?
 
-Overall I'm pretty happy with how the Plugin API is designed, even though I basically copied and pasted from opencode.
+Overall I'm pretty happy with how the Plugin API is designed, even though I basically copied and pasted from OpenCode.
 
 BUT THAT DOESN'T FUCKING MATTER LMAO.
 
 ## Why Executor is Complex (And Why Mine Doesn't Work)
 
-Let me explain to you how the security model(?) works in this kinda thing (Running untrusted TypeScript code, controlled by a Node.js host).
+Let me explain to you how the security model(?) works in this kinda thing (running untrusted TypeScript code, controlled by a Node.js host).
 
 1. You want the runtime to have the least permission possible. Deno is a good example where you can just not allow things.
-2. You want memory isolation so the untrusted code can't mess with the things inside Node.js host. You can use v8 isolate, or a completely different process for this (isolated by the OS)
+2. You want memory isolation so the untrusted code can't mess with the things inside the Node.js host. You can use a v8 isolate, or a completely different process for this (isolated by the OS).
 
 This is how I run the untrusted code in my own version of executor:
 
@@ -236,26 +238,28 @@ As you can see, security is practically... nonexistent.
 
 ---
 
-I knew this wasn't secure at all but my mind went like "Oh yeah sure, I'll figure this out later. My thing is all about extensions!"
+I knew this wasn't secure at all but my mind went like "Oh yeah, sure, I'll figure this out later. My thing is all about extensions!"
 
-And of course when I got back to this problem, I genuinely had no idea what to do. So my first thought was to just "Claude, clone executor.sh and see how it does things"
+> Did I mention that Executor also ended up with a similar plugin approach? [GitHub link](https://github.com/RhysSullivan/executor/tree/main/packages/plugins/openapi)
 
-What I got back was this (don't worry I did double check, I don't 100% trust my clanker):
+And of course when I got back to this problem, I genuinely had no idea what to do. So my first thought was to just "Claude, clone executor.sh and see how it does things."
+
+What I got back was this (don't worry I did double-check, I don't 100% trust my clanker):
 
 1. It creates a proxy for the `tools` object inside the untrusted code.
 2. Untrusted code calls the methods inside `tools`.
-3. Proxy intercepts, communicates with host via IPC.
-4. Proxy returns the real value in untrusted code.
+3. Proxy intercepts, communicates with the host via IPC.
+4. Proxy returns the real value to the untrusted code.
 
 My mind was blown, it fucking exploded. This is brilliant, no way in hell I would ever come up with that solution.
 
-That said it does come with a few limitations:
+That said, it does come with a few limitations:
 
-1. Async Proxy via IPC only supports function. Sort of.
+1. Async Proxy via IPC only supports functions. Sort of.
 
-Well it kinda supports property access via async `get()`
+Well, it kinda supports property access via async `get()`.
 
-But then when accessing an object property the code would look like:
+But then, when accessing an object property, the code would look like:
 
 ```typescript
 // Without async get():
@@ -274,18 +278,20 @@ That's why in Executor, every tool is a method call, no property access on `tool
 
 ```typescript
 const sources = await tools.executor.sources.list();
-console.log("Sources:", sources.map(s => s.name));
+console.log(
+  "Sources:",
+  sources.map((s) => s.name)
+);
 
 const search = await tools.search({ query: "list" });
 console.log("Search results:", search.length);
 
 return { sources: sources.length, searchResults: search.length };
-]
 ```
 
-2. The IPC Can Only Pass Around Serializable Objects.
+2. The IPC can only pass around serializable objects.
 
-I mean, duh
+I mean, duh.
 
 You can't pass over a function using JSON. Same thing applies here.
 
@@ -306,9 +312,9 @@ const makeRequest = (url) =>
   fetch(url, { headers: { Authorization: config.apiKey } });
 ```
 
-You just cant.
+You just can't.
 
-Well, at least we can do something like this, right? Surely we can serialize a playwright `Locator`.
+Well, at least we can do something like this, right? Surely we can serialize a Playwright `Locator`.
 
 ```typescript
 const button = page.locator(button);
@@ -316,7 +322,7 @@ const button = page.locator(button);
 
 No. No you can't. `button` contains both properties and methods.
 
-Well, yes, you can serialize it as an object and omit all the properties. But at that point, why use Playwright? The Playwright API is designed so you can do something like.
+Well, yes, you can serialize it as an object and omit all the properties. But at that point, why use Playwright? The Playwright API is designed so you can do something like:
 
 ```typescript
 await page.getByLabel("User Name").fill("John");
@@ -327,25 +333,27 @@ await page.getByLabel("User Name").fill("John");
 After learning all of that, what did I do?
 Well, I tried everything that I knew.
 
-I tried
+I tried:
 
 - `node:vm`. Not actually secure.
 - [`isolated-vm`](https://npmjs.com/package/isolated-vm). Still can't pass Playwright objects around.
-- `node:worker` with `Atomics.wait`. Same thing, needs serializable object.
+- `node:worker` with `Atomics.wait`. Same thing, needs serializable objects.
 - Deno with `node:child_process`. Same thing.
-- Forking a JS engine and modify it to somehow support async `get()` proxy? Well I considered this but you still can't pass around objects.
+- Forking a JS engine and modifying it to somehow support async `get()` proxy? Well, I considered this but you still can't pass around objects.
 
 My idea didn't really make any sense in the first place.
 You can't have "secure" with "able to meddle around with the host's memory".
 
-And that is when I thought perhaps Executor went and tried the same thing, found out about the limitations, and decided on current design. Or maybe Rhys knew what was possible and what was not, what was secure and what wasn't, beforehand. What I definitely learned is Executor wasn't designed the way I did it because, well, mine kinda sucks. It's not secure.
+And that is when I thought perhaps Executor went and tried the same thing, found out about the limitations, and decided on the current design. Or maybe Rhys knew what was possible and what was not, what was secure and what wasn't, beforehand. What I definitely learned is Executor wasn't designed the way I did it because, well, mine kinda sucks. It's not secure.
 
-I liked the extension api and design. But it's still not secure. There's not really any point of using it if it's not secure.
+> But do you know that Executor also ended up with a similar plugin approach while still being more secure? [GitHub link](https://github.com/RhysSullivan/executor/tree/main/packages/plugins/openapi)
+
+I liked the extension API and design. But it's still not secure. There's not really any point of using it if it's not secure.
 
 What's the bottom line?
 I guess, [never just](https://www.neverjust.net/).
 
-But if you want to learn stuff the hard and time wasting way, go on.
+But if you want to learn stuff the hard and time-wasting way, go on.
 TBH it was kinda fun.
 
 Just use [Executor](http://executor.sh/).

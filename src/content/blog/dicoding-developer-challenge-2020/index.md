@@ -5,7 +5,7 @@ date: "14 Nov 2020"
 draft: false
 ---
 
-There’s this [challenge](https://www.dicoding.com/challenges/637) found by my friend, held by Dicoding Indonesia. One of the theme was to grow the tourism sector. So here’s what is in our brain:
+There’s this [challenge](https://www.dicoding.com/challenges/637) found by my friend, held by Dicoding. One of the theme was to grow the tourism sector. So here’s what is in our brain:
 
 1. Uber/Gojek clone, but with tour guides instead of driver.
 2. Pinterest clone, but only for tourism destination photos.
@@ -28,7 +28,7 @@ Here’s what my first design for the Pinterest clone looks like:
 
 ![My first design](https://miro.medium.com/max/875/1*9TKzyExRmqVhOgzr8u9ymQ.png)
 
-It’s in Indonesian Language.
+It’s not in English.
 
 What’s that bell button for? Why is it only displaying 2 images at a time? Why is there a back button? Is it not gonna be on the home page?
 

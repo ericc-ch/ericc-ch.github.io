@@ -1,7 +1,7 @@
 ---
 title: "VSCode Lit HTML"
 description: "Syntax highlighting for tagged template literals"
-date: "Mar 26 2024"
+date: "May 12 2025"
 demoURL: "https://open-vsx.org/extension/ericc-ch/vscode-lit-html"
 repoURL: "https://github.com/ericc-ch/vscode-lit-html"
 draft: false

@@ -1,7 +1,7 @@
 ---
 title: "Twofactr"
 description: " Secure, client-only 2FA"
-date: "Mar 26 2024"
+date: "Jun 18 2024"
 demoURL: "https://twofactr.pages.dev/"
 repoURL: "https://github.com/sheila-jvn/twofactr"
 draft: false

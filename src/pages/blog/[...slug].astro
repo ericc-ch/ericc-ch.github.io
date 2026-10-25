@@ -1,31 +1,30 @@
 ---
-import { type CollectionEntry, getCollection } from "astro:content";
-import PageLayout from "@layouts/PageLayout.astro";
-import Container from "@components/Container.astro";
-import FormattedDate from "@components/FormattedDate.astro";
-import { readingTime } from "@lib/utils";
-import BackToPrev from "@components/BackToPrev.astro";
+import { type CollectionEntry, getCollection, render } from "astro:content"
+import PageLayout from "@layouts/PageLayout.astro"
+import Container from "@components/Container.astro"
+import FormattedDate from "@components/FormattedDate.astro"
+import { readingTime } from "@lib/utils"
+import BackToPrev from "@components/BackToPrev.astro"
 
 export async function getStaticPaths() {
-  const posts = (await getCollection("blog"))
-    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  )
   return posts.map((post) => ({
-    params: { slug: post.slug },
+    params: { slug: post.id },
     props: post,
-  }));
+  }))
 }
-type Props = CollectionEntry<"blog">;
+type Props = CollectionEntry<"blog">
 
-const post = Astro.props;
-const { Content } = await post.render();
+const post = Astro.props
+const { Content } = await render(post)
 ---
 
 <PageLayout title={post.data.title} description={post.data.description} noindex={post.data.draft}>
   <Container>
     <div class="animate">
-      <BackToPrev href="/blog">
-        Back to blog
-      </BackToPrev>
+      <BackToPrev href="/blog"> Back to blog </BackToPrev>
     </div>
     <div class="space-y-1 my-10">
       <div class="animate flex items-center gap-1.5">

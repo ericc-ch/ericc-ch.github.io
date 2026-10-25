@@ -1,7 +1,7 @@
 ---
 title: "Crawldown"
 description: "Crawl websites and convert to clean Markdown"
-date: "Mar 26 2024"
+date: "Jan 24 2025"
 demoURL: ""
 repoURL: "https://github.com/ericc-ch/crawldown"
 draft: false

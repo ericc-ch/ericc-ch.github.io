@@ -1,7 +1,7 @@
 ---
 title: "The Daily Algorithm"
 description: "Fully automated content pipeline for YouTube shorts"
-date: "Mar 26 2024"
+date: "Jan 17 2025"
 demoURL: ""
 repoURL: "https://github.com/ericc-ch/the-daily-algorithm"
 draft: false

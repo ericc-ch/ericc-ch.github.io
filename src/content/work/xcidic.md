@@ -7,7 +7,9 @@ dateEnd: "Present"
 
 I served as Acting Head of Technology Division for three months, where I managed human resources for approximately five projects and assisted in running a free Golang course offered by our company to two selected backend developers.
 
-I built **Noxtara**, a continuous cyber attack surface monitoring platform that provides visibility between pentest cycles by watching apps, APIs, and devices around the clock. The platform includes asset discovery, website security scanning, code analysis, mobile security, AI security auditing, WAF checking, VPN security, and IoT security monitoring, with a Kanban-style issue tracker for managing findings.
+Our team built **Noxtara**, a continuous cyber attack surface monitoring platform that provides visibility between pentest cycles by watching apps, APIs, and devices around the clock. The platform includes asset discovery, website security scanning, code analysis, mobile security, AI security auditing, WAF checking, VPN security, and IoT security monitoring, with a Kanban-style issue tracker for managing findings.
+
+I personally built **noxtara-mcp**, an MCP server that exposes ~226 Noxtara API endpoints as tools for AI agents, and **@noxtara/cli** for running SCA, SAST, and mobile scans from the terminal or GitHub Actions.
 
 I also optimized the **Voyage** CI/CD pipeline by reducing build times from 12 minutes to under 5 minutes through GitHub Actions optimization. For developer experience, I migrated our linting and formatting from ESLint/Prettier to **Biome**, reducing lint times from 40 seconds to 2 seconds. I published a shared ESLint configuration to our private NPM registry to standardize code quality across projects.
 

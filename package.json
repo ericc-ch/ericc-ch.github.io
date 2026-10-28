@@ -16,7 +16,8 @@
     "lint:fix": "oxlint --fix",
     "preview": "astro preview",
     "preview:network": "astro preview --host",
-    "typecheck": "astro sync && tsc --noEmit --runExternalCode"
+    "typecheck": "astro sync && tsc --noEmit --runExternalCode",
+    "verify": "bun .agents/skills/verify-site/check.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.5",
@@ -32,6 +33,7 @@
     "@astrojs/ts-content-mapper": "^0.2.0",
     "oxfmt": "^0.74.0",
     "oxlint": "^1.89.0",
+    "playwright": "^1.64.1",
     "typescript": "7.1.0-beta"
   }
 }

@@ -60,7 +60,8 @@ Links and buttons are one thing: ink text with an underline that firms up on hov
 backgrounds, no pills, no arrows, no primary button.
 
 Nav is Home, Posts and the theme toggle, which is a text button pushed right. Entry rows are
-hairline-separated rows, not cards. Everything is a rectangle and nothing has a radius.
+rows separated by whitespace, not cards and not rules. Everything is a rectangle and nothing
+has a radius.
 
 Code blocks get a caption bar with the language and a Copy button; the code itself sits on the
 syntax theme's own background. Focus is a 2px outline and is never removed.

@@ -67,11 +67,6 @@ time,
   display: grid;
   gap: 0.15rem;
   padding-block: 0.7rem;
-  border-bottom: 1px solid var(--fg-2);
-}
-
-.entry-list li:first-child {
-  border-top: 1px solid var(--fg-2);
 }
 
 .entry-list > li > a,

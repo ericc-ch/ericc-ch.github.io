@@ -10,15 +10,15 @@ export const SITE: Site = {
 
 export const SOCIALS: Socials = [
   {
-    NAME: "github",
+    NAME: "GitHub",
     HREF: "https://github.com/ericc-ch",
   },
   {
-    NAME: "twitter-x",
+    NAME: "Twitter",
     HREF: "https://x.com/ericc_ch",
   },
   {
-    NAME: "linkedin",
+    NAME: "LinkedIn",
     HREF: "https://www.linkedin.com/in/erick-christian-p",
   },
 ]

@@ -8,7 +8,7 @@ draft: false
 I'm sure you've heard of Cloudflare Codemode MCP.
 And if you haven't checked out [Executor](https://executor.sh/), it's basically a local version of that.
 
-Theo also has an excellent video about the topic [here](https://www.youtube.com/watch?v=TilDSWeiAlw).
+Theo also has [an excellent video about the topic](https://www.youtube.com/watch?v=TilDSWeiAlw).
 
 Anyway, this article won't really talk about Codemode or the concept of an execution layer itself.
 

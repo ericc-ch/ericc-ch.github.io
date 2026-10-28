@@ -1,10 +1,12 @@
 ---
+const path = Astro.url.pathname
 ---
 
 <header class="site-header">
   <div class="wrap">
     <nav class="site-nav" aria-label="Main">
-      <a href="/posts/">Posts</a>
+      <a href="/" aria-current={path === "/" ? "page" : undefined}>Home</a>
+      <a href="/posts/" aria-current={path.startsWith("/posts") ? "page" : undefined}>Posts</a>
       <button id="theme-toggle" type="button" aria-label="Switch to dark theme">Dark</button>
     </nav>
   </div>

@@ -64,205 +64,76 @@ components:
 
 # Overview
 
-A personal site that should read as a page, not an application. Two routes: `/` and
-`/posts/`, plus one article page per post. Nothing is interactive except links and the theme
-toggle.
+A personal site that reads as a page, not an application. Nothing moves, nothing animates,
+nothing is behind a control except the theme toggle.
 
-The mood is quiet, monochrome and typographic. Reference points are a printed essay and a
-well-typeset man page, not a dashboard. The reader came to read; every element that is not
-words has to earn its place.
+The mood is a printed essay or a well-typeset man page: quiet, monochrome, typographic. Text
+is the interface, so every element that is not words has to earn its place.
 
-The site is also the brand basis for two future surfaces — a tinybrowser landing page and a
-Web Platform Tests results page — so the system has to survive without this site's content.
+It is also the brand basis for two future surfaces — a tinybrowser landing page and a Web
+Platform Tests results page — so these rules are meant to survive without this content.
 
-Hard constraints, all enforced by the code rather than by taste:
+# Non-negotiables
 
-- Static Astro build. No client framework, no islands, no Tailwind.
-- Zero third-party JavaScript. The only script is the inline theme bootstrap and its click
-  handler, about 40 lines total.
-- Modern browsers only, Baseline widely available. No polyfills: features must degrade to
-  something readable, not something broken. `light-dark()` is used for the palette.
-- WCAG 2.2 AA everywhere, AAA for body text. Syntax highlighting is the single recorded
-  exception, documented under Colours.
-- Two themes, system default, one text button to switch.
+- Static build. No client framework, no utility CSS.
+- No third-party JavaScript. The only script is the inline theme bootstrap and its toggle.
+- Modern browsers only. No polyfills; a missing feature has to degrade to something readable.
+- WCAG 2.2 AA, AAA for body text. Syntax highlighting is the one recorded exception.
+- Two themes from the system preference, one text button to switch.
 
-# Colors
+# Colour
 
-Six tokens, no accent, no hue. A seventh colour is a design change, not an addition.
+Six tokens, no accent, no hue, no state colours. `--bg-0` page, `--bg-1` surfaces, `--bg-2`
+selection, `--fg-0` ink, `--fg-1` muted ink, `--fg-2` hairlines. A seventh colour is a design
+decision, not an addition.
 
-| Token    | Light     | Dark      | Role                                 |
-| -------- | --------- | --------- | ------------------------------------ |
-| `--bg-0` | `#fcfcfc` | `#111111` | Page                                 |
-| `--bg-1` | `#f2f2f2` | `#1a1a1a` | Caption bars, inline code, surfaces  |
-| `--bg-2` | `#e8e8e8` | `#242424` | Selection, pressed rows              |
-| `--fg-0` | `#111111` | `#ededed` | Body, headings, links, focus ring    |
-| `--fg-1` | `#575757` | `#a3a3a3` | Dates, roles, descriptions, captions |
-| `--fg-2` | `#cfcfcf` | `#333333` | Hairlines and borders                |
+Each token is one `light-dark()` pair, so `color-scheme` does the switching and there is no
+duplicated dark block. `primary` exists only because the format requires the key.
 
-There is no `primary`, no success, no error. `primary` maps to ink only because the format
-requires the key. State is never carried by colour: the theme button says "Light" or "Dark",
-the copy button says "Copied" or "Copy failed".
+State never lives in colour: the toggle says "Light" or "Dark", copy says "Copied" or "Copy
+failed".
 
-Links are ink with an underline at 40% opacity, going to full opacity on hover. That
-underline is the only affordance in the system — no backgrounds, no pills, no arrows.
-
-Contrast floors, checked by `bun run contrast`:
-
-| Pair             | Minimum | Actual (light / dark) |
-| ---------------- | ------- | --------------------- |
-| Body on page     | 7:1     | 18.41 / 16.13         |
-| Muted on page    | 7:1     | 7.04 / 7.49           |
-| Text on surface  | 7:1     | 16.87 / 14.87         |
-| Hairline on page | 1.2:1   | 1.52 / 1.49           |
-
-The palette is defined once in `src/styles/themes.css`. Each token is
-`light-dark(light, dark)` and resolves from `color-scheme`, so there is no duplicated dark
-block and no media query. `:root` is `color-scheme: light dark`, which follows the operating
-system without JavaScript; `[data-theme="light"]` and `[data-theme="dark"]` pin it after the
-toggle. The contrast script reads both halves of every pair.
-
-Syntax highlighting is the one place colour is allowed, and it is deliberately outside this
-palette: `vitesse-light` / `vitesse-black`, chosen for how they sit next to the monochrome
-page. They are also the one deliberate exception to the contrast rule: measured against the
-block's own background, the worst token is 1.81:1 in light and 2.16:1 in dark. Comments sit
-at 2.34:1 and dim punctuation below that, because vitesse leans on alpha rather than darker
-ink. Code is treated as texture, not as body copy; every non-code element keeps its floor.
-Shiki emits both colours as `light-dark()` inline, so the block follows `color-scheme` and
-the stylesheet contains no overrides.
+Code is the one place other colours appear — a Shiki theme chosen for how it sits next to the
+page rather than for contrast. Code is texture, not body copy.
 
 # Typography
 
-One text family: **Plus Jakarta Sans**, a variable font covering 200–800 in a single 28KB
-file. **JetBrains Mono** for code only. No second text face, no icons.
+Plus Jakarta Sans for text, JetBrains Mono for code. No second text face, no icons.
 
-Sizes follow Material 3 roles rather than a modular scale:
+Four fluid sizes: 16 body, 22 `h3`, 24 `h2`, 28 `h1`, with 14 fixed for code. The ladder is
+5% smaller at 320px and reaches full size at 1240px. `line-height: 1.5` everywhere, set once.
+Two weights only: 400, and 600 for headings and `strong`.
 
-| Token         | Role                   | Size at 320 | Size at ≥1240 | Weight |
-| ------------- | ---------------------- | ----------- | ------------- | ------ |
-| `--text-base` | body-large             | 15.2        | 16            | 400    |
-| `--text-lg`   | title-large (`h3`)     | 20.9        | 22            | 600    |
-| `--text-xl`   | headline-small (`h2`)  | 22.8        | 24            | 600    |
-| `--text-2xl`  | headline-medium (`h1`) | 26.6        | 28            | 600    |
-| `--text-sm`   | code                   | 14          | 14            | 400    |
-
-Every size except `--text-sm` is fluid: 5% below the ceiling at 320px, reaching the ceiling
-at 1240px. All four use the same clamp shape, so the ladder keeps its proportions. The
-tokens list the ceiling; the stylesheet is the source of truth.
-
-`line-height: 1.5` everywhere, set once on `body`. Headings inherit it. Only two weights
-exist: 400 for everything, 600 for headings and `strong`. Never synthesise a weight.
-
-Headings carry `letter-spacing: -0.011em` and `text-wrap: balance`; paragraphs carry
-`text-wrap: pretty`. Nothing else adjusts tracking.
-
-Hierarchy comes from size and ink intensity, not from weight or colour. Five heading levels
-exist in CSS and resolve to four sizes; `h4`–`h6` are body size.
+Hierarchy comes from size and ink intensity, never from weight or decoration.
 
 # Layout
 
-One container, no grid system:
+One column, `min(100% - 2 * gutter, 48ch)`, centred. No grid system and no media queries: the
+column shrinks until it reaches the measure and then stops. 320px is the floor, and nothing
+may scroll sideways there.
 
-```css
-.wrap {
-  width: min(100% - (var(--gutter) * 2), var(--measure));
-  margin-inline: auto;
-}
-```
+Vertical rhythm is a stack of `clamp()` margins. Entry rows put their metadata right with a
+single `1fr auto` grid.
 
-`--measure: 48ch`, `--gutter: 1.25rem`. `ch` is the width of `0` in Plus Jakarta Sans, which
-is about 0.73em, so 48ch resolves to roughly 562px and about 71 characters per line. The
-number has to be re-measured whenever the family changes; it is not a character count.
+# Chrome
 
-There are no media queries at all. The column shrinks with the viewport until it hits the
-measure and then stops; the palette follows `color-scheme`.
+Links and buttons are one thing: ink text with an underline that firms up on hover. No
+backgrounds, no pills, no arrows, no primary button.
 
-Content is a stack of sections separated by `clamp()` margins. Entry rows are
-`grid-template-columns: 1fr auto` so dates align on the right without pushing the title
-column; that is the only grid in the system.
+Nav is Home, Posts and the theme toggle, which is a text button pushed right. Entry rows are
+hairline-separated rows, not cards. Everything is a rectangle and nothing has a radius.
 
-The narrowest supported width is 320px. Nothing may scroll sideways there.
+Code blocks get a caption bar with the language and a Copy button; the code itself sits on the
+syntax theme's own background. Focus is a 2px outline and is never removed.
 
-# Cascade
+# Structure
 
-`src/styles/main.css` declares one layer order and imports each file into its layer:
+Four cascade layers, in order: `tokens`, `base`, `prose`, `ui`. Article content is scoped with
+`@scope (.prose)`. The stylesheets ship without a media query or an `!important`, and the site
+without a client script.
 
-```css
-@layer tokens, base, prose, ui;
-```
+# Rules
 
-A later layer beats an earlier one before specificity or source order is considered. That is
-what lets `prose.css` write `h2` instead of `.prose h2` and still outrank the `h1…h6` reset
-in `base.css`, and it means a future override goes where it belongs instead of being padded
-with extra selectors.
-
-- `tokens` — custom properties and `color-scheme` (`themes.css`).
-- `base` — element defaults, reset, focus ring, link and button styling.
-- `prose` — everything inside `@scope (.prose)`.
-- `ui` — header, nav, entry rows, post meta, table of contents.
-
-Only `@font-face` stays unlayered; unlayered rules outrank every layer, so new CSS belongs
-inside a layer.
-
-# Elevation & Depth
-
-No shadows, no blur, no depth tricks. Depth is a 1px hairline in `--fg-2` plus a surface fill in
-`--bg-1`.
-
-- Section and row separators: 1px `--fg-2`, full width of the measure.
-- Code blocks: 1px border, caption bar on `--bg-1`, body on the Shiki theme's own background.
-- Focus: 2px `--fg-0` outline, 2px offset, never removed. A focused code block puts the ring
-  on the figure, because the `<pre>` scrolls and would clip its own.
-- Selection: `color-mix(in oklab, var(--fg-0) 20%, transparent)`.
-
-# Shapes
-
-Everything is a rectangle. No element sets a radius: tags, code blocks, the skip link and the
-toggle are all square. A radius would read as a different brand.
-
-# Components
-
-**Links and buttons share one style**: ink text, underline, no background, no padding beyond
-the text, identical focus ring. There is no primary button; the theme toggle is a text
-button for this reason.
-
-**Nav**: three items in one row — Home, Posts, theme toggle. Links stay left, the toggle is
-pushed right with `margin-inline-start: auto`. `aria-current="page"` marks the active
-section; it is deliberately invisible.
-
-**Entry row** (posts, work, projects): title on the left, metadata on the right in `--fg-1`,
-separated from the next row by a hairline. Rows are not cards.
-
-**Code block**: `figure.code` with a caption holding the language and a Copy button, then a
-`<pre>` at 14px. The copy button reports success in its own label and through a polite live
-region. On http origins, where `navigator.clipboard` does not exist, it falls back to
-`document.execCommand`.
-
-**Prose**: markdown output only. Lists, quotes, tables, figures and footnotes are styled; no
-component classes are introduced for author content.
-
-**Tags**: a square hairline chip. No post uses them today.
-
-# Do's and Don'ts
-
-- Do reuse an existing token. Adding a colour, size or radius token is a decision, not a
-  tweak.
-- Don't add animation or transitions of any kind. State changes are immediate; text changes
-  are the feedback.
-- Don't add client JavaScript. If something cannot work without it, it degrades: the theme
-  toggle is hidden when the bootstrap does not run, and the page still reads.
-- Don't add a media query for layout. Use `min()`, `clamp()` or `ch` so the layout is
-  intrinsic.
-- Don't introduce a second text family, an icon set, or a decorative element. Text labels
-  are the interface.
-- Don't carry meaning in colour alone. Every state has a text label.
-- Don't let body text fall below 16px at the ceiling. The fluid floor is 15.2px at 320px;
-  that is the smallest body text allowed anywhere.
-- Don't ship a Shiki theme without measuring every token against the code background.
-- Do run `bun run check` (contrast, typecheck, lint, format, build) before calling a change
-  done, and `bun run verify` for anything touching themes, typography or layout.
-- Do import new CSS through `main.css` with an explicit layer, so the order stays declared in
-  one place.
-- Do keep `themes.css` to one `light-dark()` pair per token. `parsePalettes` reads the pairs,
-  and the contrast script checks both sides of each one.
-- Do keep the registry endpoints (`/r/*.json`) in sync by reading `themes.css` rather than
-  duplicating values.
+- Reuse a token. Adding a colour, size or radius is a decision, not a tweak.
+- Change state with text, not with animation.
+- This file describes intent. Measurements, ratios and the list of checks belong in the code.

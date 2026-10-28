@@ -13,5 +13,9 @@ export function parsePalettes(css: string): { light: Palette; dark: Palette } {
     dark[token] = darkValue
   }
 
+  if (Object.keys(light).length === 0) {
+    throw new Error("No light-dark() tokens found in the :root palette block")
+  }
+
   return { light, dark }
 }

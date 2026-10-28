@@ -80,6 +80,7 @@
 .theme-toggle {
   display: inline-flex;
   align-items: center;
+  margin-inline-start: auto;
   padding: 0.35rem 0 0.35rem 0.35rem;
   font: inherit;
   color: var(--muted-foreground);

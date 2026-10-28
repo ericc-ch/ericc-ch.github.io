@@ -1,6 +1,5 @@
 ---
 import { SITE } from "@consts"
-import { themes } from "@lib/themes"
 
 const year = new Date().getFullYear()
 ---
@@ -8,12 +7,5 @@ const year = new Date().getFullYear()
 <footer class="site-footer">
   <div class="wrap">
     <p>&copy; {year} {SITE.NAME}</p>
-    <div class="theme-picker">
-      <label for="theme-select">Theme</label>
-      <select id="theme-select">
-        <option value="system">System</option>
-        {themes.map((theme) => <option value={theme.name}>{theme.label}</option>)}
-      </select>
-    </div>
   </div>
 </footer>

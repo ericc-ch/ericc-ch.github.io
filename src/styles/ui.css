@@ -28,6 +28,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0 1.25rem;
+  margin-inline-start: auto;
   font-family: var(--font-sans);
   font-size: 0.875rem;
 }
@@ -76,24 +77,20 @@
   color: var(--foreground);
 }
 
-.theme-picker {
-  display: flex;
-  flex-wrap: wrap;
+.theme-toggle {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
-.theme-picker select {
-  font: inherit;
-  font-family: var(--font-sans);
-  background: var(--background);
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.15rem 0.25rem;
+html:not([data-js]) .theme-toggle {
+  display: none;
 }
 
-html:not([data-js]) .theme-picker {
+[data-scheme="light"] .theme-toggle .icon-sun {
+  display: none;
+}
+
+[data-scheme="dark"] .theme-toggle .icon-moon {
   display: none;
 }
 

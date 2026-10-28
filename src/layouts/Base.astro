@@ -85,37 +85,41 @@ const ogImage = new URL("/og-image.png", Astro.site)
       ;(() => {
         const KEY = "theme"
         const root = document.documentElement
-        const select = document.getElementById("theme-select")
+        const button = document.getElementById("theme-toggle")
         const query = window.matchMedia("(prefers-color-scheme: dark)")
 
         const set = (name, choice) => {
           root.dataset.theme = name
-          root.dataset.scheme = getComputedStyle(root).colorScheme.includes("dark")
-            ? "dark"
-            : "light"
+          root.dataset.scheme = name
           root.dataset.themeChoice = choice
-          if (select) select.value = choice
+          if (button) {
+            button.setAttribute(
+              "aria-label",
+              name === "dark" ? "Switch to light theme" : "Switch to dark theme",
+            )
+          }
         }
 
-        const resolve = (choice) =>
-          choice === "system" ? (query.matches ? "dark" : "light") : choice
+        set(
+          root.dataset.theme || (query.matches ? "dark" : "light"),
+          root.dataset.themeChoice || "system",
+        )
 
-        if (select) {
-          select.value = root.dataset.themeChoice || "system"
-          select.addEventListener("change", () => {
-            const choice = select.value
+        if (button) {
+          button.addEventListener("click", () => {
+            const next = root.dataset.scheme === "dark" ? "light" : "dark"
             try {
-              localStorage.setItem(KEY, choice)
+              localStorage.setItem(KEY, next)
             } catch {
               /* storage is optional */
             }
-            set(resolve(choice), choice)
+            set(next, next)
           })
         }
 
         query.addEventListener("change", () => {
           if ((root.dataset.themeChoice || "system") === "system") {
-            set(resolve("system"), "system")
+            set(query.matches ? "dark" : "light", "system")
           }
         })
 

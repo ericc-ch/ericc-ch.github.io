@@ -17,9 +17,4 @@ export default defineConfig({
       },
     },
   },
-  redirects: {
-    "/blog": "/posts/",
-    "/work": "/",
-    "/projects": "/",
-  },
 })

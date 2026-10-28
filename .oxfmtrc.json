@@ -1,12 +1,6 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": [
-    "dist/**",
-    "public/**",
-    "src/content/**",
-    "bun.lock",
-    "src/styles/themes.generated.css"
-  ],
+  "ignorePatterns": ["dist/**", "public/**", "src/content/**", "bun.lock"],
   "semi": false,
   "sortPackageJson": true,
   "astro": {

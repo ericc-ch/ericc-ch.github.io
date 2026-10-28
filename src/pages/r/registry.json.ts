@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro"
-import { themes } from "@lib/themes"
 
 export const GET: APIRoute = ({ site }) => {
   const origin = site ?? new URL("https://ericc.ch")
@@ -8,12 +7,20 @@ export const GET: APIRoute = ({ site }) => {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "ericc",
     homepage: origin.href,
-    items: themes.map((theme) => ({
-      name: theme.name,
-      type: "registry:theme",
-      title: `${theme.label} theme`,
-      description: `The ${theme.label.toLowerCase()} theme for the ericc.ch design system.`,
-    })),
+    items: [
+      {
+        name: "light",
+        type: "registry:theme",
+        title: "Light theme",
+        description: "The light palette from ericc.ch.",
+      },
+      {
+        name: "dark",
+        type: "registry:theme",
+        title: "Dark theme",
+        description: "The dark palette from ericc.ch.",
+      },
+    ],
   }
 
   return new Response(JSON.stringify(index, null, 2), {

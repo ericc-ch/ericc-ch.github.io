@@ -6,18 +6,16 @@
   "scripts": {
     "astro": "astro",
     "build": "astro build",
-    "check": "bun run themes && bun run typecheck && bun run lint && bun run format && bun run build",
+    "check": "bun run contrast && bun run typecheck && bun run lint && bun run format && bun run build",
+    "contrast": "bun scripts/check-contrast.ts",
     "dev": "astro dev",
     "dev:network": "astro dev --host",
     "format": "oxfmt --check",
     "format:fix": "oxfmt",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "prebuild": "bun run themes",
-    "predev": "bun run themes",
     "preview": "astro preview",
     "preview:network": "astro preview --host",
-    "themes": "bun scripts/build-themes.ts",
     "typecheck": "astro sync && tsc --noEmit --runExternalCode"
   },
   "dependencies": {

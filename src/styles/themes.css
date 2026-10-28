@@ -1,0 +1,40 @@
+/*
+ * The whole palette. Six colours, two themes.
+ *
+ * Light is defined once, on :root. Dark appears twice: inside the media query
+ * for visitors without JS, and as an attribute for the toggle. Keep those two
+ * blocks in sync — scripts/check-contrast.ts fails the build if either drifts
+ * into unreadable contrast.
+ */
+
+:root {
+  color-scheme: light;
+  --bg-0: #fcfcfc;
+  --bg-1: #f2f2f2;
+  --bg-2: #e8e8e8;
+  --fg-0: #111111;
+  --fg-1: #575757;
+  --fg-2: #cfcfcf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg-0: #111111;
+    --bg-1: #1a1a1a;
+    --bg-2: #242424;
+    --fg-0: #ededed;
+    --fg-1: #a3a3a3;
+    --fg-2: #333333;
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-0: #111111;
+  --bg-1: #1a1a1a;
+  --bg-2: #242424;
+  --fg-0: #ededed;
+  --fg-1: #a3a3a3;
+  --fg-2: #333333;
+}

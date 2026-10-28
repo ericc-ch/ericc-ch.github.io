@@ -1,6 +1,6 @@
 .site-header {
-  background: var(--background);
-  border-bottom: 1px solid var(--border);
+  background: var(--bg-0);
+  border-bottom: 1px solid var(--fg-2);
 }
 
 .site-header .wrap {
@@ -41,12 +41,11 @@ html:not([data-js]) #theme-toggle {
 }
 
 .page-lede {
-  color: var(--muted-foreground);
+  color: var(--fg-1);
   margin-bottom: clamp(1.75rem, 1rem + 3vw, 3rem);
 }
 
 .section-title {
-  color: var(--foreground);
   margin-bottom: 0.75rem;
 }
 
@@ -74,11 +73,11 @@ html:not([data-js]) #theme-toggle {
   display: grid;
   gap: 0.15rem;
   padding-block: 0.7rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--fg-2);
 }
 
 .entry-list li:first-child {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--fg-2);
 }
 
 .entry-list > li > a {
@@ -92,7 +91,7 @@ html:not([data-js]) #theme-toggle {
 .entry-when {
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  color: var(--muted-foreground);
+  color: var(--fg-1);
   white-space: nowrap;
   text-align: right;
 }
@@ -107,7 +106,7 @@ html:not([data-js]) #theme-toggle {
 .entry-detail {
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  color: var(--muted-foreground);
+  color: var(--fg-1);
 }
 
 .inline-list {
@@ -144,7 +143,7 @@ html:not([data-js]) #theme-toggle {
   gap: 0.4rem 0.75rem;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  color: var(--muted-foreground);
+  color: var(--fg-1);
 }
 
 .post-tags {
@@ -157,7 +156,7 @@ html:not([data-js]) #theme-toggle {
 }
 
 .post-tags li {
-  border: 1px solid var(--border);
+  border: 1px solid var(--fg-2);
   border-radius: var(--radius);
   padding: 0 0.4rem;
   font-size: var(--text-xs);
@@ -174,7 +173,7 @@ html:not([data-js]) #theme-toggle {
 
 .toc {
   margin-block: 0 clamp(1.75rem, 1rem + 3vw, 2.5rem);
-  border-block: 1px solid var(--border);
+  border-block: 1px solid var(--fg-2);
   padding-block: 0.6rem;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
@@ -182,11 +181,11 @@ html:not([data-js]) #theme-toggle {
 
 .toc summary {
   cursor: pointer;
-  color: var(--muted-foreground);
+  color: var(--fg-1);
 }
 
 .toc summary:hover {
-  color: var(--foreground);
+  color: var(--fg-0);
 }
 
 .toc ul {
@@ -201,11 +200,11 @@ html:not([data-js]) #theme-toggle {
 
 .toc a {
   text-decoration: none;
-  color: var(--muted-foreground);
+  color: var(--fg-1);
 }
 
 .toc a:hover {
-  color: var(--foreground);
+  color: var(--fg-0);
   text-decoration: underline;
 }
 
@@ -225,23 +224,23 @@ html:not([data-js]) #theme-toggle {
   width: min(36rem, calc(100dvw - 1.5rem));
   max-height: 80dvh;
   padding: 0;
-  border: 1px solid var(--border);
+  border: 1px solid var(--fg-2);
   border-radius: var(--radius);
-  background: var(--popover);
-  color: var(--popover-foreground);
+  background: var(--bg-1);
+  color: var(--fg-0);
   margin: 8dvh auto auto;
   overflow: hidden;
 }
 
 #palette::backdrop {
-  background: color-mix(in oklab, var(--foreground) 40%, transparent);
+  background: rgb(0 0 0 / 45%);
 }
 
 .palette-field {
   display: block;
   padding: 0.9rem 1rem;
   border: 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--fg-2);
   width: 100%;
   font-family: var(--font-sans);
   font-size: 1rem; /* below 16px iOS zooms the whole page on focus */
@@ -250,7 +249,7 @@ html:not([data-js]) #theme-toggle {
 }
 
 .palette-field:focus-visible {
-  outline: 2px solid var(--ring);
+  outline: 2px solid var(--fg-0);
   outline-offset: -3px;
 }
 
@@ -274,18 +273,13 @@ html:not([data-js]) #theme-toggle {
 }
 
 .palette-results li[aria-selected="true"] {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--bg-2);
 }
 
 .palette-results .meta {
   font-family: var(--font-sans);
   font-size: var(--text-xs);
-  color: var(--muted-foreground);
-}
-
-.palette-results li[aria-selected="true"] .meta {
-  color: inherit;
+  color: var(--fg-1);
 }
 
 .palette-empty {
@@ -293,5 +287,5 @@ html:not([data-js]) #theme-toggle {
   padding: 1.25rem 1rem;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
-  color: var(--muted-foreground);
+  color: var(--fg-1);
 }

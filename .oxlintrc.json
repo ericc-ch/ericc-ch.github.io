@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
 
-  "ignorePatterns": ["dist/**", ".astro/**", "public/**", "src/styles/themes.generated.css"],
+  "ignorePatterns": ["dist/**", ".astro/**", "public/**"],
 
   "plugins": ["import", "oxc", "promise", "unicorn", "typescript"],
 

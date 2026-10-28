@@ -7,7 +7,6 @@ import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2"
 import Nav from "@components/Nav.astro"
 import Palette from "@components/Palette.astro"
 import { SITE } from "@consts"
-import { schemeByName } from "@lib/themes"
 import "../styles/main.css"
 
 interface Props {
@@ -49,7 +48,7 @@ const ogImage = new URL("/og-image.png", Astro.site)
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <script is:inline define:vars={{ schemeByName }}>
+    <script is:inline>
       ;(() => {
         const root = document.documentElement
         root.dataset.js = "1"
@@ -61,12 +60,11 @@ const ogImage = new URL("/og-image.png", Astro.site)
           stored = null
         }
 
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-        const chosen = stored && stored !== "system" && stored in schemeByName ? stored : null
-        const name = chosen || (prefersDark ? "dark" : "light")
+        const chosen = stored === "light" || stored === "dark" ? stored : null
+        const name =
+          chosen || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
 
         root.dataset.theme = name
-        root.dataset.scheme = schemeByName[name] || "light"
         root.dataset.themeChoice = chosen || "system"
       })()
     </script>
@@ -89,7 +87,6 @@ const ogImage = new URL("/og-image.png", Astro.site)
 
         const set = (name, choice) => {
           root.dataset.theme = name
-          root.dataset.scheme = name
           root.dataset.themeChoice = choice
           if (button) {
             button.textContent = name === "dark" ? "Light" : "Dark"
@@ -107,7 +104,7 @@ const ogImage = new URL("/og-image.png", Astro.site)
 
         if (button) {
           button.addEventListener("click", () => {
-            const next = root.dataset.scheme === "dark" ? "light" : "dark"
+            const next = root.dataset.theme === "dark" ? "light" : "dark"
             try {
               localStorage.setItem(KEY, next)
             } catch {

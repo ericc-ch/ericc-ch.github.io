@@ -6,11 +6,11 @@ deterministic
 
 ## Sub-features
 
-- Dual Shiki themes: `vitesse-light` inline, `vitesse-dark` as `--shiki-dark`
+- Dual Shiki themes: `github-light-high-contrast` inline, `github-dark-high-contrast` as `--shiki-dark`
 - Dark override applied on `[data-theme="dark"]` and in `prefers-color-scheme` with `!important`
 - Code and caption at `--text-sm` (14px), JetBrains Mono
 - Copy button with a language label in `figure.code > figcaption`
-- Background forced to `--bg-1` over Shiki's own inline background
+- Background forced to `--bg-0` over Shiki's own inline background
 
 ## How to get to it (user POV)
 
@@ -21,14 +21,18 @@ language and a **Copy** button, then the code.
 ## Driving it with Playwright
 
 ```js
-const span = page.locator(".astro-code span", { hasText: "Page Snapshot" })
-const color = await span.evaluate((node) => getComputedStyle(node).color)
+const light = await page.evaluate(() => {
+  const spans = [...document.querySelectorAll(".astro-code span")]
+  const target = spans.find((span) => span.textContent.trim() && span.style.color)
+  return { computed: getComputedStyle(target).color, inline: target.style.color }
+})
 const pre = page.locator(".code pre")
 const size = await pre.evaluate((node) => getComputedStyle(node).fontSize) // 14px
 const family = await pre.evaluate((node) => getComputedStyle(node).fontFamily)
 ```
 
-Contrast is computed in the driver from the resolved `color` and the `pre` background.
+Contrast is computed over **every** token, compositing alpha onto the `pre` background, and
+the minimum is asserted. Measured on the current themes: **4.91:1** light, **8.90:1** dark.
 
 ## Gotchas
 
@@ -36,11 +40,17 @@ Contrast is computed in the driver from the resolved `color` and the `pre` backg
   `!important` silently loses. The symptom is subtle: the page goes dark, the code stays
   light, and it still looks readable enough to pass a glance. Reading the computed colour
   is the only reliable check.
-- Each token carries both palettes inline: `color:#B56959;--shiki-dark:#C98A7D`. Picking a
-  span by its attribute string can match a low-alpha punctuation token
-  (`#B5695977`) — select by text content instead.
-- `vitesse-light` is tuned for a white background. On `--bg-1` (`#f2f2f2`) some tokens fall
-  below 4.5:1; the string token measures 3.66:1. This is a real gap, not a driver bug.
+- **Do not select a token by its text.** Shiki's tokenizer boundary depends on the theme —
+  `vitesse` split `"Page Snapshot"` into a quote span plus the text, `github-*` keeps the
+  quotes in one token. Select the first span that has both text and an inline colour.
+- **`.astro-code span` also matches `.line` wrappers**, which have no inline colour. Require
+  `span.style.color` or the checks read an inherited value.
+- **Alpha matters.** Punctuation tokens carry alpha (`#B5695977`). Composite the alpha onto
+  the background before computing contrast, or the ratio is wrong.
+- **Light themes are tuned for white.** On our background, only
+  `github-light-high-contrast` cleared 4.5:1 across every token; `vitesse-light` bottomed
+  out at 3.66:1 on `--bg-1` and 4.09:1 even on white. Swapping the pair was the fix, not a
+  tweak to the background.
 - The `pre` background comes from our CSS with `!important`, not from Shiki; Shiki's
   `--shiki-dark-bg` is unused.
 

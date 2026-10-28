@@ -6,7 +6,6 @@ const BASE = process.env.BASE_URL ?? "http://localhost:4321"
 const EVIDENCE = ".audit/evidence"
 
 const ARTICLE = "/posts/writing-my-own-shitty-version-of-executor/"
-const TOKEN = "Page Snapshot"
 
 function resolveChromium() {
   if (process.env.CHROMIUM_BIN) return process.env.CHROMIUM_BIN
@@ -48,31 +47,72 @@ const hexToRgb = (value) => {
 }
 
 const read = (page) =>
-  page.evaluate(
-    ({ token }) => {
-      const spans = [...document.querySelectorAll(".astro-code span")]
-      const target = spans.find((span) => span.textContent === token)
-      const pre = document.querySelector(".code pre")
-      const wrap = document.querySelector(".wrap")
-      const caption = document.querySelector(".code figcaption")
-      return {
-        theme: document.documentElement.dataset.theme ?? null,
-        js: document.documentElement.dataset.js ?? null,
-        body: getComputedStyle(document.body).backgroundColor,
-        token: target ? getComputedStyle(target).color : null,
-        tokenLight: target ? target.style.color : null,
-        tokenDark: target ? getComputedStyle(target).getPropertyValue("--shiki-dark").trim() : null,
-        preBackground: pre ? getComputedStyle(pre).backgroundColor : null,
-        preFont: pre ? getComputedStyle(pre).fontFamily : null,
-        preSize: pre ? getComputedStyle(pre).fontSize : null,
-        captionSize: caption ? getComputedStyle(caption).fontSize : null,
-        wrapWidth: wrap ? wrap.getBoundingClientRect().width : null,
-        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-        toggleLabel: document.getElementById("theme-toggle")?.textContent ?? null,
+  page.evaluate(() => {
+    const spans = [...document.querySelectorAll(".astro-code span")]
+    const target = spans.find((span) => span.textContent.trim() && span.style.color)
+    const pre = document.querySelector(".code pre")
+    const wrap = document.querySelector(".wrap")
+    const caption = document.querySelector(".code figcaption")
+
+    const channel = (value) => {
+      const scaled = value / 255
+      return scaled <= 0.04045 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4
+    }
+    const luminance = ([red, green, blue]) =>
+      0.2126 * channel(red) + 0.7152 * channel(green) + 0.0722 * channel(blue)
+    const ratio = (first, second) => {
+      const a = luminance(first)
+      const b = luminance(second)
+      const [light, dark] = a > b ? [a, b] : [b, a]
+      return (light + 0.05) / (dark + 0.05)
+    }
+    const parse = (value) => {
+      const parts = value?.match(/[\d.]+/g)?.map(Number) ?? []
+      return parts.length >= 3 ? [parts[0], parts[1], parts[2], parts[3] ?? 1] : null
+    }
+
+    let worst = { ratio: 99, text: null, color: null }
+    if (pre) {
+      const background = parse(getComputedStyle(pre).backgroundColor)
+      if (background) {
+        for (const span of spans) {
+          if (!span.textContent.trim() || !span.style.color) continue
+          const foreground = parse(getComputedStyle(span).color)
+          if (!foreground) continue
+          const blended = foreground
+            .slice(0, 3)
+            .map((value, index) =>
+              Math.round(value * foreground[3] + background[index] * (1 - foreground[3])),
+            )
+          const value = ratio(blended, background)
+          if (value < worst.ratio) {
+            worst = {
+              ratio: Number(value.toFixed(2)),
+              text: span.textContent.trim().slice(0, 20),
+              color: getComputedStyle(span).color,
+            }
+          }
+        }
       }
-    },
-    { token: TOKEN },
-  )
+    }
+
+    return {
+      theme: document.documentElement.dataset.theme ?? null,
+      js: document.documentElement.dataset.js ?? null,
+      body: getComputedStyle(document.body).backgroundColor,
+      token: target ? getComputedStyle(target).color : null,
+      tokenLight: target ? target.style.color : null,
+      tokenDark: target ? getComputedStyle(target).getPropertyValue("--shiki-dark").trim() : null,
+      tokenMin: worst,
+      preBackground: pre ? getComputedStyle(pre).backgroundColor : null,
+      preFont: pre ? getComputedStyle(pre).fontFamily : null,
+      preSize: pre ? getComputedStyle(pre).fontSize : null,
+      captionSize: caption ? getComputedStyle(caption).fontSize : null,
+      wrapWidth: wrap ? wrap.getBoundingClientRect().width : null,
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      toggleLabel: document.getElementById("theme-toggle")?.textContent ?? null,
+    }
+  })
 
 const results = []
 const failures = []
@@ -166,9 +206,14 @@ const rows = [
     `${dark.token} vs ${dark.tokenLight}`,
   ],
   [
+    "light code readable",
+    light.tokenMin.ratio >= 4.5,
+    `${light.tokenMin.ratio}:1 at "${light.tokenMin.text}"`,
+  ],
+  [
     "dark code readable",
-    contrast(rgb(dark.token), rgb(dark.preBackground)) >= 4.5,
-    `${contrast(rgb(dark.token), rgb(dark.preBackground)).toFixed(2)}:1`,
+    dark.tokenMin.ratio >= 4.5,
+    `${dark.tokenMin.ratio}:1 at "${dark.tokenMin.text}"`,
   ],
   [
     "no-JS follows system dark",

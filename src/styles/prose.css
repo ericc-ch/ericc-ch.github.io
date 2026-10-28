@@ -69,7 +69,6 @@
   font-size: 0.875em;
   background: var(--bg-1);
   padding: 0.12em 0.35em;
-  border-radius: var(--radius);
 }
 
 .prose pre code {
@@ -108,9 +107,18 @@
 
 .code {
   border: 1px solid var(--fg-2);
-  border-radius: var(--radius);
   overflow: hidden;
   margin-block: 0 1.4em;
+}
+
+/* The pre scrolls its own overflow, so its focus ring is clipped by the figure. */
+.code:has(pre:focus-visible) {
+  outline: 2px solid var(--fg-0);
+  outline-offset: 2px;
+}
+
+.code pre:focus-visible {
+  outline: none;
 }
 
 .code figcaption {

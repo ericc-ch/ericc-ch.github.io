@@ -189,13 +189,14 @@ No shadows, no blur, no layers. Depth is a 1px hairline in `--fg-2` plus a surfa
 
 - Section and row separators: 1px `--fg-2`, full width of the measure.
 - Code blocks: 1px border, caption bar on `--bg-1`, body on the Shiki theme's own background.
-- Focus: 2px `--fg-0` outline, 2px offset, never removed.
+- Focus: 2px `--fg-0` outline, 2px offset, never removed. A focused code block puts the ring
+  on the figure, because the `<pre>` scrolls and would clip its own.
 - Selection: `color-mix(in oklab, var(--fg-0) 20%, transparent)`.
 
 # Shapes
 
-Everything is a rectangle. `--radius: 0`, and no element overrides it. Tags, code blocks,
-the skip link and the toggle are all square. A radius would read as a different brand.
+Everything is a rectangle. No element sets a radius: tags, code blocks, the skip link and the
+toggle are all square. A radius would read as a different brand.
 
 # Components
 

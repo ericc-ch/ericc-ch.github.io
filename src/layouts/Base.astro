@@ -56,12 +56,7 @@ const ogImage = new URL("/og-image.png", Astro.site)
           stored = null
         }
 
-        const chosen = stored === "light" || stored === "dark" ? stored : null
-        const name =
-          chosen || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-
-        root.dataset.theme = name
-        root.dataset.themeChoice = chosen || "system"
+        if (stored === "light" || stored === "dark") root.dataset.theme = stored
       })()
     </script>
   </head>
@@ -74,44 +69,33 @@ const ogImage = new URL("/og-image.png", Astro.site)
 
     <script is:inline>
       ;(() => {
-        const KEY = "theme"
         const root = document.documentElement
         const button = document.getElementById("theme-toggle")
         const query = window.matchMedia("(prefers-color-scheme: dark)")
+        const current = () => root.dataset.theme ?? (query.matches ? "dark" : "light")
 
-        const set = (name, choice) => {
-          root.dataset.theme = name
-          root.dataset.themeChoice = choice
-          if (button) {
-            button.textContent = name === "dark" ? "Light" : "Dark"
-            button.setAttribute(
-              "aria-label",
-              name === "dark" ? "Switch to light theme" : "Switch to dark theme",
-            )
+        const render = () => {
+          if (!button) return
+          const dark = current() === "dark"
+          button.textContent = dark ? "Light" : "Dark"
+          button.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme")
+        }
+
+        render()
+
+        button?.addEventListener("click", () => {
+          const next = current() === "dark" ? "light" : "dark"
+          root.dataset.theme = next
+          try {
+            localStorage.setItem("theme", next)
+          } catch {
+            /* storage is optional */
           }
-        }
-
-        set(
-          root.dataset.theme || (query.matches ? "dark" : "light"),
-          root.dataset.themeChoice || "system",
-        )
-
-        if (button) {
-          button.addEventListener("click", () => {
-            const next = root.dataset.theme === "dark" ? "light" : "dark"
-            try {
-              localStorage.setItem(KEY, next)
-            } catch {
-              /* storage is optional */
-            }
-            set(next, next)
-          })
-        }
+          render()
+        })
 
         query.addEventListener("change", () => {
-          if ((root.dataset.themeChoice || "system") === "system") {
-            set(query.matches ? "dark" : "light", "system")
-          }
+          if (!root.dataset.theme) render()
         })
       })()
     </script>

@@ -85,15 +85,13 @@ const updated = post.data.updatedAt
     }
 
     const copy = async () => {
-      if (navigator.clipboard && window.isSecureContext) {
-        try {
-          await navigator.clipboard.writeText(text)
-          return true
-        } catch {
-          // permission denied or document not focused
-        }
+      if (!navigator.clipboard || !window.isSecureContext) return fallback()
+      try {
+        await navigator.clipboard.writeText(text)
+        return true
+      } catch {
+        return fallback()
       }
-      return fallback()
     }
 
     const copied = await copy()

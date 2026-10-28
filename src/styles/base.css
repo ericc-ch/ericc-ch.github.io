@@ -8,7 +8,6 @@
   --text-2xl: clamp(1.6625rem, 1.6321rem + 0.1522vw, 1.75rem);
   --measure: 48ch;
   --gutter: 1.25rem;
-  --radius: 0;
 }
 
 *,

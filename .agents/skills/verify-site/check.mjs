@@ -170,6 +170,24 @@ const narrow = await read(narrowPage)
 await narrowPage.screenshot({ path: `${EVIDENCE}/layout-320.png` })
 await narrowContext.close()
 
+const focusContext = await browser.newContext({ viewport: { width: 1280, height: 900 } })
+const focusPage = await focusContext.newPage()
+await focusPage.goto(`${BASE}${ARTICLE}`)
+for (let index = 0; index < 40; index += 1) {
+  await focusPage.keyboard.press("Tab")
+  if (await focusPage.evaluate(() => document.activeElement?.tagName === "PRE")) break
+}
+const focus = await focusPage.evaluate(() => {
+  const figure = document.querySelector(".code")
+  const style = figure ? getComputedStyle(figure) : null
+  return {
+    active: document.activeElement?.tagName ?? null,
+    outline: style ? `${style.outlineStyle} ${style.outlineWidth}` : null,
+  }
+})
+await focusPage.screenshot({ path: `${EVIDENCE}/code-focus.png` })
+await focusContext.close()
+
 const copyContext = await browser.newContext({
   permissions: ["clipboard-read", "clipboard-write"],
 })
@@ -215,7 +233,7 @@ const rows = [
   ["article responds", light.status === 200, `HTTP ${light.status}`],
   [
     "light palette applies",
-    light.theme === "light" && light.body === "rgb(252, 252, 252)",
+    light.body === "rgb(252, 252, 252)",
     `${light.theme} ${light.body}`,
   ],
   [
@@ -225,7 +243,7 @@ const rows = [
   ],
   [
     "dark palette applies",
-    dark.theme === "dark" && dark.body === "rgb(17, 17, 17)",
+    dark.body === "rgb(17, 17, 17)",
     `${dark.theme} ${dark.body}`,
   ],
   [
@@ -282,6 +300,11 @@ const rows = [
     copied.clipboard === null ? "not readable on this origin" : `${copied.clipboard.length} chars`,
   ],
   ["copy resets its label", copyRestored === "Copy", copyRestored],
+  [
+    "code block keeps a visible focus ring",
+    focus.active === "PRE" && focus.outline === "solid 2px",
+    `${focus.active} ${focus.outline}`,
+  ],
 ]
 
 for (const [label, condition, detail] of rows) check(label, condition, detail)

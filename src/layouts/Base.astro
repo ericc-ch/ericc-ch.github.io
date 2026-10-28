@@ -5,7 +5,6 @@ import "@fontsource/inter/latin-400.css"
 import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2"
 import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2"
 import Nav from "@components/Nav.astro"
-import Footer from "@components/Footer.astro"
 import Palette from "@components/Palette.astro"
 import { SITE } from "@consts"
 import { schemeByName } from "@lib/themes"
@@ -78,7 +77,7 @@ const ogImage = new URL("/og-image.png", Astro.site)
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer />
+
     <Palette />
 
     <script is:inline>

@@ -182,9 +182,30 @@ column; that is the only grid in the system.
 
 The narrowest supported width is 320px. Nothing may scroll sideways there.
 
+# Cascade
+
+`src/styles/main.css` declares one layer order and imports each file into its layer:
+
+```css
+@layer tokens, base, prose, ui;
+```
+
+A later layer beats an earlier one before specificity or source order is considered. That is
+what lets `prose.css` write `h2` instead of `.prose h2` and still outrank the `h1…h6` reset
+in `base.css`, and it means a future override goes where it belongs instead of being padded
+with extra selectors.
+
+- `tokens` — custom properties and `color-scheme` (`themes.css`).
+- `base` — element defaults, reset, focus ring, link and button styling.
+- `prose` — everything inside `@scope (.prose)`.
+- `ui` — header, nav, entry rows, post meta, table of contents.
+
+Only `@font-face` stays unlayered; unlayered rules outrank every layer, so new CSS belongs
+inside a layer.
+
 # Elevation & Depth
 
-No shadows, no blur, no layers. Depth is a 1px hairline in `--fg-2` plus a surface fill in
+No shadows, no blur, no depth tricks. Depth is a 1px hairline in `--fg-2` plus a surface fill in
 `--bg-1`.
 
 - Section and row separators: 1px `--fg-2`, full width of the measure.
@@ -239,7 +260,9 @@ component classes are introduced for author content.
 - Don't ship a Shiki theme without measuring every token against the code background.
 - Do run `bun run check` (contrast, typecheck, lint, format, build) before calling a change
   done, and `bun run verify` for anything touching themes, typography or layout.
-- Do update `themes.css` in both dark blocks at once; the contrast script reads the
-  attribute block but the media query is what no-JS visitors see.
+- Do import new CSS through `main.css` with an explicit layer, so the order stays declared in
+  one place.
+- Do keep `themes.css` to one `light-dark()` pair per token. `parsePalettes` reads the pairs,
+  and the contrast script checks both sides of each one.
 - Do keep the registry endpoints (`/r/*.json`) in sync by reading `themes.css` rather than
   duplicating values.

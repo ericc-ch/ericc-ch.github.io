@@ -161,6 +161,23 @@ const wideContext = await browser.newContext({ viewport: { width: 1280, height: 
 const widePage = await wideContext.newPage()
 await widePage.goto(`${BASE}${ARTICLE}`)
 const wide = await read(widePage)
+
+// Layers are global by name, so a style tag joins the existing layers. `base` must lose to
+// `prose` even with a higher-specificity selector; `ui` must win with the same selector.
+const layered = await widePage.evaluate(() => {
+  const heading = document.querySelector(".prose h2")
+  const style = document.createElement("style")
+  document.head.append(style)
+
+  const before = getComputedStyle(heading).marginBlockStart
+  const marginWith = (layer) => {
+    style.textContent = `@layer ${layer} { .prose h2 { margin-block-start: 200px } }`
+    return getComputedStyle(heading).marginBlockStart
+  }
+
+  return { before, early: marginWith("base"), late: marginWith("ui") }
+})
+
 await wideContext.close()
 
 const narrowContext = await browser.newContext({ viewport: { width: 320, height: 800 } })
@@ -282,6 +299,12 @@ const rows = [
     `${wide.preSize} / ${wide.captionSize}`,
   ],
   ["measure caps at 48ch", wide.wrapWidth !== null && wide.wrapWidth < 600, `${wide.wrapWidth}px`],
+  [
+    "an earlier layer cannot override prose",
+    layered.early === layered.before,
+    `${layered.early} vs ${layered.before}`,
+  ],
+  ["the last layer overrides prose", layered.late === "200px", layered.late],
   ["320px has no sideways scroll", narrow.overflow <= 0, `${narrow.overflow}px`],
   ["copy reports success", copied.button === "Copied", copied.button],
   ["copy announces to a live region", copied.status === "Code copied to clipboard", copied.status],
@@ -308,7 +331,7 @@ writeFileSync(
       base: BASE,
       at: new Date().toISOString(),
       results,
-      states: { light, dark, darkNoJs, toggled, wide, narrow },
+      states: { light, dark, darkNoJs, toggled, wide, narrow, layered },
     },
     null,
     2,

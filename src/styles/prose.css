@@ -60,7 +60,6 @@
 }
 
 .prose figcaption {
-  font-family: var(--font-sans);
   color: var(--fg-1);
   margin-top: 0.6rem;
 }
@@ -92,7 +91,6 @@
 }
 
 .prose th {
-  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--fg-1);
 }
@@ -124,7 +122,6 @@
   padding: 0.3rem 0.35rem 0.3rem 0.7rem;
   background: var(--bg-1);
   border-bottom: 1px solid var(--fg-2);
-  font-family: var(--font-sans);
   color: var(--fg-1);
 }
 
@@ -133,12 +130,9 @@
   padding: 0.9rem 1rem;
   overflow-x: auto;
   background-color: var(--bg-1) !important;
+  font-family: var(--font-mono);
   line-height: 1.6;
   tab-size: 2;
-}
-
-.copy {
-  font-family: var(--font-sans);
 }
 
 [data-theme="dark"] .astro-code span {

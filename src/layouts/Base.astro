@@ -1,9 +1,7 @@
 ---
-import "@fontsource/lora/latin-400.css"
-import "@fontsource/lora/latin-600.css"
-import "@fontsource/inter/latin-400.css"
-import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2"
-import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2"
+import "@fontsource-variable/plus-jakarta-sans/wght.css"
+import "@fontsource-variable/jetbrains-mono/wght.css"
+import sans from "@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2"
 import Nav from "@components/Nav.astro"
 import { SITE } from "@consts"
 import "../styles/main.css"
@@ -34,8 +32,7 @@ const ogImage = new URL("/og-image.png", Astro.site)
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title={SITE.NAME} href="/rss.xml" />
 
-    <link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sans} as="font" type="font/woff2" crossorigin />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />

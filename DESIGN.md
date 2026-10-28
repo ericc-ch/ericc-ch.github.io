@@ -108,10 +108,10 @@ Contrast floors, checked by `bun run contrast`:
 
 | Pair             | Minimum | Actual (light / dark) |
 | ---------------- | ------- | --------------------- |
-| Body on page     | 7:1     | 18.4 / 16.1           |
-| Muted on page    | 7:1     | 7.0 / 7.5             |
-| Text on surface  | 7:1     | 18.4 / 16.1           |
-| Hairline on page | 1.2:1   | 1.49 / 1.32           |
+| Body on page     | 7:1     | 18.41 / 16.13         |
+| Muted on page    | 7:1     | 7.04 / 7.49           |
+| Text on surface  | 7:1     | 16.87 / 14.87         |
+| Hairline on page | 1.2:1   | 1.52 / 1.49           |
 
 The dark palette is written twice in `src/styles/themes.css`: once inside
 `prefers-color-scheme` for visitors without JavaScript, once on `[data-theme="dark"]` for the

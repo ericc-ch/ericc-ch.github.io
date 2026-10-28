@@ -27,6 +27,11 @@ html:not([data-js]) #theme-toggle {
   display: none;
 }
 
+time,
+.entry-when {
+  font-family: var(--font-mono);
+}
+
 .page-title {
   margin-bottom: 0.35rem;
 }

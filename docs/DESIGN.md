@@ -37,7 +37,7 @@ page rather than for contrast. Code is texture, not body copy.
 
 ## Typography
 
-Plus Jakarta Sans for text, JetBrains Mono for code. No second text face, no icons.
+Plus Jakarta Sans for text, JetBrains Mono for code and dates. No second text face, no icons.
 
 Four fluid sizes: 16 body, 22 `h3`, 24 `h2`, 28 `h1`, with 14 fixed for code. The ladder is
 5% smaller at 320px and reaches full size at 1240px. `line-height: 1.5` everywhere, set once.

@@ -42,6 +42,7 @@ const read = (page) =>
       span.textContent.trim() && span.style.getPropertyValue("--shiki-light")
     const target = spans.find(isToken)
     const pre = document.querySelector(".code pre")
+    const date = document.querySelector(".post-meta time")
     const wrap = document.querySelector(".wrap")
     const caption = document.querySelector(".code figcaption")
 
@@ -97,6 +98,7 @@ const read = (page) =>
       tokenMin: worst,
       preBackground: pre ? getComputedStyle(pre).backgroundColor : null,
       preFont: pre ? getComputedStyle(pre).fontFamily : null,
+      dateFont: date ? getComputedStyle(date).fontFamily : null,
       preSize: pre ? getComputedStyle(pre).fontSize : null,
       captionSize: caption ? getComputedStyle(caption).fontSize : null,
       wrapWidth: wrap ? wrap.getBoundingClientRect().width : null,
@@ -290,6 +292,7 @@ const rows = [
     `${toggledBack.theme} ${toggledBack.toggleLabel}`,
   ],
   ["code is JetBrains Mono", wide.preFont?.includes("JetBrains Mono"), wide.preFont],
+  ["dates are JetBrains Mono", wide.dateFont?.includes("JetBrains Mono"), wide.dateFont],
   [
     "code is 14px",
     wide.preSize === "14px" && wide.captionSize === "14px",

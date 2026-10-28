@@ -13,11 +13,6 @@ export function readingTime(body: string | undefined): string {
   return `${Math.max(1, Math.round(words / 200))} min read`
 }
 
-export function dateRange(start: Date, end: Date | string): string {
-  const startYear = start.getFullYear()
-
-  if (typeof end === "string") return `${startYear} - ${end}`
-
-  const endYear = end.getFullYear()
-  return endYear === startYear ? `${startYear}` : `${startYear} - ${endYear}`
+export function dateRange(start: string, end: string): string {
+  return start === end ? start : `${start} - ${end}`
 }

@@ -1,8 +1,8 @@
 ---
 company: "Xcidic"
 role: "Software Engineer"
-dateStart: "1 February 2022"
-dateEnd: "Present"
+dateStart: "2022"
+dateEnd: "2026"
 ---
 
 I served as Acting Head of Technology Division for three months, where I managed human resources for approximately five projects and assisted in running a free Golang course offered by our company to two selected backend developers.

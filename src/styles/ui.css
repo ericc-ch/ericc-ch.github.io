@@ -80,6 +80,16 @@
 .theme-toggle {
   display: inline-flex;
   align-items: center;
+  padding: 0.35rem 0 0.35rem 0.35rem;
+  font: inherit;
+  color: var(--muted-foreground);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--foreground);
 }
 
 html:not([data-js]) .theme-toggle {

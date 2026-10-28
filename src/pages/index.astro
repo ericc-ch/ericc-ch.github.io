@@ -10,11 +10,8 @@ const posts = (await getCollection("blog"))
 
 const latest = posts.slice(0, 3)
 
-const endOf = (value: Date | string) =>
-  typeof value === "string" ? Number.POSITIVE_INFINITY : value.valueOf()
-
 const work = (await getCollection("work"))
-  .sort((first, second) => endOf(second.data.dateEnd) - endOf(first.data.dateEnd))
+  .sort((first, second) => second.data.dateEnd.localeCompare(first.data.dateEnd))
   .slice(0, 3)
 
 const projects = (await getCollection("projects"))
@@ -25,7 +22,7 @@ const projects = (await getCollection("projects"))
 
 <Base>
   <div class="wrap home">
-    <h1 class="sr-only">{SITE.NAME}</h1>
+    <h1>{SITE.NAME}</h1>
 
     <section class="lede">
       <p>

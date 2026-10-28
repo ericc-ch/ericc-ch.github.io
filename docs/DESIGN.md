@@ -1,71 +1,11 @@
----
-version: alpha
-name: Erick's site
-description: A monochrome, typographic personal site. One text family, six colours, no motion.
-colors:
-  background: "#fcfcfc"
-  surface: "#f2f2f2"
-  surface-raised: "#e8e8e8"
-  ink: "#111111"
-  ink-muted: "#575757"
-  rule: "#cfcfcf"
-  primary: "#111111"
-typography:
-  body:
-    fontFamily: "Plus Jakarta Sans"
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.5
-  h3:
-    fontFamily: "Plus Jakarta Sans"
-    fontSize: 22px
-    fontWeight: 600
-    lineHeight: 1.5
-    letterSpacing: -0.011em
-  h2:
-    fontFamily: "Plus Jakarta Sans"
-    fontSize: 24px
-    fontWeight: 600
-    lineHeight: 1.5
-    letterSpacing: -0.011em
-  h1:
-    fontFamily: "Plus Jakarta Sans"
-    fontSize: 28px
-    fontWeight: 600
-    lineHeight: 1.5
-    letterSpacing: -0.011em
-  code:
-    fontFamily: "JetBrains Mono"
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 1.5
-spacing:
-  gutter: 20px
-  section: 56px
-  row: 11px
-rounded:
-  none: 0px
-components:
-  link:
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-  nav-item:
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-  entry-row:
-    textColor: "{colors.ink}"
-    typography: "{typography.body}"
-  code-block:
-    backgroundColor: "{colors.background}"
-    textColor: "{colors.ink}"
-    typography: "{typography.code}"
-    rounded: "{rounded.none}"
----
+# Erick's site
 
-# Overview
+A monochrome, typographic personal site. One text family, six colours, no motion.
 
-A personal site that reads as a page, not an application. Nothing moves, nothing animates,
-nothing is behind a control except the theme toggle.
+## Overview
+
+It reads as a page, not an application. Nothing moves, nothing animates, nothing is behind a
+control except the theme toggle.
 
 The mood is a printed essay or a well-typeset man page: quiet, monochrome, typographic. Text
 is the interface, so every element that is not words has to earn its place.
@@ -73,7 +13,7 @@ is the interface, so every element that is not words has to earn its place.
 It is also the brand basis for two future surfaces — a tinybrowser landing page and a Web
 Platform Tests results page — so these rules are meant to survive without this content.
 
-# Non-negotiables
+## Non-negotiables
 
 - Static build. No client framework, no utility CSS.
 - No third-party JavaScript. The only script is the inline theme bootstrap and its toggle.
@@ -81,14 +21,13 @@ Platform Tests results page — so these rules are meant to survive without this
 - WCAG 2.2 AA, AAA for body text. Syntax highlighting is the one recorded exception.
 - Two themes from the system preference, one text button to switch.
 
-# Colour
+## Colour
 
-Six tokens, no accent, no hue, no state colours. `--bg-0` page, `--bg-1` surfaces, `--bg-2`
-selection, `--fg-0` ink, `--fg-1` muted ink, `--fg-2` hairlines. A seventh colour is a design
-decision, not an addition.
+Six tokens, no accent, no hue, no state colours. Background, two surfaces, ink, muted ink and
+a hairline. A seventh colour is a design decision, not an addition.
 
 Each token is one `light-dark()` pair, so `color-scheme` does the switching and there is no
-duplicated dark block. `primary` exists only because the format requires the key.
+duplicated dark block.
 
 State never lives in colour: the toggle says "Light" or "Dark", copy says "Copied" or "Copy
 failed".
@@ -96,7 +35,7 @@ failed".
 Code is the one place other colours appear — a Shiki theme chosen for how it sits next to the
 page rather than for contrast. Code is texture, not body copy.
 
-# Typography
+## Typography
 
 Plus Jakarta Sans for text, JetBrains Mono for code. No second text face, no icons.
 
@@ -106,7 +45,7 @@ Two weights only: 400, and 600 for headings and `strong`.
 
 Hierarchy comes from size and ink intensity, never from weight or decoration.
 
-# Layout
+## Layout
 
 One column, `min(100% - 2 * gutter, 48ch)`, centred. No grid system and no media queries: the
 column shrinks until it reaches the measure and then stops. 320px is the floor, and nothing
@@ -115,7 +54,7 @@ may scroll sideways there.
 Vertical rhythm is a stack of `clamp()` margins. Entry rows put their metadata right with a
 single `1fr auto` grid.
 
-# Chrome
+## Chrome
 
 Links and buttons are one thing: ink text with an underline that firms up on hover. No
 backgrounds, no pills, no arrows, no primary button.
@@ -126,14 +65,15 @@ hairline-separated rows, not cards. Everything is a rectangle and nothing has a 
 Code blocks get a caption bar with the language and a Copy button; the code itself sits on the
 syntax theme's own background. Focus is a 2px outline and is never removed.
 
-# Structure
+## Structure
 
 Four cascade layers, in order: `tokens`, `base`, `prose`, `ui`. Article content is scoped with
 `@scope (.prose)`. The stylesheets ship without a media query or an `!important`, and the site
 without a client script.
 
-# Rules
+## Rules
 
+- This file is intent, not a copy. Token values, ratios and checks live in `src/styles/` and
+  the scripts.
 - Reuse a token. Adding a colour, size or radius is a decision, not a tweak.
 - Change state with text, not with animation.
-- This file describes intent. Measurements, ratios and the list of checks belong in the code.

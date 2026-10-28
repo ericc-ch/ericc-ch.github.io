@@ -85,21 +85,12 @@ html:not([data-js]) #theme-toggle {
 }
 
 .entry-list > li > a {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: baseline;
-  justify-content: space-between;
   gap: 0.15rem 1rem;
   color: var(--foreground);
   text-decoration: none;
-}
-
-.entry-list > li > a > span {
-  flex: 1 1 20rem;
-}
-
-.entry-list > li > a > time {
-  flex: 0 0 auto;
 }
 
 .entry-list > li > a:hover {
@@ -111,13 +102,14 @@ html:not([data-js]) #theme-toggle {
   font-family: var(--font-sans);
   font-size: 0.8125rem;
   color: var(--muted-foreground);
+  white-space: nowrap;
+  text-align: right;
 }
 
 .entry-main {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: baseline;
-  justify-content: space-between;
   gap: 0.15rem 1rem;
 }
 

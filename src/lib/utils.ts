@@ -14,10 +14,10 @@ export function readingTime(body: string | undefined): string {
 }
 
 export function dateRange(start: Date, end: Date | string): string {
-  const startLabel = `${start.toLocaleString("en-US", { month: "short" })} ${start.getFullYear()}`
+  const startYear = start.getFullYear()
 
-  if (typeof end === "string") return `${startLabel} to ${end}`
+  if (typeof end === "string") return `${startYear} - ${end}`
 
-  const endLabel = `${end.toLocaleString("en-US", { month: "short" })} ${end.getFullYear()}`
-  return `${startLabel} to ${endLabel}`
+  const endYear = end.getFullYear()
+  return endYear === startYear ? `${startYear}` : `${startYear} - ${endYear}`
 }

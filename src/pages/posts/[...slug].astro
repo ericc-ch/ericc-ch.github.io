@@ -90,7 +90,7 @@ const updated = post.data.updatedAt
           await navigator.clipboard.writeText(text)
           return true
         } catch {
-          /* fall through to execCommand */
+          // permission denied or document not focused
         }
       }
       return fallback()

@@ -14,6 +14,7 @@
 
 .site-nav {
   display: flex;
+  flex: 1;
   flex-wrap: wrap;
   align-items: center;
   gap: 0 1.25rem;
@@ -23,6 +24,10 @@
 .site-nav a,
 .site-nav button {
   padding-block: 0.35rem;
+}
+
+#theme-toggle {
+  margin-inline-start: auto;
 }
 
 html:not([data-js]) #theme-toggle {

@@ -53,7 +53,9 @@ const updated = post.data.updatedAt
 </Base>
 
 <script is:inline>
-  document.addEventListener("click", (event) => {
+  const timers = new WeakMap()
+
+  document.addEventListener("click", async (event) => {
     const button = event.target.closest("[data-copy]")
     if (!button) return
 
@@ -61,19 +63,49 @@ const updated = post.data.updatedAt
     if (!pre) return
 
     const status = document.getElementById("copy-status")
-    const restore = () => {
-      button.textContent = "Copy"
+    const text = pre.textContent || ""
+
+    // execCommand is the only option on http origins, where navigator.clipboard is absent.
+    const fallback = () => {
+      const area = document.createElement("textarea")
+      area.value = text
+      area.setAttribute("readonly", "")
+      area.style.position = "fixed"
+      area.style.left = "-9999px"
+      document.body.append(area)
+      area.select()
+      let copied = false
+      try {
+        copied = document.execCommand("copy")
+      } catch {
+        copied = false
+      }
+      area.remove()
+      return copied
     }
 
-    navigator.clipboard
-      .writeText(pre.textContent || "")
-      .then(() => {
-        button.textContent = "Copied"
-        if (status) status.textContent = "Code copied to clipboard"
-        setTimeout(restore, 1500)
-      })
-      .catch(() => {
-        if (status) status.textContent = "Copy failed"
-      })
+    const copy = async () => {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text)
+          return true
+        } catch {
+          /* fall through to execCommand */
+        }
+      }
+      return fallback()
+    }
+
+    const copied = await copy()
+    button.textContent = copied ? "Copied" : "Copy failed"
+    if (status) status.textContent = copied ? "Code copied to clipboard" : "Could not copy the code"
+
+    clearTimeout(timers.get(button))
+    timers.set(
+      button,
+      setTimeout(() => {
+        button.textContent = "Copy"
+      }, 2000),
+    )
   })
 </script>

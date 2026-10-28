@@ -10,6 +10,8 @@ deterministic
 - Dark override applied on `[data-theme="dark"]` and in `prefers-color-scheme` with `!important`
 - Code and caption at `--text-sm` (14px), JetBrains Mono
 - Copy button with a language label in `figure.code > figcaption`
+- Copy feedback: label flips to "Copied" (or "Copy failed") for 2s, `#copy-status` announces it
+- Clipboard falls back to `document.execCommand` on http origins, where `navigator.clipboard` is absent
 - Background forced to `--bg-0` over Shiki's own inline background
 
 ## How to get to it (user POV)
@@ -53,6 +55,13 @@ the minimum is asserted. Measured on the current themes: **4.91:1** light, **8.9
   tweak to the background.
 - The `pre` background comes from our CSS with `!important`, not from Shiki; Shiki's
   `--shiki-dark-bg` is unused.
+- **`navigator.clipboard` does not exist on http origins.** Over the Tailscale IP the click
+  handler used to throw `Cannot read properties of undefined (reading 'writeText')` and give
+  no feedback at all. The `execCommand` fallback is what makes the button work there; do not
+  remove it as "legacy".
+- Clipboard reads in the driver need `permissions: ["clipboard-read", "clipboard-write"]`
+  and a secure origin. Against the IP the assertion degrades to "not readable" rather than
+  failing the run.
 
 ## Promotion Criteria
 

@@ -164,6 +164,33 @@ const narrow = await read(narrowPage)
 await narrowPage.screenshot({ path: `${EVIDENCE}/layout-320.png` })
 await narrowContext.close()
 
+const copyContext = await browser.newContext({
+  permissions: ["clipboard-read", "clipboard-write"],
+})
+const copyPage = await copyContext.newPage()
+await copyPage.goto(`${BASE}${ARTICLE}`)
+await copyPage.click(".copy")
+await copyPage.waitForTimeout(150)
+const copied = await copyPage.evaluate(async () => {
+  let clipboard = null
+  try {
+    clipboard = await navigator.clipboard.readText()
+  } catch {
+    clipboard = null // insecure origin or no permission
+  }
+  return {
+    button: document.querySelector(".copy")?.textContent ?? null,
+    status: document.getElementById("copy-status")?.textContent ?? null,
+    clipboard,
+  }
+})
+await copyPage.screenshot({ path: `${EVIDENCE}/copy.png` })
+await copyPage.waitForTimeout(2100)
+const copyRestored = await copyPage.evaluate(
+  () => document.querySelector(".copy")?.textContent ?? null,
+)
+await copyContext.close()
+
 await browser.close()
 
 const parseColor = (value) => {
@@ -240,6 +267,15 @@ const rows = [
   ],
   ["measure caps at 48ch", wide.wrapWidth !== null && wide.wrapWidth < 600, `${wide.wrapWidth}px`],
   ["320px has no sideways scroll", narrow.overflow <= 0, `${narrow.overflow}px`],
+  ["copy reports success", copied.button === "Copied", copied.button],
+  ["copy announces to a live region", copied.status === "Code copied to clipboard", copied.status],
+  [
+    "copy fills the clipboard",
+    copied.clipboard === null ||
+      (copied.clipboard.length > 100 && copied.clipboard.includes("console.log")),
+    copied.clipboard === null ? "not readable on this origin" : `${copied.clipboard.length} chars`,
+  ],
+  ["copy resets its label", copyRestored === "Copy", copyRestored],
 ]
 
 for (const [label, condition, detail] of rows) check(label, condition, detail)

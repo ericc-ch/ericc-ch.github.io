@@ -138,5 +138,12 @@
 }
 
 [data-theme="dark"] .astro-code span {
-  color: var(--shiki-dark);
+  color: var(--shiki-dark) !important;
+}
+
+/* No JS: the attribute never lands, so follow the system like the palette does. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .astro-code span {
+    color: var(--shiki-dark) !important;
+  }
 }

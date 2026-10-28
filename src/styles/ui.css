@@ -22,7 +22,6 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 0 1.25rem;
-  margin-inline-start: auto;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
 }
@@ -216,76 +215,4 @@ html:not([data-js]) #theme-toggle {
 
 .home h1 {
   margin-bottom: 1.5rem;
-}
-
-/* Command palette */
-
-#palette {
-  width: min(36rem, calc(100dvw - 1.5rem));
-  max-height: 80dvh;
-  padding: 0;
-  border: 1px solid var(--fg-2);
-  border-radius: var(--radius);
-  background: var(--bg-1);
-  color: var(--fg-0);
-  margin: 8dvh auto auto;
-  overflow: hidden;
-}
-
-#palette::backdrop {
-  background: rgb(0 0 0 / 45%);
-}
-
-.palette-field {
-  display: block;
-  padding: 0.9rem 1rem;
-  border: 0;
-  border-bottom: 1px solid var(--fg-2);
-  width: 100%;
-  font-family: var(--font-sans);
-  font-size: 1rem; /* below 16px iOS zooms the whole page on focus */
-  background: transparent;
-  color: inherit;
-}
-
-.palette-field:focus-visible {
-  outline: 2px solid var(--fg-0);
-  outline-offset: -3px;
-}
-
-.palette-results {
-  list-style: none;
-  margin: 0;
-  padding: 0.35rem;
-  max-height: 55dvh;
-  overflow-y: auto;
-}
-
-.palette-results li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.15rem 1rem;
-  padding: 0.5rem 0.65rem;
-  font-size: var(--text-base);
-  cursor: pointer;
-}
-
-.palette-results li[aria-selected="true"] {
-  background: var(--bg-2);
-}
-
-.palette-results .meta {
-  font-family: var(--font-sans);
-  font-size: var(--text-xs);
-  color: var(--fg-1);
-}
-
-.palette-empty {
-  margin: 0;
-  padding: 1.25rem 1rem;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  color: var(--fg-1);
 }

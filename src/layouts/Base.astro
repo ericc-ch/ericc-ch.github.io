@@ -5,7 +5,6 @@ import "@fontsource/inter/latin-400.css"
 import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2"
 import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2"
 import Nav from "@components/Nav.astro"
-import Palette from "@components/Palette.astro"
 import { SITE } from "@consts"
 import "../styles/main.css"
 
@@ -76,8 +75,6 @@ const ogImage = new URL("/og-image.png", Astro.site)
       <slot />
     </main>
 
-    <Palette />
-
     <script is:inline>
       ;(() => {
         const KEY = "theme"
@@ -117,42 +114,6 @@ const ogImage = new URL("/og-image.png", Astro.site)
         query.addEventListener("change", () => {
           if ((root.dataset.themeChoice || "system") === "system") {
             set(query.matches ? "dark" : "light", "system")
-          }
-        })
-
-        let loading
-        const ensure = () =>
-          loading ||
-          (loading = new Promise((done, fail) => {
-            const script = document.createElement("script")
-            script.type = "module"
-            script.src = "/palette.js"
-            script.onload = done
-            script.onerror = fail
-            document.head.append(script)
-          }))
-
-        const open = () =>
-          ensure().then(
-            () => window.dispatchEvent(new Event("palette:open")),
-            () => {},
-          )
-
-        const preload = () => {
-          ensure().catch(() => {})
-        }
-
-        const trigger = document.getElementById("open-palette")
-        if (trigger) {
-          trigger.addEventListener("click", open)
-          trigger.addEventListener("pointerenter", preload)
-          trigger.addEventListener("focus", preload)
-        }
-
-        window.addEventListener("keydown", (event) => {
-          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-            event.preventDefault()
-            open()
           }
         })
       })()

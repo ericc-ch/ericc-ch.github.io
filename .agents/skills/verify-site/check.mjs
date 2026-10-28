@@ -319,8 +319,8 @@ const rows = [
     `${social.og.href} ${social.og.status} ${social.og.bytes}B`,
   ],
   [
-    "favicon is a png",
-    social.icon.status === 200 && social.icon.type === "image/png",
+    "favicon is an svg",
+    social.icon.status === 200 && social.icon.type === "image/svg+xml",
     `${social.icon.href} ${social.icon.status}`,
   ],
   ["dates are YYYY/MM/DD", /^\d{4}\/\d{2}\/\d{2}$/.test(wide.dateText ?? ""), wide.dateText],

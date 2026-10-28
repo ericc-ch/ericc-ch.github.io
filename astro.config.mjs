@@ -11,7 +11,7 @@ export default defineConfig({
   markdown: {
     processor: satteri({ hastPlugins: [codeBlocks] }),
     shikiConfig: {
-      defaultColor: false,
+      defaultColor: "light-dark()",
       themes: {
         light: "github-light-high-contrast",
         dark: "github-dark-high-contrast",

@@ -6,9 +6,9 @@ deterministic
 
 ## Sub-features
 
-- Light palette on `:root`
-- Dark palette from `prefers-color-scheme` when no `data-theme` is set
-- Dark palette from `[data-theme="dark"]` after the inline bootstrap or the toggle
+- One palette of `light-dark(light, dark)` tokens; `color-scheme` picks the half
+- `:root` is `color-scheme: light dark`, so the system decides with no media query
+- `[data-theme="light"]` / `[data-theme="dark"]` pin `color-scheme` after the bootstrap or the toggle
 - Toggle sets `data-theme`, persists to `localStorage`, and relabels itself
 - The toggle is hidden when JS never runs
 
@@ -41,8 +41,10 @@ and the toggle's text content.
 ## Gotchas
 
 - With JS on, the inline bootstrap **always** sets `data-theme`, even for the system
-  default. The media query only applies to `:root:not([data-theme])`, so the no-JS case is
-  the only one that exercises it.
+  default, so the loaded page never relies on `:root`'s `light dark`. The no-JS case is the
+  only one that exercises the system default.
+- `light-dark()` needs `color-scheme`; if that property is ever removed from `:root`, every
+  palette token becomes invalid and the page renders with inherited colours.
 - Persistence uses `localStorage.theme` with values `light` or `dark` only; there is no
   stored `system` value. Clearing it returns the visitor to the system default.
 - A fresh Playwright context has empty storage, so each state must get its own context or

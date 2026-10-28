@@ -80,7 +80,8 @@ Hard constraints, all enforced by the code rather than by taste:
 - Static Astro build. No client framework, no islands, no Tailwind.
 - Zero third-party JavaScript. The only script is the inline theme bootstrap and its click
   handler, about 40 lines total.
-- Firefox ESR 115 is the floor; an old Android phone in portrait is the test device.
+- Modern browsers only, Baseline widely available. No polyfills: features must degrade to
+  something readable, not something broken. `light-dark()` is used for the palette.
 - WCAG 2.2 AA everywhere, AAA for body text.
 - Two themes, system default, one text button to switch.
 
@@ -113,14 +114,17 @@ Contrast floors, checked by `bun run contrast`:
 | Text on surface  | 7:1     | 16.87 / 14.87         |
 | Hairline on page | 1.2:1   | 1.52 / 1.49           |
 
-The dark palette is written twice in `src/styles/themes.css`: once inside
-`prefers-color-scheme` for visitors without JavaScript, once on `[data-theme="dark"]` for the
-toggle. They must stay identical. That duplication is the price of having no build step.
+The palette is defined once in `src/styles/themes.css`. Each token is
+`light-dark(light, dark)` and resolves from `color-scheme`, so there is no duplicated dark
+block and no media query. `:root` is `color-scheme: light dark`, which follows the operating
+system without JavaScript; `[data-theme="light"]` and `[data-theme="dark"]` pin it after the
+toggle. The contrast script reads both halves of every pair.
 
 Syntax highlighting is the one place colour is allowed, and it is deliberately outside this
 palette: `github-light-high-contrast` / `github-dark-high-contrast`, chosen because every
-token clears 4.5:1 on our backgrounds (4.91 / 8.90). Any replacement theme must be measured
-the same way before it ships.
+token clears 4.5:1 on the block's own background (5.04 / 9.23). Shiki emits both colours as
+`light-dark()` inline, so the block follows `color-scheme` like everything else and the
+stylesheet contains no overrides. Any replacement theme must be measured the same way.
 
 # Typography
 
@@ -165,9 +169,8 @@ One container, no grid system:
 is about 0.73em, so 48ch resolves to roughly 562px and about 71 characters per line. The
 number has to be re-measured whenever the family changes; it is not a character count.
 
-There are no media queries for layout. The column shrinks with the viewport until it hits
-the measure and then stops. The only media query in the project is
-`prefers-color-scheme: dark`.
+There are no media queries at all. The column shrinks with the viewport until it hits the
+measure and then stops; the palette follows `color-scheme`.
 
 Content is a stack of sections separated by `clamp()` margins. Entry rows are
 `grid-template-columns: 1fr auto` so dates align on the right without pushing the title

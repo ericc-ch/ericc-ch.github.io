@@ -90,11 +90,10 @@ Playwright's bundled build does not start on this host — it fails with
 
 ## Gotchas
 
-- **Shiki runs with `defaultColor: false`.** Spans carry only `--shiki-light` / `--shiki-dark`,
-  and `prose.css` applies them. If `defaultColor` is set back to `'light'` or removed, Shiki
-  writes inline `color` again and the dark override silently loses unless it is `!important`.
-  That bug shipped once: the page went dark, the code stayed light, and it looked plausible
-  until `getComputedStyle` was read.
+- **Shiki writes colour and background inline.** With `defaultColor: "light-dark()"` both
+  halves ride along and the block follows `color-scheme` with no site CSS. Any override would
+  need `!important`, which is why there are none; the verifier reads computed values and
+  would catch a losing rule.
 - **`scrollbar-gutter: stable`** makes `scrollWidth - clientWidth` negative at 320px
   (about `-15`). Assert `<= 0`, never `=== 0`.
 - **Pick a post with a fenced code block.** `ARTICLE` in `check.mjs` points at

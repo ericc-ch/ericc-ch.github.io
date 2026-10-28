@@ -7,13 +7,12 @@ deterministic
 ## Sub-features
 
 - Dual Shiki themes: `github-light-high-contrast` and `github-dark-high-contrast`
-- `defaultColor: false`, so spans carry `--shiki-light` / `--shiki-dark` and no inline `color`
-- `prose.css` applies the variables for light, `[data-theme="dark"]`, and `prefers-color-scheme`
+- `defaultColor: "light-dark()"`, so each token carries both colours inline and follows `color-scheme`
+- No site CSS overrides the block's colour or background; both come from the theme
 - Code and caption at `--text-sm` (14px), JetBrains Mono
 - Copy button with a language label in `figure.code > figcaption`
 - Copy feedback: label flips to "Copied" (or "Copy failed") for 2s, `#copy-status` announces it
 - Clipboard falls back to `document.execCommand` on http origins, where `navigator.clipboard` is absent
-- Background on `--bg-0`, painted by our CSS rather than by Shiki
 
 ## How to get to it (user POV)
 
@@ -41,14 +40,13 @@ const family = await pre.evaluate((node) => getComputedStyle(node).fontFamily)
 ```
 
 Contrast is computed over **every** token, compositing alpha onto the `pre` background, and
-the minimum is asserted. Measured on the current themes: **4.91:1** light, **8.90:1** dark.
+the minimum is asserted. Measured on the current themes: **5.04:1** light, **9.23:1** dark.
 
 ## Gotchas
 
-- **Shiki is configured with `defaultColor: false`.** Nothing writes inline `color`, so
-  `prose.css` owns the palette and no rule needs `!important`. Setting `defaultColor` back to
-  `'light'` (the Shiki default) reintroduces inline colours, and any dark override then loses
-  silently — that bug shipped once and looked fine on screen.
+- **The block owns its colours and background.** Shiki writes `color` and `background-color`
+  inline as `light-dark(...)`, so nothing in `prose.css` can override them without
+  `!important`. Don't add one; change the theme instead.
 - **Do not select a token by its text.** Shiki's tokenizer boundary depends on the theme —
   `vitesse` split `"Page Snapshot"` into a quote span plus the text, `github-*` keeps the
   quotes in one token. Select the first span that has text and `--shiki-light`.

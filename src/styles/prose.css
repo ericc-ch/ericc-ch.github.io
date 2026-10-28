@@ -130,26 +130,10 @@
   margin: 0;
   padding: 0.9rem 1rem;
   overflow-x: auto;
-  background-color: var(--bg-0);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   line-height: 1.5;
   tab-size: 2;
 }
 
-/* Shiki emits only custom properties (defaultColor: false), so the palette wins
-   without !important. The variables are --shiki-light / --shiki-dark. */
-.astro-code span {
-  color: var(--shiki-light);
-}
-
-[data-theme="dark"] .astro-code span {
-  color: var(--shiki-dark);
-}
-
-/* No JS: the attribute never lands, so follow the system like the palette does. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .astro-code span {
-    color: var(--shiki-dark);
-  }
-}
+/* Shiki writes colour and background inline as light-dark(). */

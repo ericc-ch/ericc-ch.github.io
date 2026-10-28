@@ -6,13 +6,14 @@ deterministic
 
 ## Sub-features
 
-- Dual Shiki themes: `github-light-high-contrast` inline, `github-dark-high-contrast` as `--shiki-dark`
-- Dark override applied on `[data-theme="dark"]` and in `prefers-color-scheme` with `!important`
+- Dual Shiki themes: `github-light-high-contrast` and `github-dark-high-contrast`
+- `defaultColor: false`, so spans carry `--shiki-light` / `--shiki-dark` and no inline `color`
+- `prose.css` applies the variables for light, `[data-theme="dark"]`, and `prefers-color-scheme`
 - Code and caption at `--text-sm` (14px), JetBrains Mono
 - Copy button with a language label in `figure.code > figcaption`
 - Copy feedback: label flips to "Copied" (or "Copy failed") for 2s, `#copy-status` announces it
 - Clipboard falls back to `document.execCommand` on http origins, where `navigator.clipboard` is absent
-- Background forced to `--bg-0` over Shiki's own inline background
+- Background on `--bg-0`, painted by our CSS rather than by Shiki
 
 ## How to get to it (user POV)
 
@@ -25,8 +26,14 @@ language and a **Copy** button, then the code.
 ```js
 const light = await page.evaluate(() => {
   const spans = [...document.querySelectorAll(".astro-code span")]
-  const target = spans.find((span) => span.textContent.trim() && span.style.color)
-  return { computed: getComputedStyle(target).color, inline: target.style.color }
+  const target = spans.find(
+    (span) => span.textContent.trim() && span.style.getPropertyValue("--shiki-light"),
+  )
+  return {
+    computed: getComputedStyle(target).color,
+    light: getComputedStyle(target).getPropertyValue("--shiki-light"),
+    dark: getComputedStyle(target).getPropertyValue("--shiki-dark"),
+  }
 })
 const pre = page.locator(".code pre")
 const size = await pre.evaluate((node) => getComputedStyle(node).fontSize) // 14px
@@ -38,15 +45,15 @@ the minimum is asserted. Measured on the current themes: **4.91:1** light, **8.9
 
 ## Gotchas
 
-- **Shiki writes `style="color:#..."` on every span.** A stylesheet override without
-  `!important` silently loses. The symptom is subtle: the page goes dark, the code stays
-  light, and it still looks readable enough to pass a glance. Reading the computed colour
-  is the only reliable check.
+- **Shiki is configured with `defaultColor: false`.** Nothing writes inline `color`, so
+  `prose.css` owns the palette and no rule needs `!important`. Setting `defaultColor` back to
+  `'light'` (the Shiki default) reintroduces inline colours, and any dark override then loses
+  silently — that bug shipped once and looked fine on screen.
 - **Do not select a token by its text.** Shiki's tokenizer boundary depends on the theme —
   `vitesse` split `"Page Snapshot"` into a quote span plus the text, `github-*` keeps the
-  quotes in one token. Select the first span that has both text and an inline colour.
-- **`.astro-code span` also matches `.line` wrappers**, which have no inline colour. Require
-  `span.style.color` or the checks read an inherited value.
+  quotes in one token. Select the first span that has text and `--shiki-light`.
+- **`.astro-code span` also matches `.line` wrappers**, which have no colour variables. Require
+  `--shiki-light` or the checks read an inherited value.
 - **Alpha matters.** Punctuation tokens carry alpha (`#B5695977`). Composite the alpha onto
   the background before computing contrast, or the ratio is wrong.
 - **Light themes are tuned for white.** On our background, only

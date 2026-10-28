@@ -49,7 +49,9 @@ const hexToRgb = (value) => {
 const read = (page) =>
   page.evaluate(() => {
     const spans = [...document.querySelectorAll(".astro-code span")]
-    const target = spans.find((span) => span.textContent.trim() && span.style.color)
+    const isToken = (span) =>
+      span.textContent.trim() && span.style.getPropertyValue("--shiki-light")
+    const target = spans.find(isToken)
     const pre = document.querySelector(".code pre")
     const wrap = document.querySelector(".wrap")
     const caption = document.querySelector(".code figcaption")
@@ -76,7 +78,7 @@ const read = (page) =>
       const background = parse(getComputedStyle(pre).backgroundColor)
       if (background) {
         for (const span of spans) {
-          if (!span.textContent.trim() || !span.style.color) continue
+          if (!isToken(span)) continue
           const foreground = parse(getComputedStyle(span).color)
           if (!foreground) continue
           const blended = foreground
@@ -101,7 +103,7 @@ const read = (page) =>
       js: document.documentElement.dataset.js ?? null,
       body: getComputedStyle(document.body).backgroundColor,
       token: target ? getComputedStyle(target).color : null,
-      tokenLight: target ? target.style.color : null,
+      tokenLight: target ? getComputedStyle(target).getPropertyValue("--shiki-light").trim() : null,
       tokenDark: target ? getComputedStyle(target).getPropertyValue("--shiki-dark").trim() : null,
       tokenMin: worst,
       preBackground: pre ? getComputedStyle(pre).backgroundColor : null,
@@ -213,7 +215,7 @@ const rows = [
     `${light.theme} ${light.body}`,
   ],
   [
-    "light code uses inline colour",
+    "light code uses --shiki-light",
     same(light.token, light.tokenLight),
     `${light.token} vs ${light.tokenLight}`,
   ],

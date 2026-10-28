@@ -1,7 +1,3 @@
-.prose {
-  font-size: 1.1875rem;
-}
-
 .prose p,
 .prose ul,
 .prose ol,
@@ -182,10 +178,4 @@
 
 [data-scheme="dark"] .astro-code span {
   color: var(--shiki-dark);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .astro-code span {
-    color: var(--shiki-dark);
-  }
 }

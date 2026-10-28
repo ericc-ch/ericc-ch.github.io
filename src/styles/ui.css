@@ -12,18 +12,12 @@
   padding-block: 0.85rem;
 }
 
-.brand {
-  font-size: var(--text-base);
-  font-weight: 600;
-}
-
 .site-nav {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0 1.25rem;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
 }
 
 .site-nav a,
@@ -89,7 +83,6 @@ html:not([data-js]) #theme-toggle {
 .entry-list time,
 .entry-when {
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
   color: var(--fg-1);
   white-space: nowrap;
   text-align: right;
@@ -104,7 +97,6 @@ html:not([data-js]) #theme-toggle {
 
 .entry-detail {
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
   color: var(--fg-1);
 }
 
@@ -116,13 +108,11 @@ html:not([data-js]) #theme-toggle {
   margin: 0;
   padding: 0;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
 }
 
 .more {
   margin-top: 0.9rem;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
 }
 
 /* Post header */
@@ -141,7 +131,6 @@ html:not([data-js]) #theme-toggle {
   align-items: center;
   gap: 0.4rem 0.75rem;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
   color: var(--fg-1);
 }
 
@@ -158,13 +147,11 @@ html:not([data-js]) #theme-toggle {
   border: 1px solid var(--fg-2);
   border-radius: var(--radius);
   padding: 0 0.4rem;
-  font-size: var(--text-xs);
 }
 
 .back {
   display: inline-block;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
   margin-bottom: clamp(1.25rem, 0.75rem + 2vw, 2rem);
 }
 
@@ -175,7 +162,6 @@ html:not([data-js]) #theme-toggle {
   border-block: 1px solid var(--fg-2);
   padding-block: 0.6rem;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
 }
 
 .toc summary {

@@ -6,7 +6,7 @@ deterministic
 
 ## Sub-features
 
-- Dual Shiki themes: `github-light-high-contrast` and `github-dark-high-contrast`
+- Dual Shiki themes: `vitesse-light` and `vitesse-black`
 - `defaultColor: "light-dark()"`, so each token carries both colours inline and follows `color-scheme`
 - No site CSS overrides the block's colour or background; both come from the theme
 - Code and caption at `--text-sm` (14px), JetBrains Mono
@@ -40,7 +40,9 @@ const family = await pre.evaluate((node) => getComputedStyle(node).fontFamily)
 ```
 
 Contrast is computed over **every** token, compositing alpha onto the `pre` background, and
-the minimum is asserted. Measured on the current themes: **5.04:1** light, **9.23:1** dark.
+the minimum is asserted against a **recorded floor** rather than a WCAG threshold: the code
+themes are a deliberate exception. Current values: **1.81:1** light, **2.16:1** dark. Re-record
+`CODE_CONTRAST` in `check.mjs` when the themes change.
 
 ## Gotchas
 
@@ -54,12 +56,12 @@ the minimum is asserted. Measured on the current themes: **5.04:1** light, **9.2
   `--shiki-light` or the checks read an inherited value.
 - **Alpha matters.** Punctuation tokens carry alpha (`#B5695977`). Composite the alpha onto
   the background before computing contrast, or the ratio is wrong.
-- **Light themes are tuned for white.** On our background, only
-  `github-light-high-contrast` cleared 4.5:1 across every token; `vitesse-light` bottomed
-  out at 3.66:1 on `--bg-1` and 4.09:1 even on white. Swapping the pair was the fix, not a
-  tweak to the background.
-- The `pre` background comes from our CSS with `!important`, not from Shiki; Shiki's
-  `--shiki-dark-bg` is unused.
+- **Code contrast is a recorded exception.** `vitesse-light` / `vitesse-black` are chosen for
+  tone and sit well under AA: 1.81:1 and 2.16:1 worst token. Comments land at 2.34:1 and dim
+  punctuation below that, because vitesse uses alpha instead of darker ink. `CODE_CONTRAST`
+  in `check.mjs` holds the floor that must not regress; it is not a WCAG pass.
+- The `pre` background comes from Shiki's theme, not from our CSS. `--bg-1` is used only for
+  the caption bar.
 - **`navigator.clipboard` does not exist on http origins.** Over the Tailscale IP the click
   handler used to throw `Cannot read properties of undefined (reading 'writeText')` and give
   no feedback at all. The `execCommand` fallback is what makes the button work there; do not

@@ -13,8 +13,8 @@ export default defineConfig({
     shikiConfig: {
       defaultColor: "light-dark()",
       themes: {
-        light: "github-light-high-contrast",
-        dark: "github-dark-high-contrast",
+        light: "vitesse-light",
+        dark: "vitesse-black",
       },
     },
   },

@@ -92,8 +92,9 @@ Playwright's bundled build does not start on this host — it fails with
 
 - **Shiki writes colour and background inline.** With `defaultColor: "light-dark()"` both
   halves ride along and the block follows `color-scheme` with no site CSS. Any override would
-  need `!important`, which is why there are none; the verifier reads computed values and
-  would catch a losing rule.
+  need `!important`, which is why there are none.
+- **Code contrast is a deliberate exception to AA** (vitesse pair, ~1.8:1). The verifier
+  asserts against a recorded floor, not 4.5:1; do not "fix" it by raising the threshold.
 - **`scrollbar-gutter: stable`** makes `scrollWidth - clientWidth` negative at 320px
   (about `-15`). Assert `<= 0`, never `=== 0`.
 - **Pick a post with a fenced code block.** `ARTICLE` in `check.mjs` points at

@@ -82,7 +82,8 @@ Hard constraints, all enforced by the code rather than by taste:
   handler, about 40 lines total.
 - Modern browsers only, Baseline widely available. No polyfills: features must degrade to
   something readable, not something broken. `light-dark()` is used for the palette.
-- WCAG 2.2 AA everywhere, AAA for body text.
+- WCAG 2.2 AA everywhere, AAA for body text. Syntax highlighting is the single recorded
+  exception, documented under Colours.
 - Two themes, system default, one text button to switch.
 
 # Colors
@@ -121,10 +122,13 @@ system without JavaScript; `[data-theme="light"]` and `[data-theme="dark"]` pin 
 toggle. The contrast script reads both halves of every pair.
 
 Syntax highlighting is the one place colour is allowed, and it is deliberately outside this
-palette: `github-light-high-contrast` / `github-dark-high-contrast`, chosen because every
-token clears 4.5:1 on the block's own background (5.04 / 9.23). Shiki emits both colours as
-`light-dark()` inline, so the block follows `color-scheme` like everything else and the
-stylesheet contains no overrides. Any replacement theme must be measured the same way.
+palette: `vitesse-light` / `vitesse-black`, chosen for how they sit next to the monochrome
+page. They are also the one deliberate exception to the contrast rule: measured against the
+block's own background, the worst token is 1.81:1 in light and 2.16:1 in dark. Comments sit
+at 2.34:1 and dim punctuation below that, because vitesse leans on alpha rather than darker
+ink. Code is treated as texture, not as body copy; every non-code element keeps its floor.
+Shiki emits both colours as `light-dark()` inline, so the block follows `color-scheme` and
+the stylesheet contains no overrides.
 
 # Typography
 
@@ -184,7 +188,7 @@ No shadows, no blur, no layers. Depth is a 1px hairline in `--fg-2` plus a surfa
 `--bg-1`.
 
 - Section and row separators: 1px `--fg-2`, full width of the measure.
-- Code blocks: 1px border, caption bar on `--bg-1`, body on `--bg-0`.
+- Code blocks: 1px border, caption bar on `--bg-1`, body on the Shiki theme's own background.
 - Focus: 2px `--fg-0` outline, 2px offset, never removed.
 - Selection: `color-mix(in oklab, var(--fg-0) 20%, transparent)`.
 

@@ -1,30 +1,9 @@
-import { getCollection } from "astro:content"
 import type { APIRoute } from "astro"
 
-export const GET: APIRoute = async () => {
-  const blogDrafts = (await getCollection("blog")).filter((post) => post.data.draft)
+export const GET: APIRoute = ({ site }) => {
+  const sitemap = new URL("sitemap-index.xml", site ?? "https://ericc.ch").href
 
-  const projectDrafts = (await getCollection("projects")).filter((project) => project.data.draft)
-
-  const baseRules = `User-agent: *
-Allow: /
-`
-
-  const draftDisallows = [
-    ...blogDrafts.map((post) => `Disallow: /blog/${post.id}/`),
-    ...projectDrafts.map((project) => `Disallow: /projects/${project.id}/`),
-  ].join("\n")
-
-  const sitemapLine = `Sitemap: ${new URL("sitemap-index.xml", import.meta.env.SITE).href}`
-
-  const content =
-    draftDisallows.length > 0
-      ? `${baseRules}${draftDisallows}\n\n${sitemapLine}`
-      : `${baseRules}\n${sitemapLine}`
-
-  return new Response(content, {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-    },
+  return new Response(`User-agent: *\nAllow: /\n\nSitemap: ${sitemap}\n`, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
   })
 }

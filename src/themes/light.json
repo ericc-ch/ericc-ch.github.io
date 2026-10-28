@@ -1,0 +1,27 @@
+{
+  "name": "light",
+  "label": "Light",
+  "scheme": "light",
+  "order": 1,
+  "tokens": {
+    "--background": "#fbfaf7",
+    "--foreground": "#1a1a18",
+    "--card": "#fbfaf7",
+    "--card-foreground": "#1a1a18",
+    "--popover": "#ffffff",
+    "--popover-foreground": "#1a1a18",
+    "--primary": "#8a3b1f",
+    "--primary-foreground": "#fbfaf7",
+    "--secondary": "#f1eee7",
+    "--secondary-foreground": "#1a1a18",
+    "--muted": "#f1eee7",
+    "--muted-foreground": "#55524c",
+    "--accent": "#efe9df",
+    "--accent-foreground": "#1a1a18",
+    "--destructive": "#9b2226",
+    "--border": "#e0dace",
+    "--input": "#b8b0a1",
+    "--ring": "#8a3b1f",
+    "--radius": "0"
+  }
+}

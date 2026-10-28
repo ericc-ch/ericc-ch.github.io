@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content"
+import Base from "@layouts/Base.astro"
+import { formatDate } from "@lib/utils"
+
+const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((first, second) => second.data.date.valueOf() - first.data.date.valueOf())
+
+const byYear = new Map<number, typeof posts>()
+for (const post of posts) {
+  const year = post.data.date.getFullYear()
+  const bucket = byYear.get(year)
+  if (bucket) bucket.push(post)
+  else byYear.set(year, [post])
+}
+
+const groups = [...byYear.entries()]
+---
+
+<Base title="Posts">
+  <div class="wrap">
+    <h1 class="page-title">Posts</h1>
+    <p class="page-lede">{posts.length} posts, mostly about the web and the things I break.</p>
+
+    {groups.map(([year, entries]) => <section>
+      <h2 class="year">{year}</h2>
+      <ul class="entry-list">
+        {entries.map((post) => <li>
+          <a href={`/posts/${post.id}/`}>
+            <span>{post.data.title}</span>
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+          </a>
+        </li>)}
+      </ul>
+    </section>)}
+  </div>
+</Base>

@@ -1,0 +1,160 @@
+---
+import "@fontsource/lora/latin-400.css"
+import "@fontsource/lora/latin-600.css"
+import "@fontsource/inter/latin-400.css"
+import lora400 from "@fontsource/lora/files/lora-latin-400-normal.woff2"
+import lora600 from "@fontsource/lora/files/lora-latin-600-normal.woff2"
+import Nav from "@components/Nav.astro"
+import Footer from "@components/Footer.astro"
+import Palette from "@components/Palette.astro"
+import { SITE } from "@consts"
+import { schemeByName } from "@lib/themes"
+import "../styles/main.css"
+
+interface Props {
+  title?: string
+  description?: string
+  noindex?: boolean
+}
+
+const { title, description = SITE.DESCRIPTION, noindex = false } = Astro.props
+
+const pageTitle = title ? `${title} · ${SITE.NAME}` : SITE.NAME
+const canonical = new URL(Astro.url.pathname, Astro.site)
+const ogImage = new URL("/og-image.png", Astro.site)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.NAME} href="/rss.xml" />
+
+    <link rel="preload" href={lora400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={lora600} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline define:vars={{ schemeByName }}>
+      ;(() => {
+        const root = document.documentElement
+        root.dataset.js = "1"
+
+        let stored = null
+        try {
+          stored = localStorage.getItem("theme")
+        } catch {
+          stored = null
+        }
+
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
+        const chosen = stored && stored !== "system" && stored in schemeByName ? stored : null
+        const name = chosen || (prefersDark ? "dark" : "light")
+
+        root.dataset.theme = name
+        root.dataset.scheme = schemeByName[name] || "light"
+        root.dataset.themeChoice = chosen || "system"
+      })()
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <Palette />
+
+    <script is:inline>
+      ;(() => {
+        const KEY = "theme"
+        const root = document.documentElement
+        const select = document.getElementById("theme-select")
+        const query = window.matchMedia("(prefers-color-scheme: dark)")
+
+        const set = (name, choice) => {
+          root.dataset.theme = name
+          root.dataset.scheme = getComputedStyle(root).colorScheme.includes("dark")
+            ? "dark"
+            : "light"
+          root.dataset.themeChoice = choice
+          if (select) select.value = choice
+        }
+
+        const resolve = (choice) =>
+          choice === "system" ? (query.matches ? "dark" : "light") : choice
+
+        if (select) {
+          select.value = root.dataset.themeChoice || "system"
+          select.addEventListener("change", () => {
+            const choice = select.value
+            try {
+              localStorage.setItem(KEY, choice)
+            } catch {
+              /* storage is optional */
+            }
+            set(resolve(choice), choice)
+          })
+        }
+
+        query.addEventListener("change", () => {
+          if ((root.dataset.themeChoice || "system") === "system") {
+            set(resolve("system"), "system")
+          }
+        })
+
+        let loading
+        const ensure = () =>
+          loading ||
+          (loading = new Promise((done, fail) => {
+            const script = document.createElement("script")
+            script.type = "module"
+            script.src = "/palette.js"
+            script.onload = done
+            script.onerror = fail
+            document.head.append(script)
+          }))
+
+        const open = () =>
+          ensure().then(
+            () => window.dispatchEvent(new Event("palette:open")),
+            () => {},
+          )
+
+        const preload = () => {
+          ensure().catch(() => {})
+        }
+
+        const trigger = document.getElementById("open-palette")
+        if (trigger) {
+          trigger.addEventListener("click", open)
+          trigger.addEventListener("pointerenter", preload)
+          trigger.addEventListener("focus", preload)
+        }
+
+        window.addEventListener("keydown", (event) => {
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+            event.preventDefault()
+            open()
+          }
+        })
+      })()
+    </script>
+  </body>
+</html>

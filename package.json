@@ -6,29 +6,28 @@
   "scripts": {
     "astro": "astro",
     "build": "astro build",
-    "check": "bun run typecheck && bun run lint && bun run format && bun run build",
+    "check": "bun run themes && bun run typecheck && bun run lint && bun run format && bun run build",
     "dev": "astro dev",
     "dev:network": "astro dev --host",
     "format": "oxfmt --check",
     "format:fix": "oxfmt",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
+    "prebuild": "bun run themes",
+    "predev": "bun run themes",
     "preview": "astro preview",
     "preview:network": "astro preview --host",
+    "themes": "bun scripts/build-themes.ts",
     "typecheck": "astro sync && tsc --noEmit --runExternalCode"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.5",
     "@astrojs/mdx": "^8.1.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource/inter": "^5.3.0",
     "@fontsource/lora": "^5.3.0",
-    "@tailwindcss/typography": "^0.5.20",
-    "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.4.2",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.7.0",
-    "tailwindcss": "^4.3.3"
+    "astro": "^7.4.2"
   },
   "devDependencies": {
     "@astrojs/compiler-rs": "^0.5.2",

@@ -1,42 +1,23 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: Array<ClassValue>) {
-  return twMerge(clsx(inputs))
-}
-
-export function formatDate(date: Date) {
+export function formatDate(date: Date): string {
   return Intl.DateTimeFormat("en-US", {
     month: "short",
-    day: "2-digit",
+    day: "numeric",
     year: "numeric",
   }).format(date)
 }
 
-export function readingTime(html: string | undefined) {
-  if (!html) return ""
+export function readingTime(body: string | undefined): string {
+  if (!body) return ""
 
-  const textOnly = html.replace(/<[^>]+>/g, "")
-  const wordCount = textOnly.split(/\s+/).length
-  const readingTimeMinutes = (wordCount / 200 + 1).toFixed()
-  return `${readingTimeMinutes} min read`
+  const words = body.trim().split(/\s+/).length
+  return `${Math.max(1, Math.round(words / 200))} min read`
 }
 
-export function dateRange(startDate: Date, endDate?: Date | string): string {
-  const startMonth = startDate.toLocaleString("default", { month: "short" })
-  const startYear = startDate.getFullYear().toString()
-  let endMonth
-  let endYear
+export function dateRange(start: Date, end: Date | string): string {
+  const startLabel = `${start.toLocaleString("en-US", { month: "short" })} ${start.getFullYear()}`
 
-  if (endDate) {
-    if (typeof endDate === "string") {
-      endMonth = ""
-      endYear = endDate
-    } else {
-      endMonth = endDate.toLocaleString("default", { month: "short" })
-      endYear = endDate.getFullYear().toString()
-    }
-  }
+  if (typeof end === "string") return `${startLabel} to ${end}`
 
-  return `${startMonth} ${startYear} - ${endMonth} ${endYear}`
+  const endLabel = `${end.toLocaleString("en-US", { month: "short" })} ${end.getFullYear()}`
+  return `${startLabel} to ${endLabel}`
 }

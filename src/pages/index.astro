@@ -1,147 +1,93 @@
 ---
-import { getCollection, render } from "astro:content"
-import Container from "@components/Container.astro"
-import PageLayout from "@layouts/PageLayout.astro"
-import ArrowCard from "@components/ArrowCard.astro"
-import Link from "@components/Link.astro"
-import { dateRange } from "@lib/utils"
-import { SITE, HOME, SOCIALS } from "@consts"
+import { getCollection } from "astro:content"
+import Base from "@layouts/Base.astro"
+import { SITE, SOCIALS } from "@consts"
+import { dateRange, formatDate } from "@lib/utils"
 
-const blog = (await getCollection("blog"))
+const posts = (await getCollection("blog"))
   .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE)
+  .sort((first, second) => second.data.date.valueOf() - first.data.date.valueOf())
+
+const latest = posts.slice(0, 3)
+
+const endOf = (value: Date | string) =>
+  typeof value === "string" ? Number.POSITIVE_INFINITY : value.valueOf()
+
+const work = (await getCollection("work"))
+  .sort((first, second) => endOf(second.data.dateEnd) - endOf(first.data.dateEnd))
+  .slice(0, 3)
 
 const projects = (await getCollection("projects"))
   .filter((project) => !project.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, SITE.NUM_PROJECTS_ON_HOMEPAGE)
-
-const allwork = (await getCollection("work"))
-  .sort((a, b) => {
-    // If dateEnd is "Present", sort it to first
-    const aDateEnd = a.data.dateEnd === "Present" ? Infinity : new Date(a.data.dateEnd).getTime()
-    const bDateEnd = b.data.dateEnd === "Present" ? Infinity : new Date(b.data.dateEnd).getTime()
-
-    return bDateEnd - aDateEnd
-  })
-  .slice(0, SITE.NUM_WORKS_ON_HOMEPAGE)
-
-const work = await Promise.all(
-  allwork.map(async (item) => {
-    const { Content } = await render(item)
-    return Object.assign({}, item, { Content })
-  }),
-)
+  .sort((first, second) => second.data.date.valueOf() - first.data.date.valueOf())
+  .slice(0, 3)
 ---
 
-<PageLayout title={HOME.TITLE} description={HOME.DESCRIPTION}>
-  <Container>
-    <h4 class="animate font-semibold text-black dark:text-white">Hi, I'm Erick!</h4>
-    <div class="space-y-16">
-      <section>
-        <article class="space-y-4">
-          <p class="animate">
-            I am a software engineer. I'm deep into the JavaScript world. I mostly do frontend
-            stuff, but sometimes I like doing a little of server stuff (still, with JavaScript).
-            Currently loving open source.
-          </p>
-          <p class="animate">
-            Well by going here, I assume you must be interested in me <i>right?</i> Maybe not in a
-            romantic way though.
-          </p>
-          <p class="animate">
-            Anyway, you can find what I've <Link href="/blog">written</Link> and
-            <Link href="/work">worked</Link> on here. Cheers! 🎉
-          </p>
-        </article>
-      </section>
+<Base>
+  <div class="wrap home">
+    <section class="lede">
+      <p>
+        I'm a software engineer. Mostly frontend, sometimes the other side of it, still in
+        JavaScript. Lately that means browsers, developer tooling, and open source.
+      </p>
+      <p>
+        Right now I'm building <a href="https://github.com/ericc-ch/tinybrowser">tinybrowser</a>, a
+        headless browser for AI agents. I write about what I learn <a href="/posts/">here</a>.
+      </p>
+    </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">Latest posts</h5>
-          <Link href="/blog"> See all posts </Link>
-        </div>
-        <ul class="flex flex-col gap-4">
-          {blog.map((post) => <li>
-            <ArrowCard entry={post} />
-          </li>)}
-        </ul>
-      </section>
+    <section class="section">
+      <h2 class="section-title">Latest posts</h2>
+      <ul class="entry-list">
+        {latest.map((post) => <li>
+          <a href={`/posts/${post.id}/`}>
+            <span>{post.data.title}</span>
+            <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+          </a>
+        </li>)}
+      </ul>
+      <p class="more"><a href="/posts/">All posts</a></p>
+    </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">Recent Works</h5>
-          <Link href="/work"> See all works </Link>
-        </div>
-        <ul class="flex flex-col space-y-4">
-          {work.map((entry) => <li>
-            <div class="text-sm opacity-75">
+    <section class="section">
+      <h2 class="section-title">Work</h2>
+      <ul class="entry-list">
+        {work.map((entry) => <li>
+          <div class="entry-main">
+            <span>{entry.data.company}</span>
+            <span class="entry-when">
               {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-            </div>
-            <div class="font-semibold text-black dark:text-white">
-              {entry.data.company}
-            </div>
-            <div class="text-sm opacity-75">{entry.data.role}</div>
-            <article>
-              <entry.Content />
-            </article>
-          </li>)}
-        </ul>
-      </section>
+            </span>
+          </div>
+          <span class="entry-detail">{entry.data.role}</span>
+        </li>)}
+      </ul>
+    </section>
 
-      <section class="animate space-y-6">
-        <div class="flex flex-wrap gap-y-2 items-center justify-between">
-          <h5 class="font-semibold text-black dark:text-white">Recent projects</h5>
-          <Link href="/projects"> See all projects </Link>
-        </div>
-        <ul class="flex flex-col gap-4">
-          {projects.map((project) => <li>
-            <ArrowCard entry={project} />
-          </li>)}
-        </ul>
-      </section>
+    <section class="section">
+      <h2 class="section-title">Projects</h2>
+      <ul class="entry-list">
+        {projects.map((project) => <li>
+          <div class="entry-main">
+            <a href={project.data.repoURL ?? project.data.demoURL ?? "/posts/"}>
+              {project.data.title}
+            </a>
+          </div>
+          <span class="entry-detail">{project.data.description}</span>
+        </li>)}
+      </ul>
+    </section>
 
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">Education</h5>
-        <article>
-          <p class="font-semibold text-black dark:text-white">Universitas Terbuka</p>
-          <p class="text-sm opacity-75">Bachelor's Degree in Information Systems</p>
-        </article>
-      </section>
-
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">Open Source</h5>
-        <article>
-          <p>
-            I contribute to open source projects including Better Hub, Better Auth, OpenCode, and
-            OpenTUI.
-          </p>
-        </article>
-      </section>
-
-      <section class="animate space-y-4">
-        <h5 class="font-semibold text-black dark:text-white">Let's Connect</h5>
-        <article>
-          <p>
-            If you want to get in touch with me about something or just to say hi, reach out on
-            social media or send me an email.
-          </p>
-        </article>
-        <ul class="flex flex-wrap gap-2">
-          {SOCIALS.map((SOCIAL) => <li class="flex gap-x-2 text-nowrap">
-            <Link href={SOCIAL.HREF} external aria-label={`${SITE.NAME} on ${SOCIAL.NAME}`}>
-              {SOCIAL.NAME}
-            </Link>
-            {"/"}
-          </li>)}
-          <li class="line-clamp-1">
-            <Link href={`mailto:${SITE.EMAIL}`} aria-label={`Email ${SITE.NAME}`}>
-              {SITE.EMAIL}
-            </Link>
-          </li>
-        </ul>
-      </section>
-    </div>
-  </Container>
-</PageLayout>
+    <section class="section">
+      <h2 class="section-title">Elsewhere</h2>
+      <ul class="inline-list">
+        {SOCIALS.map((social) => <li>
+          <a href={social.HREF} rel="me">
+            {social.NAME}
+          </a>
+        </li>)}
+        <li><a href={`mailto:${SITE.EMAIL}`}>email</a></li>
+      </ul>
+    </section>
+  </div>
+</Base>

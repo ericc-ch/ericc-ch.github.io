@@ -1,0 +1,27 @@
+{
+  "name": "gruvbox",
+  "label": "Gruvbox",
+  "scheme": "dark",
+  "order": 3,
+  "tokens": {
+    "--background": "#282828",
+    "--foreground": "#ebdbb2",
+    "--card": "#1d2021",
+    "--card-foreground": "#ebdbb2",
+    "--popover": "#32302f",
+    "--popover-foreground": "#ebdbb2",
+    "--primary": "#83a598",
+    "--primary-foreground": "#282828",
+    "--secondary": "#3c3836",
+    "--secondary-foreground": "#ebdbb2",
+    "--muted": "#32302f",
+    "--muted-foreground": "#a89984",
+    "--accent": "#3c3836",
+    "--accent-foreground": "#ebdbb2",
+    "--destructive": "#fe6a58",
+    "--border": "#3c3836",
+    "--input": "#504945",
+    "--ring": "#83a598",
+    "--radius": "0"
+  }
+}

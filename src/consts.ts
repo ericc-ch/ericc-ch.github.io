@@ -1,42 +1,20 @@
-import type { Site, Metadata, Socials } from "@types"
+import type { Site, Socials } from "@types"
 
 export const SITE: Site = {
   NAME: "Erick Christian",
-  EMAIL: "erickchristian48@gmail.com",
-  NUM_POSTS_ON_HOMEPAGE: 3,
-  NUM_WORKS_ON_HOMEPAGE: 2,
-  NUM_PROJECTS_ON_HOMEPAGE: 3,
-}
-
-export const HOME: Metadata = {
-  TITLE: "Home",
-  DESCRIPTION: "I'm a Web Developer, being held hostage by JavaScript",
-}
-
-export const BLOG: Metadata = {
-  TITLE: "Blog",
   DESCRIPTION:
-    "A collection of articles on topics I that I like, mixed with personal rants sometimes.",
-}
-
-export const WORK: Metadata = {
-  TITLE: "Work",
-  DESCRIPTION: "Where I have worked and what I have done.",
-}
-
-export const PROJECTS: Metadata = {
-  TITLE: "Projects",
-  DESCRIPTION: "A collection of my projects, with links to repositories and demos.",
+    "Software engineer working on the web, browsers, and open source. I write about what I build.",
+  EMAIL: "erickchristian48@gmail.com",
 }
 
 export const SOCIALS: Socials = [
   {
-    NAME: "twitter-x",
-    HREF: "https://x.com/ericc_ch",
-  },
-  {
     NAME: "github",
     HREF: "https://github.com/ericc-ch",
+  },
+  {
+    NAME: "twitter-x",
+    HREF: "https://x.com/ericc_ch",
   },
   {
     NAME: "dev.to",

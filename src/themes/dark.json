@@ -1,0 +1,27 @@
+{
+  "name": "dark",
+  "label": "Dark",
+  "scheme": "dark",
+  "order": 2,
+  "tokens": {
+    "--background": "#131312",
+    "--foreground": "#e9e6df",
+    "--card": "#131312",
+    "--card-foreground": "#e9e6df",
+    "--popover": "#1a1918",
+    "--popover-foreground": "#e9e6df",
+    "--primary": "#e0a06a",
+    "--primary-foreground": "#1a1a18",
+    "--secondary": "#1e1d1b",
+    "--secondary-foreground": "#e9e6df",
+    "--muted": "#1e1d1b",
+    "--muted-foreground": "#a3a09a",
+    "--accent": "#262420",
+    "--accent-foreground": "#e9e6df",
+    "--destructive": "#ff8a80",
+    "--border": "#2e2c29",
+    "--input": "#4a4740",
+    "--ring": "#e0a06a",
+    "--radius": "0"
+  }
+}

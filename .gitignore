@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# generated
+src/styles/themes.generated.css
+
 # generated types
 .astro/
 

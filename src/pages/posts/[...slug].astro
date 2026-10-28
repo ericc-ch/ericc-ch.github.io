@@ -1,0 +1,81 @@
+---
+import { getCollection, render } from "astro:content"
+import Base from "@layouts/Base.astro"
+import { formatDate, readingTime } from "@lib/utils"
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog")
+
+  return posts
+    .filter((post) => !post.data.draft)
+    .map((post) => ({ params: { slug: post.id }, props: { post } }))
+}
+
+const { post } = Astro.props
+const { Content, headings } = await render(post)
+
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
+const minutes = readingTime(post.body)
+const updated = post.data.updatedAt
+---
+
+<Base title={post.data.title} description={post.data.description}>
+  <div class="wrap">
+    <a class="back" href="/posts/">Back to posts</a>
+
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <div class="post-meta">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        {minutes && <span>{minutes}</span>}
+        {updated && <span>Updated {formatDate(updated)}</span>}
+        {post.data.tags && post.data.tags.length > 0 && <ul class="post-tags">
+          {post.data.tags.map((tag) => <li>{tag}</li>)}
+        </ul>}
+      </div>
+    </header>
+
+    {toc.length >= 4 && <details class="toc">
+      <summary>On this page</summary>
+      <ul>
+        {toc.map((heading) => <li class={heading.depth === 3 ? "h3" : undefined}>
+          <a href={`#${heading.slug}`}>{heading.text}</a>
+        </li>)}
+      </ul>
+    </details>}
+
+    <article class="prose">
+      <Content />
+    </article>
+
+    <p id="copy-status" class="sr-only" aria-live="polite"></p>
+  </div>
+</Base>
+
+<script is:inline>
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-copy]")
+    if (!button) return
+
+    const pre = button.closest("figure")?.querySelector("pre")
+    if (!pre) return
+
+    const status = document.getElementById("copy-status")
+    const restore = () => {
+      button.removeAttribute("data-copied")
+      button.textContent = "Copy"
+    }
+
+    navigator.clipboard
+      .writeText(pre.textContent || "")
+      .then(() => {
+        button.setAttribute("data-copied", "")
+        button.textContent = "Copied"
+        if (status) status.textContent = "Code copied to clipboard"
+        setTimeout(restore, 1500)
+      })
+      .catch(() => {
+        if (status) status.textContent = "Copy failed"
+      })
+  })
+</script>

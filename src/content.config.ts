@@ -22,8 +22,8 @@ const work = defineCollection({
     .object({
       company: z.string(),
       role: z.string(),
-      dateStart: z.string().regex(/^\d{4}$/),
-      dateEnd: z.string().regex(/^\d{4}$/),
+      dateStart: z.string().regex(/^\d{4}\/\d{2}$/),
+      dateEnd: z.string().regex(/^\d{4}\/\d{2}$/),
     })
     .strict(),
 })

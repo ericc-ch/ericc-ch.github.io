@@ -99,6 +99,7 @@ const read = (page) =>
       preBackground: pre ? getComputedStyle(pre).backgroundColor : null,
       preFont: pre ? getComputedStyle(pre).fontFamily : null,
       dateFont: date ? getComputedStyle(date).fontFamily : null,
+      dateText: date ? date.textContent.trim() : null,
       preSize: pre ? getComputedStyle(pre).fontSize : null,
       captionSize: caption ? getComputedStyle(caption).fontSize : null,
       wrapWidth: wrap ? wrap.getBoundingClientRect().width : null,
@@ -293,6 +294,7 @@ const rows = [
   ],
   ["code is JetBrains Mono", wide.preFont?.includes("JetBrains Mono"), wide.preFont],
   ["dates are JetBrains Mono", wide.dateFont?.includes("JetBrains Mono"), wide.dateFont],
+  ["dates are YYYY/MM/DD", /^\d{4}\/\d{2}\/\d{2}$/.test(wide.dateText ?? ""), wide.dateText],
   [
     "code is 14px",
     wide.preSize === "14px" && wide.captionSize === "14px",

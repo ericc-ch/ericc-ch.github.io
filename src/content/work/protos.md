@@ -1,8 +1,8 @@
 ---
 company: "ProtosLabs (Outsourced via Xcidic)"
 role: "Frontend Engineer"
-dateStart: "2023"
-dateEnd: "2024"
+dateStart: "2023/03"
+dateEnd: "2024/12"
 ---
 
 Worked on NEXUS, a unified cyber risk management platform. Used React and Material UI to build an admin dashboard complete with charts, interactive tables, forms, and various data visualization components.

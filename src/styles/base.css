@@ -22,6 +22,9 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
   margin: 0;
   background: var(--background);
   color: var(--foreground);
@@ -86,6 +89,7 @@ a:hover {
 
 main {
   display: block;
+  flex: 1;
   padding-block: clamp(2rem, 1rem + 4vw, 3.5rem) clamp(3rem, 2rem + 4vw, 5rem);
 }
 

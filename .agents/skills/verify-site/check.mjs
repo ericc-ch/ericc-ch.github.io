@@ -23,21 +23,6 @@ function resolveChromium() {
   }
 }
 
-function luminance([red, green, blue]) {
-  const channel = (value) => {
-    const scaled = value / 255
-    return scaled <= 0.04045 ? scaled / 12.92 : ((scaled + 0.055) / 1.055) ** 2.4
-  }
-  return 0.2126 * channel(red) + 0.7152 * channel(green) + 0.0722 * channel(blue)
-}
-
-function contrast(foreground, background) {
-  const first = luminance(foreground)
-  const second = luminance(background)
-  const [light, dark] = first > second ? [first, second] : [second, first]
-  return (light + 0.05) / (dark + 0.05)
-}
-
 const rgb = (value) =>
   value
     .match(/[\d.]+/g)
@@ -166,6 +151,12 @@ const wide = await read(widePage)
 // `prose` even with a higher-specificity selector; `ui` must win with the same selector.
 const layered = await widePage.evaluate(() => {
   const heading = document.querySelector(".prose h2")
+  const rules = Array.from(document.styleSheets).flatMap((sheet) => Array.from(sheet.cssRules))
+  const layers = rules.filter((rule) => rule instanceof CSSLayerBlockRule).map((rule) => rule.name)
+  const unlayered = rules
+    .filter((rule) => !(rule instanceof CSSLayerBlockRule))
+    .map((rule) => rule.constructor.name)
+
   const style = document.createElement("style")
   document.head.append(style)
 
@@ -175,7 +166,13 @@ const layered = await widePage.evaluate(() => {
     return getComputedStyle(heading).marginBlockStart
   }
 
-  return { before, early: marginWith("base"), late: marginWith("ui") }
+  return {
+    layers,
+    unlayered,
+    before,
+    early: marginWith("base"),
+    late: marginWith("ui"),
+  }
 })
 
 await wideContext.close()
@@ -299,6 +296,16 @@ const rows = [
     `${wide.preSize} / ${wide.captionSize}`,
   ],
   ["measure caps at 48ch", wide.wrapWidth !== null && wide.wrapWidth < 600, `${wide.wrapWidth}px`],
+  [
+    "styles ship in four layers",
+    layered.layers.join(",") === "tokens,base,prose,ui",
+    layered.layers.join(","),
+  ],
+  [
+    "only @font-face is unlayered",
+    layered.unlayered.length > 0 && layered.unlayered.every((type) => type === "CSSFontFaceRule"),
+    [...new Set(layered.unlayered)].join(","),
+  ],
   [
     "an earlier layer cannot override prose",
     layered.early === layered.before,

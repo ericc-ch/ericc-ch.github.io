@@ -156,24 +156,8 @@
 }
 
 .copy {
-  font: inherit;
   font-family: var(--font-sans);
   font-size: 0.75rem;
-  padding: 0.15rem 0.5rem;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  color: inherit;
-  cursor: pointer;
-}
-
-.copy:hover {
-  color: var(--foreground);
-  border-color: var(--input);
-}
-
-.copy[data-copied] {
-  color: var(--primary);
 }
 
 [data-scheme="dark"] .astro-code span {

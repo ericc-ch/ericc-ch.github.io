@@ -62,14 +62,12 @@ const updated = post.data.updatedAt
 
     const status = document.getElementById("copy-status")
     const restore = () => {
-      button.removeAttribute("data-copied")
       button.textContent = "Copy"
     }
 
     navigator.clipboard
       .writeText(pre.textContent || "")
       .then(() => {
-        button.setAttribute("data-copied", "")
         button.textContent = "Copied"
         if (status) status.textContent = "Code copied to clipboard"
         setTimeout(restore, 1500)

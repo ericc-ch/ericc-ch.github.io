@@ -13,14 +13,8 @@
 }
 
 .brand {
-  color: var(--foreground);
-  text-decoration: none;
   font-size: 1rem;
   font-weight: 600;
-}
-
-.brand:hover {
-  text-decoration: underline;
 }
 
 .site-nav {
@@ -35,47 +29,10 @@
 
 .site-nav a,
 .site-nav button {
-  color: var(--muted-foreground);
-  text-decoration: none;
   padding-block: 0.35rem;
 }
 
-.site-nav a:hover,
-.site-nav button:hover {
-  color: var(--foreground);
-  text-decoration: underline;
-}
-
-.site-nav button {
-  font: inherit;
-  background: none;
-  border: 0;
-  cursor: pointer;
-}
-
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  font: inherit;
-  color: var(--muted-foreground);
-  background: none;
-  border: 0;
-  cursor: pointer;
-}
-
-.theme-toggle:hover {
-  color: var(--foreground);
-}
-
-html:not([data-js]) .theme-toggle {
-  display: none;
-}
-
-[data-scheme="light"] .theme-toggle .icon-sun {
-  display: none;
-}
-
-[data-scheme="dark"] .theme-toggle .icon-moon {
+html:not([data-js]) #theme-toggle {
   display: none;
 }
 

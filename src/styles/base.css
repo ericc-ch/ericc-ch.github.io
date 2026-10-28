@@ -61,7 +61,8 @@ svg {
   max-width: 100%;
 }
 
-a {
+a,
+button {
   color: var(--primary);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -69,8 +70,17 @@ a {
   text-decoration-color: color-mix(in oklab, currentcolor 45%, transparent);
 }
 
-a:hover {
+a:hover,
+button:hover {
   text-decoration-color: currentcolor;
+}
+
+button {
+  font: inherit;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
 }
 
 :focus-visible {

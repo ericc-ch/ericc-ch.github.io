@@ -231,21 +231,13 @@ const same = (computed, raw) => {
 
 const rows = [
   ["article responds", light.status === 200, `HTTP ${light.status}`],
-  [
-    "light palette applies",
-    light.body === "rgb(252, 252, 252)",
-    `${light.theme} ${light.body}`,
-  ],
+  ["light palette applies", light.body === "rgb(252, 252, 252)", `${light.theme} ${light.body}`],
   [
     "light code uses --shiki-light",
     same(light.token, light.tokenLight),
     `${light.token} vs ${light.tokenLight}`,
   ],
-  [
-    "dark palette applies",
-    dark.body === "rgb(17, 17, 17)",
-    `${dark.theme} ${dark.body}`,
-  ],
+  ["dark palette applies", dark.body === "rgb(17, 17, 17)", `${dark.theme} ${dark.body}`],
   [
     "dark code uses --shiki-dark",
     same(dark.token, dark.tokenDark),

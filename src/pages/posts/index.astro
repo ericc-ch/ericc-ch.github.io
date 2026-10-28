@@ -8,7 +8,7 @@ const posts = (await getCollection("blog"))
   .sort((first, second) => second.data.date.valueOf() - first.data.date.valueOf())
 ---
 
-<Base title="Posts">
+<Base title="Posts" ogImage="/og/posts.png">
   <div class="wrap">
     <h1 class="page-title">Posts</h1>
     <p class="page-lede">{posts.length} posts, mostly about the web and the things I break.</p>

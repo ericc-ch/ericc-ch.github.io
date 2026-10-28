@@ -32,8 +32,9 @@ duplicated dark block.
 State never lives in colour: the toggle says "Light" or "Dark", copy says "Copied" or "Copy
 failed".
 
-Code is the one place other colours appear — a Shiki theme chosen for how it sits next to the
-page rather than for contrast. Code is texture, not body copy.
+Code and the favicon are the only places other colours appear. Code uses a Shiki theme chosen
+for how it sits next to the page rather than for contrast; the favicon is the avatar, a
+low-poly head on tan. Everything else is this palette.
 
 ## Typography
 

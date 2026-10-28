@@ -205,6 +205,25 @@ const focus = await focusPage.evaluate(() => {
 await focusPage.screenshot({ path: `${EVIDENCE}/code-focus.png` })
 await focusContext.close()
 
+const socialContext = await browser.newContext()
+const socialPage = await socialContext.newPage()
+await socialPage.goto(`${BASE}${ARTICLE}`)
+const social = await socialPage.evaluate(async () => {
+  const probe = async (selector, attribute) => {
+    const href = document.querySelector(selector)?.getAttribute(attribute) ?? null
+    if (!href) return { href, status: null, type: null, bytes: 0 }
+    const response = await fetch(new URL(href, location.origin).pathname)
+    const blob = await response.blob()
+    return { href, status: response.status, type: blob.type, bytes: blob.size }
+  }
+
+  return {
+    og: await probe('meta[property="og:image"]', "content"),
+    icon: await probe('link[rel="icon"]', "href"),
+  }
+})
+await socialContext.close()
+
 const copyContext = await browser.newContext({
   permissions: ["clipboard-read", "clipboard-write"],
 })
@@ -294,6 +313,16 @@ const rows = [
   ],
   ["code is JetBrains Mono", wide.preFont?.includes("JetBrains Mono"), wide.preFont],
   ["dates are JetBrains Mono", wide.dateFont?.includes("JetBrains Mono"), wide.dateFont],
+  [
+    "og:image is a png",
+    social.og.status === 200 && social.og.type === "image/png" && social.og.bytes > 10_000,
+    `${social.og.href} ${social.og.status} ${social.og.bytes}B`,
+  ],
+  [
+    "favicon is a png",
+    social.icon.status === 200 && social.icon.type === "image/png",
+    `${social.icon.href} ${social.icon.status}`,
+  ],
   ["dates are YYYY/MM/DD", /^\d{4}\/\d{2}\/\d{2}$/.test(wide.dateText ?? ""), wide.dateText],
   [
     "code is 14px",

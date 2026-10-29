@@ -1,3 +1,4 @@
+/** @jsxImportSource satori/jsx */
 import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { Resvg, initWasm } from "@resvg/resvg-wasm"
@@ -65,94 +66,78 @@ function fonts() {
  */
 export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
   const { light } = parsePalettes(readFileSync("src/styles/themes.css", "utf8"))
-  const background = light["--bg-0"]
-  const ink = light["--fg-0"]
-  const muted = light["--fg-1"]
-  const hairline = light["--fg-2"]
 
   await initResvg()
 
-  const children = []
+  const svg = await satori(
+    <div
+      style={{
+        display: "flex",
+        position: "relative",
+        width: `${WIDTH}px`,
+        height: `${HEIGHT}px`,
+        background: light["--bg-0"],
+        color: light["--fg-0"],
+        fontFamily: "Plus Jakarta Sans",
+      }}
+    >
+      {card.label ? (
+        <div
+          style={{
+            position: "absolute",
+            left: `${PADDING}px`,
+            top: "74px",
+            fontSize: "28px",
+            color: light["--fg-1"],
+          }}
+        >
+          {card.label}
+        </div>
+      ) : null}
 
-  if (card.label) {
-    children.push({
-      type: "div",
-      props: {
-        style: {
+      <div
+        style={{
           position: "absolute",
           left: `${PADDING}px`,
-          top: "74px",
-          fontSize: "28px",
-          color: muted,
-        },
-        children: card.label,
-      },
-    })
-  }
+          right: `${PADDING}px`,
+          bottom: "140px",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "64px",
+            fontWeight: 600,
+            lineHeight: 1.2,
+            letterSpacing: "-0.011em",
+          }}
+        >
+          {card.title}
+        </div>
 
-  children.push({
-    type: "div",
-    props: {
-      style: {
-        position: "absolute",
-        left: `${PADDING}px`,
-        right: `${PADDING}px`,
-        bottom: "140px",
-        display: "flex",
-        flexDirection: "column",
-      },
-      children: [
-        {
-          type: "div",
-          props: {
-            style: {
-              fontSize: "64px",
-              fontWeight: 600,
-              lineHeight: 1.2,
-              letterSpacing: "-0.011em",
-            },
-            children: card.title,
-          },
-        },
-        ...(card.subtitle
-          ? [
-              {
-                type: "div",
-                props: {
-                  style: {
-                    marginTop: "24px",
-                    fontSize: "30px",
-                    lineHeight: 1.4,
-                    color: muted,
-                  },
-                  children: card.subtitle,
-                },
-              },
-            ]
-          : []),
-      ],
-    },
-  })
+        {card.subtitle ? (
+          <div
+            style={{ marginTop: "24px", fontSize: "30px", lineHeight: 1.4, color: light["--fg-1"] }}
+          >
+            {card.subtitle}
+          </div>
+        ) : null}
+      </div>
 
-  children.push(
-    {
-      type: "div",
-      props: {
-        style: {
+      <div
+        style={{
           position: "absolute",
           left: `${PADDING}px`,
           right: `${PADDING}px`,
           bottom: `${PADDING}px`,
           height: "1px",
-          background: hairline,
-        },
-        children: "",
-      },
-    },
-    {
-      type: "div",
-      props: {
-        style: {
+          background: light["--fg-2"],
+        }}
+      />
+
+      <div
+        style={{
           position: "absolute",
           left: `${PADDING}px`,
           right: `${PADDING}px`,
@@ -161,32 +146,13 @@ export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
           justifyContent: "space-between",
           fontFamily: "JetBrains Mono",
           fontSize: "24px",
-          color: muted,
-        },
-        children: [
-          { type: "div", props: { style: {}, children: card.date ?? "" } },
-          { type: "div", props: { style: {}, children: "ericc.ch" } },
-        ],
-      },
-    },
-  )
-
-  const svg = await satori(
-    {
-      type: "div",
-      props: {
-        style: {
-          display: "flex",
-          position: "relative",
-          width: `${WIDTH}px`,
-          height: `${HEIGHT}px`,
-          background,
-          color: ink,
-          fontFamily: "Plus Jakarta Sans",
-        },
-        children,
-      },
-    },
+          color: light["--fg-1"],
+        }}
+      >
+        <div>{card.date ?? ""}</div>
+        <div>ericc.ch</div>
+      </div>
+    </div>,
     { width: WIDTH, height: HEIGHT, fonts: fonts() },
   )
 

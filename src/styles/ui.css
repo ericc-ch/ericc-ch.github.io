@@ -96,6 +96,14 @@ time,
   margin-top: var(--space-4);
 }
 
+.more a {
+  color: var(--fg-1);
+}
+
+.more a:hover {
+  color: var(--fg-0);
+}
+
 .post-header {
   margin-bottom: clamp(1.75rem, 1rem + 3vw, 2.5rem);
 }
@@ -129,6 +137,11 @@ time,
 .back {
   display: inline-block;
   margin-bottom: clamp(1.25rem, 0.75rem + 2vw, 2rem);
+  color: var(--fg-1);
+}
+
+.back:hover {
+  color: var(--fg-0);
 }
 
 .toc {

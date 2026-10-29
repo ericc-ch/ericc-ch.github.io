@@ -60,8 +60,9 @@ type.
 
 ## Chrome
 
-Links and buttons are one thing: ink text with an underline that firms up on hover. No
-backgrounds, no pills, no arrows, no primary button.
+Links and buttons are one thing: an underline that firms up on hover, no backgrounds, no
+pills, no arrows, no primary button. Links that leave a section — "All posts", "Back to
+posts" — sit in muted ink, so they read as navigation rather than as another row.
 
 Nav is Home, Posts and the theme toggle, which is a text button pushed right. Entry rows are
 rows separated by whitespace, not cards and not rules. Everything is a rectangle and nothing

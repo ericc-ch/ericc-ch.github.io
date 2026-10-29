@@ -13,7 +13,13 @@ export async function getStaticPaths() {
 const { post } = Astro.props
 const { Content, headings } = await render(post)
 
-const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3)
+const toc = headings.filter(
+  (heading) =>
+    (heading.depth === 2 || heading.depth === 3) &&
+    // The footnote section's sr-only label is generated at render time, so it arrives here
+    // as a real heading and would show up in the list as a second "Footnotes".
+    heading.slug !== "footnote-label",
+)
 const minutes = readingTime(post.body)
 const updated = post.data.updatedAt
 ---

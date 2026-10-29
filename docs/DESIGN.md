@@ -1,6 +1,6 @@
 # Erick's site
 
-A monochrome, typographic personal site. One text family, six colours, no motion.
+A monochrome, typographic personal site. One text family, no motion.
 
 ## Overview
 
@@ -23,8 +23,8 @@ Platform Tests results page — so these rules are meant to survive without this
 
 ## Colour
 
-Six tokens, no accent, no hue, no state colours. Background, two surfaces, ink, muted ink and
-a hairline. A seventh colour is a design decision, not an addition.
+A handful of tokens, no accent, no hue, no state colours: the page, two surfaces, ink, muted
+ink and a hairline. Adding a colour is a design decision, not a tweak.
 
 Each token is one `light-dark()` pair, so `color-scheme` does the switching and there is no
 duplicated dark block.
@@ -33,31 +33,30 @@ State never lives in colour: the toggle says "Light" or "Dark", copy says "Copie
 failed".
 
 Code and the favicon are the only places other colours appear. Code uses a Shiki theme chosen
-for how it sits next to the page rather than for contrast; the favicon is the avatar, a
-low-poly head on tan. Everything else is this palette.
+for how it sits next to the page rather than for contrast; the favicon is the avatar.
+Everything else is this palette.
 
 ## Typography
 
 Plus Jakarta Sans for text, JetBrains Mono for code and dates. No second text face, no icons.
 
-Four fluid sizes: 16 body, 22 `h3`, 24 `h2`, 28 `h1`, with 14 fixed for code. The ladder is
-5% smaller at 320px and reaches full size at 1240px. `line-height: 1.5` everywhere, set once.
-Two weights only: 400, and 600 for headings and `strong`.
+Sizes form a short fluid ladder: it gives way a little on narrow screens and reaches full size
+on wide ones. Code is a fixed step below body. One line height everywhere, set once. Two
+weights: regular for text, semibold for headings and `strong`.
 
 Hierarchy comes from size and ink intensity, never from weight or decoration.
 
 ## Layout
 
-One column, `min(100% - 2 * gutter, 50ch)`, centred. No grid system and no media queries: the
-column shrinks until it reaches the measure and then stops. 320px is the floor, and nothing
-may scroll sideways there.
+One column, centred, capped at a readable measure. No grid system and no media queries: the
+column shrinks with the viewport and stops at the cap. The narrowest phone has to fit without
+sideways scrolling.
 
-Vertical rhythm is a stack of `clamp()` margins. Entry rows put their metadata right with a
-single `1fr auto` grid.
+Vertical rhythm is a stack of margins. Entry rows put their metadata right with a single grid.
 
-Boxes sit on a 4px grid: `--space-1` to `--space-6` and `--space-12` are multiples of
-`0.25rem`, and `--gutter` is `--space-5`. Text rhythm is deliberately not on that grid —
-prose margins stay in `em` so they scale with the type they separate.
+Boxes sit on one spacing step; every box value is a multiple of it. Text rhythm is deliberately
+not on that grid — prose margins are relative to the text they separate, so they scale with the
+type.
 
 ## Chrome
 
@@ -69,17 +68,16 @@ rows separated by whitespace, not cards and not rules. Everything is a rectangle
 has a radius.
 
 Code blocks get a caption bar with the language and a Copy button; the code itself sits on the
-syntax theme's own background. Focus is a 2px outline and is never removed.
+syntax theme's own background. Focus is an outline and is never removed.
 
 ## Structure
 
-Four cascade layers, in order: `tokens`, `base`, `prose`, `ui`. Article content is scoped with
-`@scope (.prose)`. The stylesheets ship without a media query or an `!important`, and the site
+Layers run from tokens to page chrome: `tokens`, `base`, `prose`, `ui`. Article content is
+scoped to `.prose`. The stylesheets ship without a media query or an `!important`, and the site
 without a client script.
 
 ## Rules
 
-- This file is intent, not a copy. Token values, ratios and checks live in `src/styles/` and
-  the scripts.
-- Reuse a token. Adding a colour, size or radius is a decision, not a tweak.
+- This file describes intent. Values live in `src/styles/`.
+- Reuse a token. Changing one is a decision.
 - Change state with text, not with animation.

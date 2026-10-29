@@ -1,9 +1,8 @@
 import { SITE, SOCIALS } from "@consts"
-import { isoDate } from "@lib/utils"
 
 export interface ArticleMeta {
-  published: Date
-  modified?: Date
+  published: string
+  modified?: string
   tags?: Array<string>
 }
 
@@ -64,8 +63,8 @@ export function structuredData({
       headline: title,
       description,
       image: image.href,
-      datePublished: isoDate(article.published),
-      dateModified: isoDate(modified),
+      datePublished: article.published,
+      dateModified: modified,
       inLanguage: "en",
       author: { "@id": `${origin.href}#person` },
       publisher: {

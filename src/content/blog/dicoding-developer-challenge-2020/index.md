@@ -1,9 +1,9 @@
 ---
 title: "Things I learned From Participating in a Developer Challenge"
 description: "My first dip into the world of competitive programming"
-date: "14 Nov 2020"
-updatedAt: "29 Oct 2026"
-draft: false
+createdAt: "2020-11-14"
+updatedAt: "2026-10-29"
+published: true
 ---
 
 There’s this [challenge](https://www.dicoding.com/challenges/637) found by my friend, held by Dicoding. One of the theme was to grow the tourism sector. So here’s what is in our brain:

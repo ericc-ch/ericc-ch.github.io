@@ -2,7 +2,6 @@ import rss from "@astrojs/rss"
 import type { APIContext } from "astro"
 import { SITE } from "@consts"
 import { getPublishedPosts } from "@lib/posts"
-import { utcDay } from "@lib/utils"
 
 export async function GET(context: APIContext) {
   const posts = await getPublishedPosts()
@@ -15,7 +14,7 @@ export async function GET(context: APIContext) {
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,
-      pubDate: utcDay(post.data.date),
+      pubDate: new Date(`${post.data.createdAt}T00:00:00Z`),
       link: `/posts/${post.id}/`,
     })),
   })

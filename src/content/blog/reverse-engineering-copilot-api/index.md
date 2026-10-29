@@ -1,8 +1,8 @@
 ---
 title: "I Turned GitHub Copilot Into OpenAI Compatible API Provider"
 description: "Building a proxy server to make GitHub Copilot work with third-party tools"
-date: "5 Feb 2025"
-draft: false
+createdAt: "2025-02-05"
+published: true
 ---
 
 ![Screenshot of copilot api running](./00-copilot-api.webp)

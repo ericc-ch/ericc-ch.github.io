@@ -1,10 +1,10 @@
 ---
 title: "The Daily Algorithm"
 description: "Fully automated content pipeline for YouTube shorts"
-date: "Jan 17 2025"
+createdAt: "2025-01-17"
+published: true
 demoURL: ""
 repoURL: "https://github.com/ericc-ch/the-daily-algorithm"
-draft: false
 ---
 
 Engineered a fully automated content pipeline for YouTube shorts using **Google Gemini** for script generation, custom **Edge TTS** implementation for voiceover synthesis, and **Remotion** for video rendering.

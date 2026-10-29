@@ -1,10 +1,10 @@
 ---
 title: "Edge TTS"
 description: "Microsoft Edge Text-to-Speech service for Node.js"
-date: "Aug 23 2024"
+createdAt: "2024-08-23"
+published: true
 demoURL: ""
 repoURL: "https://github.com/ericc-ch/edge-tts"
-draft: false
 ---
 
 Reverse-engineered the WebSocket-based Microsoft Edge Text-to-Speech service and published it as an NPM package.

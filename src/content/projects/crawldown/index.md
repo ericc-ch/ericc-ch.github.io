@@ -1,10 +1,10 @@
 ---
 title: "Crawldown"
 description: "Crawl websites and convert to clean Markdown"
-date: "Jan 24 2025"
+createdAt: "2025-01-24"
+published: true
 demoURL: ""
 repoURL: "https://github.com/ericc-ch/crawldown"
-draft: false
 ---
 
 Crawl websites and convert their pages into clean, readable Markdown content using Mozilla's Readability and Turndown.

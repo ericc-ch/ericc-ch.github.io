@@ -1,10 +1,10 @@
 ---
 title: "Twofactr"
 description: " Secure, client-only 2FA"
-date: "Jun 18 2024"
+createdAt: "2024-06-18"
+published: true
 demoURL: "https://twofactr.pages.dev/"
 repoURL: "https://github.com/sheila-jvn/twofactr"
-draft: false
 ---
 
 Winner of [Baparekraf Digital Talent 2024 - Upaya Keamanan Siber dan Ketahanan Digital](https://www.dicoding.com/challenges/902)

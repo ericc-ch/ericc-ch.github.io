@@ -1,22 +1,6 @@
-export function formatDate(date: Date): string {
-  const month = String(date.getMonth() + 1).padStart(2, "0")
-  const day = String(date.getDate()).padStart(2, "0")
-  return `${date.getFullYear()}/${month}/${day}`
-}
-
-/** The same calendar day as formatDate, in the form the datetime attribute expects. */
-export function isoDate(date: Date): string {
-  return formatDate(date).replaceAll("/", "-")
-}
-
-/**
- * The calendar day a date was written for, moved to UTC midnight.
- *
- * Frontmatter dates are parsed in the build machine's zone, so a feed rendered in UTC+7 would
- * otherwise publish a post one day early for a reader in UTC.
- */
-export function utcDay(date: Date): Date {
-  return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+/** "2026-04-07" as "2026/04/07", the site's date format. */
+export function formatDate(day: string): string {
+  return day.replaceAll("-", "/")
 }
 
 export function readingTime(body: string | undefined): string {

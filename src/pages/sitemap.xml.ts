@@ -1,6 +1,5 @@
 import type { APIRoute } from "astro"
 import { getPublishedPosts } from "@lib/posts"
-import { isoDate } from "@lib/utils"
 
 const escape = (value: string) =>
   value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
@@ -16,14 +15,14 @@ export const GET: APIRoute = async ({ site }) => {
   const posts = await getPublishedPosts()
 
   const newest = posts[0]?.data
-  const indexDate = newest ? isoDate(newest.updatedAt ?? newest.date) : null
+  const indexDate = newest ? (newest.updatedAt ?? newest.createdAt) : null
 
   const entries = [
     { loc: new URL("/", origin).href, lastmod: indexDate },
     { loc: new URL("/posts/", origin).href, lastmod: indexDate },
     ...posts.map((post) => ({
       loc: new URL(`/posts/${post.id}/`, origin).href,
-      lastmod: isoDate(post.data.updatedAt ?? post.data.date),
+      lastmod: post.data.updatedAt ?? post.data.createdAt,
     })),
   ]
 

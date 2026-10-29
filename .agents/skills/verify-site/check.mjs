@@ -240,11 +240,11 @@ const social = await socialPage.evaluate(async () => {
 })
 await socialContext.close()
 
-// A draft is built at its URL and kept out of every list, feed and sitemap.
-const DRAFT = "/posts/kitchen-sink/"
+// An unpublished post is built at its URL and kept out of every list, feed and sitemap.
+const UNPUBLISHED = "/posts/kitchen-sink/"
 const sinkContext = await browser.newContext({ viewport: { width: 320, height: 800 } })
 const sinkPage = await sinkContext.newPage()
-const sinkResponse = await sinkPage.goto(`${BASE}${DRAFT}`)
+const sinkResponse = await sinkPage.goto(`${BASE}${UNPUBLISHED}`)
 const sinkStatus = sinkResponse ? await sinkResponse.status() : null
 const sink = await sinkPage.evaluate(() => {
   const wrap = document.querySelector(".table")
@@ -254,7 +254,7 @@ const sink = await sinkPage.evaluate(() => {
     robots: document.querySelector('meta[name="robots"]')?.content ?? null,
   }
 })
-await sinkPage.screenshot({ path: `${EVIDENCE}/draft-320.png` })
+await sinkPage.screenshot({ path: `${EVIDENCE}/unpublished-320.png` })
 await sinkContext.close()
 
 const listing = await (await fetch(`${BASE}/posts/`)).text()
@@ -426,18 +426,22 @@ const rows = [
     focus.active === "PRE" && focus.outline === "solid 2px",
     `${focus.active} ${focus.outline}`,
   ],
-  ["a draft is built", sinkStatus === 200, `HTTP ${sinkStatus}`],
-  ["a draft is noindex", sink.robots === "noindex, nofollow", sink.robots],
-  ["a draft is not in the post list", !listing.includes("kitchen-sink"), "posts/index.html"],
-  ["a draft is not in the feed", !feed.includes("kitchen-sink"), "rss.xml"],
-  ["a draft is not in the sitemap", !sitemap.includes("kitchen-sink"), "sitemap.xml"],
+  ["an unpublished post is built", sinkStatus === 200, `HTTP ${sinkStatus}`],
+  ["an unpublished post is noindex", sink.robots === "noindex, nofollow", sink.robots],
+  [
+    "an unpublished post is not in the post list",
+    !listing.includes("kitchen-sink"),
+    "posts/index.html",
+  ],
+  ["an unpublished post is not in the feed", !feed.includes("kitchen-sink"), "rss.xml"],
+  ["an unpublished post is not in the sitemap", !sitemap.includes("kitchen-sink"), "sitemap.xml"],
   ["the sitemap carries lastmod", sitemap.includes("<lastmod>"), "sitemap.xml"],
   [
     "a listing names the site",
     listingTitle === "Posts · Erick Christian",
     listingTitle ?? "no title",
   ],
-  ["a draft fits 320", sink.overflow <= 0, `${sink.overflow}px`],
+  ["an unpublished post fits 320", sink.overflow <= 0, `${sink.overflow}px`],
   ["a wide table scrolls in its own box", sink.tableScrolls, `${sink.tableScrolls}`],
 ]
 

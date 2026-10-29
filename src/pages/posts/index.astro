@@ -1,12 +1,12 @@
 ---
 import Base from "@layouts/Base.astro"
 import { getPublishedPosts } from "@lib/posts"
-import { formatDate, isoDate } from "@lib/utils"
+import { formatDate } from "@lib/utils"
 
 const posts = await getPublishedPosts()
 ---
 
-<Base title="Posts" ogImage="/og/posts.png" suffix>
+<Base title="Posts" ogImage="/og/posts.png" titleSuffix>
   <div class="wrap">
     <h1>Posts</h1>
     <p class="lede">{posts.length} posts, mostly about the web and the things I break.</p>
@@ -15,7 +15,7 @@ const posts = await getPublishedPosts()
       {posts.map((post) => <li>
         <div class="entry-main">
           <a href={`/posts/${post.id}/`}>{post.data.title}</a>
-          <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
+          <time datetime={post.data.createdAt}>{formatDate(post.data.createdAt)}</time>
         </div>
       </li>)}
     </ul>

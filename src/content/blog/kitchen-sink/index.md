@@ -1,10 +1,10 @@
 ---
 title: "The Kitchen Sink"
 description: "Every block and inline element this site renders, on one page, including the ones it still gets wrong."
-date: "Oct 27 2026"
-updatedAt: "Oct 29 2026"
+createdAt: "2026-10-27"
+updatedAt: "2026-10-29"
 tags: ["meta", "design", "test"]
-draft: true
+published: false
 ---
 
 This page exists to be looked at rather than read. It renders every block and inline element

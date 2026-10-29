@@ -1,10 +1,10 @@
 ---
 title: "Copilot API"
 description: "Turn GitHub Copilot into OpenAI/Anthropic API compatible server"
-date: "Jan 11 2025"
+createdAt: "2025-01-11"
+published: true
 demoURL: ""
 repoURL: "https://github.com/ericc-ch/copilot-api"
-draft: false
 ---
 
 Reverse-engineered GitHub Copilot's internal API to create a CLI tool and OpenAI-compatible proxy server. Usable with Claude Code and other OpenAI-compatible clients.

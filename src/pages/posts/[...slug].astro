@@ -2,7 +2,7 @@
 import { render } from "astro:content"
 import Base from "@layouts/Base.astro"
 import { getAllPosts } from "@lib/posts"
-import { formatDate, isoDate, readingTime } from "@lib/utils"
+import { formatDate, readingTime } from "@lib/utils"
 
 export async function getStaticPaths() {
   const posts = await getAllPosts()
@@ -26,10 +26,11 @@ const updated = post.data.updatedAt
 
 <Base
   title={post.data.title}
+  titleSuffix={post.data.titleSuffix}
   description={post.data.description}
   ogImage={`/og/${post.id}.png`}
-  noindex={Boolean(post.data.draft)}
-  article={{ published: post.data.date, modified: updated, tags: post.data.tags }}
+  noindex={!post.data.published}
+  article={{ published: post.data.createdAt, modified: updated, tags: post.data.tags }}
 >
   <div class="wrap">
     <a class="back" href="/posts/">Back to posts</a>
@@ -37,11 +38,9 @@ const updated = post.data.updatedAt
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <div class="post-meta">
-        <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
+        <time datetime={post.data.createdAt}>{formatDate(post.data.createdAt)}</time>
         {minutes && <span>{minutes}</span>}
-        {updated && <span
-          >Updated <time datetime={isoDate(updated)}>{formatDate(updated)}</time></span
-        >}
+        {updated && <span>Updated <time datetime={updated}>{formatDate(updated)}</time></span>}
         {post.data.tags && post.data.tags.length > 0 && <ul class="post-tags">
           {post.data.tags.map((tag) => <li>{tag}</li>)}
         </ul>}

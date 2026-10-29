@@ -22,7 +22,7 @@ export const getStaticPaths = (async () => {
         card: {
           label: SITE.NAME,
           title: post.data.title,
-          date: formatDate(post.data.date),
+          date: formatDate(post.data.createdAt),
         },
       },
     })),

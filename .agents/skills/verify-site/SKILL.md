@@ -60,7 +60,7 @@ bun .agents/skills/verify-site/check.mjs
 
 46 assertions, exit code 1 on failure. It opens a fresh context per state so
 `localStorage` never leaks between light, dark, and toggled runs, and it fetches
-`/posts/`, `/rss.xml` and `/sitemap.xml` to prove a draft stays out of them.
+`/posts/`, `/rss.xml` and `/sitemap.xml` to prove an unpublished post stays out of them.
 
 ## Evidence
 

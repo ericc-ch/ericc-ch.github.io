@@ -1,9 +1,9 @@
 ---
 title: "Sludge AI"
 description: "TikTok/Youtube Shorts content automation using LLM"
-date: "Mar 15 2024"
+createdAt: "2024-03-15"
+published: false
 repoURL: "https://github.com/ericc-ch/sludge-ai"
-draft: true
 ---
 
 Sludge AI is my attempt to fully automate content generation using AI. Currently only targeted for TikTok and YouTube Shorts, with Reddit stories type of content.

@@ -2,18 +2,22 @@ import { defineCollection } from "astro:content"
 import { glob } from "astro/loaders"
 import { z } from "astro/zod"
 
+/** A calendar day as YYYY-MM-DD, so it sorts as a string and carries no timezone. */
+const calendarDay = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Write the day as YYYY-MM-DD")
+
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),
   schema: z
     .object({
       title: z.string(),
+      /** Append "· Erick Christian" to the page title. */
+      titleSuffix: z.boolean().default(false),
       description: z.string(),
-      date: z.coerce.date(),
-      updatedAt: z.coerce.date().optional(),
+      createdAt: calendarDay,
+      updatedAt: calendarDay.optional(),
       tags: z.array(z.string()).optional(),
-      // A draft is built at its URL, marked noindex, and left out of every list, feed and
-      // sitemap. It is the "not published, still readable" state; there is no unbuilt state.
-      draft: z.boolean().optional(),
+      /** False builds the page at its URL, marks it noindex and leaves it out of every list. */
+      published: z.boolean(),
     })
     .strict(),
 })
@@ -36,8 +40,8 @@ const projects = defineCollection({
     .object({
       title: z.string(),
       description: z.string(),
-      date: z.coerce.date(),
-      draft: z.boolean().optional(),
+      createdAt: calendarDay,
+      published: z.boolean(),
       demoURL: z.string().optional(),
       repoURL: z.string().optional(),
     })

@@ -130,17 +130,6 @@ export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
           position: "absolute",
           left: `${PADDING}px`,
           right: `${PADDING}px`,
-          bottom: `${PADDING}px`,
-          height: "1px",
-          background: light["--fg-2"],
-        }}
-      />
-
-      <div
-        style={{
-          position: "absolute",
-          left: `${PADDING}px`,
-          right: `${PADDING}px`,
           bottom: "40px",
           display: "flex",
           justifyContent: "space-between",

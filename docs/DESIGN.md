@@ -55,6 +55,10 @@ may scroll sideways there.
 Vertical rhythm is a stack of `clamp()` margins. Entry rows put their metadata right with a
 single `1fr auto` grid.
 
+Boxes sit on a 4px grid: `--space-1` to `--space-6` and `--space-12` are multiples of
+`0.25rem`, and `--gutter` is `--space-5`. Text rhythm is deliberately not on that grid —
+prose margins stay in `em` so they scale with the type they separate.
+
 ## Chrome
 
 Links and buttons are one thing: ink text with an underline that firms up on hover. No

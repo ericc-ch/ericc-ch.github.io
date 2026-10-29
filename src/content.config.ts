@@ -11,6 +11,8 @@ const blog = defineCollection({
       date: z.coerce.date(),
       updatedAt: z.coerce.date().optional(),
       tags: z.array(z.string()).optional(),
+      // A draft is built at its URL, marked noindex, and left out of every list, feed and
+      // sitemap. It is the "not published, still readable" state; there is no unbuilt state.
       draft: z.boolean().optional(),
     })
     .strict(),

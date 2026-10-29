@@ -58,8 +58,9 @@ bun .agents/skills/verify-site/check.mjs
 | `BASE_URL`     | `http://localhost:4321` | Preview origin |
 | `CHROMIUM_BIN` | `command -v helium`     | Browser binary |
 
-15 assertions, exit code 1 on failure. It opens a fresh context per state so
-`localStorage` never leaks between light, dark, and toggled runs.
+44 assertions, exit code 1 on failure. It opens a fresh context per state so
+`localStorage` never leaks between light, dark, and toggled runs, and it fetches
+`/posts/`, `/rss.xml` and `/sitemap.xml` to prove a draft stays out of them.
 
 ## Evidence
 

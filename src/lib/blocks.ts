@@ -69,6 +69,11 @@ function caption(language: string): Array<HastNode> {
   return nodes
 }
 
+/** Shallow clone, so the replacement never contains the node it replaces. */
+function clone(node: HastElement): HastElement {
+  return { ...node, children: node.children ?? [] }
+}
+
 const codeBlocks = {
   name: "code-blocks",
   element: {
@@ -78,17 +83,27 @@ const codeBlocks = {
 
       // Shiki already gives the pre tabindex="0" so it can be scrolled from the keyboard.
       // Setting it again here emits a duplicate attribute, which is invalid HTML.
-      const pre: HastElement = { ...node, children: node.children ?? [] }
-
       ctx.replaceNode(
         node,
         element("figure", { className: ["code"] }, [
           element("figcaption", {}, caption(language)),
-          pre,
+          clone(node),
         ]),
       )
     },
   },
 }
 
-export default codeBlocks
+const tableBlocks = {
+  name: "table-blocks",
+  element: {
+    filter: ["table"],
+    visit(node: HastElement, ctx: VisitorContext): void {
+      // A scroll container of its own, so a wide table scrolls instead of moving the page.
+      // tabindex makes it reachable without a keyboard-only dead end.
+      ctx.replaceNode(node, element("div", { className: ["table"], tabIndex: 0 }, [clone(node)]))
+    },
+  },
+}
+
+export default [codeBlocks, tableBlocks]

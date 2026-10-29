@@ -1,11 +1,11 @@
 import type { APIRoute, GetStaticPaths } from "astro"
 import { SITE } from "@consts"
 import { renderOgImage, type OgCard } from "@lib/og"
-import { getPublishedPosts } from "@lib/posts"
+import { getAllPosts } from "@lib/posts"
 import { formatDate } from "@lib/utils"
 
 export const getStaticPaths = (async () => {
-  const posts = await getPublishedPosts()
+  const posts = await getAllPosts()
 
   return [
     {

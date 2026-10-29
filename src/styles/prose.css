@@ -1,11 +1,16 @@
 @scope (.prose) {
+  :scope {
+    /* A token with no break opportunity would stretch the column instead. */
+    overflow-wrap: anywhere;
+  }
+
   p,
   ul,
   ol,
   blockquote,
   figure,
   pre,
-  table {
+  .table {
     margin-block: 0 1.5em;
   }
 
@@ -77,9 +82,15 @@
     font-size: inherit;
   }
 
+  .table {
+    overflow-x: auto;
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;
+    /* Cells keep their words whole; the wrapper scrolls instead of the page. */
+    overflow-wrap: normal;
   }
 
   th,

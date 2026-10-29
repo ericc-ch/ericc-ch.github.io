@@ -4,7 +4,7 @@ description: "Every block and inline element this site renders, on one page, inc
 date: "Oct 27 2026"
 updatedAt: "Oct 29 2026"
 tags: ["meta", "design", "test"]
-draft: false
+draft: true
 ---
 
 This page exists to be looked at rather than read. It renders every block and inline element
@@ -25,7 +25,7 @@ x<sup>2</sup>, and <small>small print</small> in it.
 
 Look at: the italic is synthesised by the browser because only the normal weight is loaded, the
 `mark` is the only colour on the site, the `kbd` has no styling at all, and the long inline code
-runs past the column instead of breaking.
+breaks inside the column instead of running past it.
 
 ### The ladder
 
@@ -135,7 +135,7 @@ apart on a narrow screen.
 | Image | `prose.css` | `max-width: 100%` | A caption, because Markdown images are not figures |
 
 Look at: every column is read from a real table cell above. Shrink the window to 320 and the
-table takes the page with it.
+table scrolls inside its own box; the page stays where it is.
 
 ## Media
 
@@ -193,17 +193,15 @@ Everything below is visible somewhere above. It is listed here so the next chang
    no token to replace it with.
 4. Task-list checkboxes and the disclosure triangle are the browser's, in its colour, with its
    icon.
-5. A table wider than the column, and an inline token with no break opportunity, both push the
-   page sideways. Nothing in `prose.css` wraps or scrolls them.
-6. Inline code is `0.875em`; a code block is a fixed `0.875rem`. They are the same size at
+5. Inline code is `0.875em`; a code block is a fixed `0.875rem`. They are the same size at
    16px and different at 320.
-7. An image is a paragraph, so there is no caption and no figure.
-8. A raw `<details>` takes no block margin at all, because the rhythm only knows the Markdown
+6. An image is a paragraph, so there is no caption and no figure.
+7. A raw `<details>` takes no block margin at all, because the rhythm only knows the Markdown
    blocks in its list.
-9. The tags above the title have no vertical padding. This is the first post to use them, so
+8. The tags above the title have no vertical padding. This is the first post to use them, so
    nothing had caught it.
-10. The date above the title is not part of the link, so clicking it does nothing. That is a
-    deliberate change: the date used to be inside the link and carried its underline.
+9. The date above the title is not part of the link, so clicking it does nothing. That is a
+   deliberate change: the date used to be inside the link and carried its underline.
 
 The rest of the page is the page: one column, one measure, one line height, two themes, no
 media queries, no third-party script.

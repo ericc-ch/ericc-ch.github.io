@@ -239,6 +239,27 @@ const social = await socialPage.evaluate(async () => {
 })
 await socialContext.close()
 
+// A draft is built at its URL and kept out of every list, feed and sitemap.
+const DRAFT = "/posts/kitchen-sink/"
+const sinkContext = await browser.newContext({ viewport: { width: 320, height: 800 } })
+const sinkPage = await sinkContext.newPage()
+const sinkResponse = await sinkPage.goto(`${BASE}${DRAFT}`)
+const sinkStatus = sinkResponse ? await sinkResponse.status() : null
+const sink = await sinkPage.evaluate(() => {
+  const wrap = document.querySelector(".table")
+  return {
+    overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    tableScrolls: wrap ? wrap.scrollWidth > wrap.clientWidth : false,
+    robots: document.querySelector('meta[name="robots"]')?.content ?? null,
+  }
+})
+await sinkPage.screenshot({ path: `${EVIDENCE}/draft-320.png` })
+await sinkContext.close()
+
+const listing = await (await fetch(`${BASE}/posts/`)).text()
+const feed = await (await fetch(`${BASE}/rss.xml`)).text()
+const sitemap = await (await fetch(`${BASE}/sitemap.xml`)).text()
+
 const copyContext = await browser.newContext({
   permissions: ["clipboard-read", "clipboard-write"],
 })
@@ -398,6 +419,14 @@ const rows = [
     focus.active === "PRE" && focus.outline === "solid 2px",
     `${focus.active} ${focus.outline}`,
   ],
+  ["a draft is built", sinkStatus === 200, `HTTP ${sinkStatus}`],
+  ["a draft is noindex", sink.robots === "noindex, nofollow", sink.robots],
+  ["a draft is not in the post list", !listing.includes("kitchen-sink"), "posts/index.html"],
+  ["a draft is not in the feed", !feed.includes("kitchen-sink"), "rss.xml"],
+  ["a draft is not in the sitemap", !sitemap.includes("kitchen-sink"), "sitemap.xml"],
+  ["the sitemap carries lastmod", sitemap.includes("<lastmod>"), "sitemap.xml"],
+  ["a draft fits 320", sink.overflow <= 0, `${sink.overflow}px`],
+  ["a wide table scrolls in its own box", sink.tableScrolls, `${sink.tableScrolls}`],
 ]
 
 for (const [label, condition, detail] of rows) check(label, condition, detail)

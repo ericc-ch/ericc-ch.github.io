@@ -4,8 +4,8 @@ A monochrome, typographic personal site. One text family, no motion.
 
 ## Overview
 
-It reads as a page, not an application. Nothing moves, nothing animates, nothing is behind a
-control except the theme toggle.
+It reads as a page, not an application. Nothing moves and nothing animates. Three things are
+controls: the theme toggle, the table of contents and the copy buttons.
 
 The mood is a printed essay or a well-typeset man page: quiet, monochrome, typographic. Text
 is the interface, so every element that is not words has to earn its place.
@@ -16,7 +16,8 @@ Platform Tests results page — so these rules are meant to survive without this
 ## Non-negotiables
 
 - Static build. No client framework, no utility CSS.
-- No third-party JavaScript. The only script is the inline theme bootstrap and its toggle.
+- No third-party JavaScript. Two inline scripts: the theme bootstrap with its toggle, and the
+  copy handler.
 - Modern browsers only. No polyfills; a missing feature has to degrade to something readable.
 - WCAG 2.2 AA, AAA for body text. Syntax highlighting is the one recorded exception.
 - Two themes from the system preference, one text button to switch.
@@ -44,7 +45,8 @@ Sizes form a short fluid ladder: it gives way a little on narrow screens and rea
 on wide ones. Code is a fixed step below body. One line height everywhere, set once. Two
 weights: regular for text, semibold for headings and `strong`.
 
-Hierarchy comes from size and ink intensity, never from weight or decoration.
+Hierarchy comes from size and ink intensity. Weight is reserved for headings and `strong`, and
+nothing is decorated to stand out.
 
 ## Layout
 
@@ -69,13 +71,17 @@ rows separated by whitespace, not cards and not rules. Everything is a rectangle
 has a radius.
 
 Code blocks get a caption bar with the language and a Copy button; the code itself sits on the
-syntax theme's own background. Focus is an outline and is never removed.
+syntax theme's own background. Focus is an outline. The skip link's target is the only element
+that drops it, because the target is the whole page.
 
 ## Structure
 
 Layers run from tokens to page chrome: `tokens`, `base`, `prose`, `ui`. Article content is
-scoped to `.prose`. The stylesheets ship without a media query or an `!important`, and the site
-without a client script.
+scoped to `.prose`. The stylesheets ship without a media query or an `!important`, and the page
+without third-party code.
+
+Metadata is generated at build too: canonical, Open Graph, a card per page and a JSON-LD graph
+that names one author and one site.
 
 ## Rules
 

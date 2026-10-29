@@ -75,21 +75,16 @@ const codeBlocks = {
     filter: ["pre"],
     visit(node: HastElement, ctx: VisitorContext): void {
       const language = languageOf(node)
-      const cloned: HastElement = {
-        type: "element",
-        tagName: "pre",
-        properties:
-          node.properties?.tabIndex === undefined
-            ? { ...node.properties, tabIndex: 0 }
-            : { ...node.properties },
-        children: node.children ?? [],
-      }
+
+      // Shiki already gives the pre tabindex="0" so it can be scrolled from the keyboard.
+      // Setting it again here emits a duplicate attribute, which is invalid HTML.
+      const pre: HastElement = { ...node, children: node.children ?? [] }
 
       ctx.replaceNode(
         node,
         element("figure", { className: ["code"] }, [
           element("figcaption", {}, caption(language)),
-          cloned,
+          pre,
         ]),
       )
     },

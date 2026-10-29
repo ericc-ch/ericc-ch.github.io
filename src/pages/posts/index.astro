@@ -1,24 +1,22 @@
 ---
-import { getCollection } from "astro:content"
 import Base from "@layouts/Base.astro"
-import { formatDate } from "@lib/utils"
+import { getPublishedPosts } from "@lib/posts"
+import { formatDate, isoDate } from "@lib/utils"
 
-const posts = (await getCollection("blog"))
-  .filter((post) => !post.data.draft)
-  .sort((first, second) => second.data.date.valueOf() - first.data.date.valueOf())
+const posts = await getPublishedPosts()
 ---
 
 <Base title="Posts" ogImage="/og/posts.png">
   <div class="wrap">
-    <h1 class="page-title">Posts</h1>
-    <p class="page-lede">{posts.length} posts, mostly about the web and the things I break.</p>
+    <h1>Posts</h1>
+    <p class="lede">{posts.length} posts, mostly about the web and the things I break.</p>
 
     <ul class="entry-list">
       {posts.map((post) => <li>
-        <a href={`/posts/${post.id}/`}>
-          <span>{post.data.title}</span>
-          <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
-        </a>
+        <div class="entry-main">
+          <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+          <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
+        </div>
       </li>)}
     </ul>
   </div>

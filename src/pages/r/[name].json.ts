@@ -1,13 +1,5 @@
 import type { APIRoute, GetStaticPaths } from "astro"
-import { readFileSync } from "node:fs"
-import { parsePalettes } from "@lib/palette"
-
-const { light, dark } = parsePalettes(readFileSync("src/styles/themes.css", "utf8"))
-
-const THEMES = [
-  { name: "light", label: "Light", palette: light },
-  { name: "dark", label: "Dark", palette: dark },
-]
+import { REGISTRY_ITEMS, THEMES } from "@lib/registry"
 
 export const getStaticPaths = (() =>
   THEMES.map((theme) => ({
@@ -20,10 +12,7 @@ export const GET: APIRoute = ({ props }) => {
 
   const item = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
-    name: theme.name,
-    type: "registry:theme",
-    title: `${theme.label} theme`,
-    description: `The ${theme.label.toLowerCase()} palette from ericc.ch. Six monochrome tokens; the variable names are not shadcn's.`,
+    ...REGISTRY_ITEMS.find((entry) => entry.name === theme.name),
     cssVars: {
       light: theme.palette,
       dark: theme.palette,

@@ -2,7 +2,6 @@ import type { Site, Socials } from "@types"
 
 export const SITE: Site = {
   NAME: "Erick Christian",
-  SHORT_NAME: "Erick",
   DESCRIPTION:
     "Software engineer working on the web, browsers, and open source. I write about what I build.",
   EMAIL: "erickchristian48@gmail.com",

@@ -141,6 +141,8 @@ await togglePage.goto(`${BASE}${ARTICLE}`)
 await togglePage.click("#theme-toggle")
 const toggled = await read(togglePage)
 await togglePage.screenshot({ path: `${EVIDENCE}/theme-toggle.png` })
+await togglePage.reload()
+const toggledReload = await read(togglePage)
 await togglePage.click("#theme-toggle")
 const toggledBack = await read(togglePage)
 await toggleContext.close()
@@ -281,17 +283,17 @@ const rows = [
   ],
   [
     "dark code left the light palette",
-    !same(dark.token, dark.tokenLight),
+    dark.token !== null && dark.tokenLight !== null && !same(dark.token, dark.tokenLight),
     `${dark.token} vs ${dark.tokenLight}`,
   ],
   [
     "light code contrast above floor",
-    light.tokenMin.ratio >= CODE_CONTRAST.light,
+    light.tokenMin.text !== null && light.tokenMin.ratio >= CODE_CONTRAST.light,
     `${light.tokenMin.ratio}:1 at "${light.tokenMin.text}"`,
   ],
   [
     "dark code contrast above floor",
-    dark.tokenMin.ratio >= CODE_CONTRAST.dark,
+    dark.tokenMin.text !== null && dark.tokenMin.ratio >= CODE_CONTRAST.dark,
     `${dark.tokenMin.ratio}:1 at "${dark.tokenMin.text}"`,
   ],
   [
@@ -306,6 +308,11 @@ const rows = [
   ],
   ["toggle sets data-theme", toggled.theme === "dark", toggled.theme],
   ["toggle relabels itself", toggled.toggleLabel === "Light", toggled.toggleLabel],
+  [
+    "toggle survives a reload",
+    toggledReload.theme === "dark" && toggledReload.toggleLabel === "Light",
+    `${toggledReload.theme} ${toggledReload.toggleLabel}`,
+  ],
   [
     "toggle reverts",
     toggledBack.theme === "light" && toggledBack.toggleLabel === "Dark",

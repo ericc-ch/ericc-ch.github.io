@@ -1,14 +1,13 @@
 ---
-import { getCollection, render } from "astro:content"
+import { render } from "astro:content"
 import Base from "@layouts/Base.astro"
-import { formatDate, readingTime } from "@lib/utils"
+import { getPublishedPosts } from "@lib/posts"
+import { formatDate, isoDate, readingTime } from "@lib/utils"
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog")
+  const posts = await getPublishedPosts()
 
-  return posts
-    .filter((post) => !post.data.draft)
-    .map((post) => ({ params: { slug: post.id }, props: { post } }))
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
 }
 
 const { post } = Astro.props
@@ -19,17 +18,22 @@ const minutes = readingTime(post.body)
 const updated = post.data.updatedAt
 ---
 
-<Base title={post.data.title} description={post.data.description} ogImage={`/og/${post.id}.png`}>
+<Base
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={`/og/${post.id}.png`}
+  article={{ published: post.data.date, modified: updated, tags: post.data.tags }}
+>
   <div class="wrap">
     <a class="back" href="/posts/">Back to posts</a>
 
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <div class="post-meta">
-        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <time datetime={isoDate(post.data.date)}>{formatDate(post.data.date)}</time>
         {minutes && <span>{minutes}</span>}
         {updated && <span
-          >Updated <time datetime={updated.toISOString()}>{formatDate(updated)}</time></span
+          >Updated <time datetime={isoDate(updated)}>{formatDate(updated)}</time></span
         >}
         {post.data.tags && post.data.tags.length > 0 && <ul class="post-tags">
           {post.data.tags.map((tag) => <li>{tag}</li>)}
@@ -83,6 +87,7 @@ const updated = post.data.updatedAt
         copied = false
       }
       area.remove()
+      button.focus()
       return copied
     }
 

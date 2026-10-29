@@ -1,21 +1,21 @@
 import rss from "@astrojs/rss"
-import { getCollection } from "astro:content"
 import type { APIContext } from "astro"
 import { SITE } from "@consts"
+import { getPublishedPosts } from "@lib/posts"
+import { utcDay } from "@lib/utils"
 
 export async function GET(context: APIContext) {
-  const posts = (await getCollection("blog"))
-    .filter((post) => !post.data.draft)
-    .sort((first, second) => second.data.date.valueOf() - first.data.date.valueOf())
+  const posts = await getPublishedPosts()
 
   return rss({
     title: SITE.NAME,
     description: SITE.DESCRIPTION,
     site: context.site ?? "https://ericc.ch",
+    customData: "<language>en</language>",
     items: posts.map((post) => ({
       title: post.data.title,
       description: post.data.description,
-      pubDate: post.data.date,
+      pubDate: utcDay(post.data.date),
       link: `/posts/${post.id}/`,
     })),
   })

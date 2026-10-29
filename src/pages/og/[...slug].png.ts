@@ -1,26 +1,26 @@
 import type { APIRoute, GetStaticPaths } from "astro"
-import { getCollection } from "astro:content"
 import { SITE } from "@consts"
 import { renderOgImage, type OgCard } from "@lib/og"
+import { getPublishedPosts } from "@lib/posts"
 import { formatDate } from "@lib/utils"
 
 export const getStaticPaths = (async () => {
-  const posts = (await getCollection("blog")).filter((post) => !post.data.draft)
+  const posts = await getPublishedPosts()
 
   return [
     {
       params: { slug: "home" },
-      props: { card: { title: "Erick Christian", subtitle: SITE.DESCRIPTION } },
+      props: { card: { title: SITE.NAME, subtitle: SITE.DESCRIPTION } },
     },
     {
       params: { slug: "posts" },
-      props: { card: { label: "Erick Christian", title: "Posts" } },
+      props: { card: { label: SITE.NAME, title: "Posts" } },
     },
     ...posts.map((post) => ({
       params: { slug: post.id },
       props: {
         card: {
-          label: "Erick Christian",
+          label: SITE.NAME,
           title: post.data.title,
           date: formatDate(post.data.date),
         },

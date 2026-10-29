@@ -58,10 +58,10 @@ function fonts() {
  * Renders the 1200x630 social card for one page.
  *
  * The card is the site's type on paper: the name top-left, the page title in the
- * lower half, a hairline, then a mono footer of date and domain. It uses the
- * light palette only, because social previews have no colour scheme.
+ * lower half, and the date bottom-left when the page has one. It uses the light
+ * palette only, because social previews have no colour scheme.
  *
- * @param card Title, optional kicker above it, optional mono date in the footer.
+ * @param card Title, optional kicker above it, optional subtitle, optional mono date.
  * @returns PNG bytes, ready to be returned from an Astro endpoint.
  */
 export async function renderOgImage(card: OgCard): Promise<Uint8Array> {

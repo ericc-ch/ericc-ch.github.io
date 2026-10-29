@@ -125,22 +125,20 @@ export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
         ) : null}
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          left: `${PADDING}px`,
-          right: `${PADDING}px`,
-          bottom: "40px",
-          display: "flex",
-          justifyContent: "space-between",
-          fontFamily: "JetBrains Mono",
-          fontSize: "24px",
-          color: light["--fg-1"],
-        }}
-      >
-        <div>{card.date ?? ""}</div>
-        <div>ericc.ch</div>
-      </div>
+      {card.date ? (
+        <div
+          style={{
+            position: "absolute",
+            left: `${PADDING}px`,
+            bottom: "40px",
+            fontFamily: "JetBrains Mono",
+            fontSize: "24px",
+            color: light["--fg-1"],
+          }}
+        >
+          {card.date}
+        </div>
+      ) : null}
     </div>,
     { width: WIDTH, height: HEIGHT, fonts: fonts() },
   )

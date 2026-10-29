@@ -92,6 +92,19 @@ const read = (page) =>
       theme: document.documentElement.dataset.theme ?? null,
       js: document.documentElement.dataset.js ?? null,
       body: getComputedStyle(document.body).backgroundColor,
+      canonical: document.querySelector('link[rel="canonical"]')?.href ?? null,
+      description: document.querySelector('meta[name="description"]')?.content ?? null,
+      ogType: document.querySelector('meta[property="og:type"]')?.content ?? null,
+      h1Count: document.querySelectorAll("h1").length,
+      jsonLd: (() => {
+        try {
+          return JSON.parse(
+            document.querySelector('script[type="application/ld+json"]')?.textContent ?? "null",
+          )
+        } catch {
+          return null
+        }
+      })(),
       token: target ? getComputedStyle(target).color : null,
       tokenLight: target ? getComputedStyle(target).getPropertyValue("--shiki-light").trim() : null,
       tokenDark: target ? getComputedStyle(target).getPropertyValue("--shiki-dark").trim() : null,
@@ -324,6 +337,23 @@ const rows = [
     "og:image is a png",
     social.og.status === 200 && social.og.type === "image/png" && social.og.bytes > 10_000,
     `${social.og.href} ${social.og.status} ${social.og.bytes}B`,
+  ],
+  [
+    "canonical points at this article",
+    wide.canonical !== null && new URL(wide.canonical).pathname === ARTICLE,
+    wide.canonical,
+  ],
+  [
+    "description fits a snippet",
+    wide.description !== null && wide.description.length <= 160,
+    `${wide.description?.length ?? 0} chars`,
+  ],
+  ["og:type is article", wide.ogType === "article", wide.ogType],
+  ["the article has one h1", wide.h1Count === 1, `${wide.h1Count}`],
+  [
+    "json-ld describes the post",
+    wide.jsonLd?.["@graph"]?.some((node) => node["@type"] === "BlogPosting") === true,
+    wide.jsonLd?.["@graph"]?.map((node) => node["@type"]).join(",") ?? "no graph",
   ],
   [
     "favicon is an svg",

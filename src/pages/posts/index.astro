@@ -6,7 +6,7 @@ import { formatDate, isoDate } from "@lib/utils"
 const posts = await getPublishedPosts()
 ---
 
-<Base title="Posts" ogImage="/og/posts.png">
+<Base title="Posts" ogImage="/og/posts.png" suffix>
   <div class="wrap">
     <h1>Posts</h1>
     <p class="lede">{posts.length} posts, mostly about the web and the things I break.</p>

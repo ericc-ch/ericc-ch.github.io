@@ -260,6 +260,7 @@ await sinkContext.close()
 const listing = await (await fetch(`${BASE}/posts/`)).text()
 const feed = await (await fetch(`${BASE}/rss.xml`)).text()
 const sitemap = await (await fetch(`${BASE}/sitemap.xml`)).text()
+const listingTitle = /<title>(.*?)<\/title>/.exec(listing)?.[1] ?? null
 
 const copyContext = await browser.newContext({
   permissions: ["clipboard-read", "clipboard-write"],
@@ -431,6 +432,11 @@ const rows = [
   ["a draft is not in the feed", !feed.includes("kitchen-sink"), "rss.xml"],
   ["a draft is not in the sitemap", !sitemap.includes("kitchen-sink"), "sitemap.xml"],
   ["the sitemap carries lastmod", sitemap.includes("<lastmod>"), "sitemap.xml"],
+  [
+    "a listing names the site",
+    listingTitle === "Posts · Erick Christian",
+    listingTitle ?? "no title",
+  ],
   ["a draft fits 320", sink.overflow <= 0, `${sink.overflow}px`],
   ["a wide table scrolls in its own box", sink.tableScrolls, `${sink.tableScrolls}`],
 ]

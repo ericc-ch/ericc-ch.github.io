@@ -13,6 +13,8 @@ interface Props {
   description?: string
   noindex?: boolean
   ogImage?: string
+  /** Append "· Site name". For pages whose own title says nothing about the site. */
+  suffix?: boolean
   article?: ArticleMeta
 }
 
@@ -21,10 +23,11 @@ const {
   description = SITE.DESCRIPTION,
   noindex = false,
   ogImage = "/og/home.png",
+  suffix = false,
   article,
 } = Astro.props
 
-const pageTitle = title ?? SITE.NAME
+const pageTitle = title ? (suffix ? `${title} · ${SITE.NAME}` : title) : SITE.NAME
 const site = Astro.site ?? new URL(Astro.url.origin)
 const canonical = new URL(Astro.url.pathname, site)
 const ogImageUrl = new URL(ogImage, site)

@@ -48,7 +48,7 @@ Hierarchy comes from size and ink intensity, never from weight or decoration.
 
 ## Layout
 
-One column, `min(100% - 2 * gutter, 48ch)`, centred. No grid system and no media queries: the
+One column, `min(100% - 2 * gutter, 50ch)`, centred. No grid system and no media queries: the
 column shrinks until it reaches the measure and then stops. 320px is the floor, and nothing
 may scroll sideways there.
 

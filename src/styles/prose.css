@@ -6,7 +6,7 @@
   figure,
   pre,
   table {
-    margin-block: 0 1.4em;
+    margin-block: 0 1.5em;
   }
 
   h2,
@@ -108,7 +108,7 @@
   .code {
     border: 1px solid var(--fg-2);
     overflow: hidden;
-    margin-block: 0 1.4em;
+    margin-block: 0 1.5em;
 
     /* The pre scrolls its own overflow, so its focus ring is clipped by the figure. */
     &:has(pre:focus-visible) {

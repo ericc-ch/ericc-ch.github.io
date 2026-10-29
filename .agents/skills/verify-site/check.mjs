@@ -329,7 +329,7 @@ const rows = [
     wide.preSize === "14px" && wide.captionSize === "14px",
     `${wide.preSize} / ${wide.captionSize}`,
   ],
-  ["measure caps at 48ch", wide.wrapWidth !== null && wide.wrapWidth < 600, `${wide.wrapWidth}px`],
+  ["measure caps at 50ch", wide.wrapWidth !== null && wide.wrapWidth < 600, `${wide.wrapWidth}px`],
   [
     "styles ship in four layers",
     layered.layers.join(",") === "tokens,base,prose,ui",

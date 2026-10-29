@@ -365,8 +365,8 @@ const rows = [
     wide.canonical,
   ],
   [
-    "description fits a snippet",
-    wide.description !== null && wide.description.length <= 160,
+    "description is snippet length",
+    wide.description !== null && wide.description.length >= 50 && wide.description.length <= 160,
     `${wide.description?.length ?? 0} chars`,
   ],
   ["og:type is article", wide.ogType === "article", wide.ogType],

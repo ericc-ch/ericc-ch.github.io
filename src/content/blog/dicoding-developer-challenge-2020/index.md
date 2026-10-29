@@ -2,6 +2,7 @@
 title: "Things I learned From Participating in a Developer Challenge"
 description: "My first dip into the world of competitive programming"
 date: "14 Nov 2020"
+updatedAt: "29 Oct 2026"
 draft: false
 ---
 
@@ -10,7 +11,7 @@ There’s this [challenge](https://www.dicoding.com/challenges/637) found by my 
 1. Uber/Gojek clone, but with tour guides instead of driver.
 2. Pinterest clone, but only for tourism destination photos.
 
-![Flutter logo](https://miro.medium.com/max/875/1*0h8e7K6qsIG6fv7BchwHEg.png)
+![The Flutter logo](./flutter-logo.webp)
 
 Flutter was our initial decision because there are three of us, and two are flutter developer. Yes, I’m the only one who uses React. But I wrote an app using Flutter once, so it’s really a big deal.
 
@@ -26,7 +27,7 @@ At that time, I recently found [this article](https://medium.com/superhighfives/
 
 Here’s what my first design for the Pinterest clone looks like:
 
-![My first design](https://miro.medium.com/max/875/1*9TKzyExRmqVhOgzr8u9ymQ.png)
+![The first design: a phone-width home screen in Indonesian, with a search field, Bogor location chips and two Gedung Sate cards](./first-design.webp)
 
 It’s not in English.
 
@@ -36,7 +37,7 @@ I don’t know, I just mimicking the design of the mobile version of the app.
 
 Why? I don’t know. I feel kinda stupid and changed the design.
 
-![](https://miro.medium.com/max/875/1*5k16lkfqg95XRMjkGIuIMg.png)
+![The revised design: a search for Bandung with three Gedung Sate listings, beside Chrome DevTools](./second-design.webp)
 
 Better isn’t it?
 
@@ -48,7 +49,7 @@ No, I’m kidding. But I was kinda stressed there. What’s the point of a multi
 
 So here comes my third revision:
 
-![](https://miro.medium.com/max/875/1*KZy1n48QfoEawrkDgIydzQ.png)
+![The sign-in page: email and password fields, a Login button, and Google and sign-up options](./sign-in.webp)
 
 I decided that I’ll work on the homepage later, while also changing the tech stacks that I used
 
@@ -65,9 +66,9 @@ Home page.
 
 First, I thought Chakra UI has some kind of Navigation. But boy I was hella wrong. I had to make my own Navigation Bar using its Box Component. Actually I just have to put a few icons in a box. What’s hard about that?
 
-![](https://miro.medium.com/max/3840/1*rc9w51X0UZZJSec2zwy__g.png)
+![The home page at desktop width: a red sidebar with home, saved and profile icons, a search field, and no content yet](./home-desktop.webp)
 
-![](https://miro.medium.com/max/3840/1*iDPNdDLUqF0VeVADQBtygg.png)
+![The same home page in a phone viewport, with Chrome DevTools open on the Application panel and Service Workers selected](./home-devtools.webp)
 
 Seems familiar?
 

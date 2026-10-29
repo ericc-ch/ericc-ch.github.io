@@ -1,6 +1,6 @@
 ---
 title: "Writing My Own (Shitty) Version of Executor"
-description: "I tried building my own executor"
+description: "My attempt at building a local Cloudflare Codemode, and why Executor has to work the way it does."
 date: "Apr 14 2026"
 draft: false
 ---

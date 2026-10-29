@@ -92,6 +92,7 @@ const read = (page) =>
       theme: document.documentElement.dataset.theme ?? null,
       js: document.documentElement.dataset.js ?? null,
       body: getComputedStyle(document.body).backgroundColor,
+      title: document.title,
       canonical: document.querySelector('link[rel="canonical"]')?.href ?? null,
       description: document.querySelector('meta[name="description"]')?.content ?? null,
       ogType: document.querySelector('meta[property="og:type"]')?.content ?? null,
@@ -371,6 +372,11 @@ const rows = [
   ],
   ["og:type is article", wide.ogType === "article", wide.ogType],
   ["the article has one h1", wide.h1Count === 1, `${wide.h1Count}`],
+  [
+    "title fits a search result",
+    wide.title !== null && wide.title.length > 0 && wide.title.length <= 60,
+    `${wide.title?.length ?? 0} chars`,
+  ],
   [
     "json-ld describes the post",
     wide.jsonLd?.["@graph"]?.some((node) => node["@type"] === "BlogPosting") === true,

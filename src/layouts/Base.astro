@@ -24,7 +24,7 @@ const {
   article,
 } = Astro.props
 
-const pageTitle = title ? `${title} · ${SITE.NAME}` : SITE.NAME
+const pageTitle = title ?? SITE.NAME
 const site = Astro.site ?? new URL(Astro.url.origin)
 const canonical = new URL(Astro.url.pathname, site)
 const ogImageUrl = new URL(ogImage, site)

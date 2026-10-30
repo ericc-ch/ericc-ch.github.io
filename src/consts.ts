@@ -3,7 +3,7 @@ import type { Site, Socials } from "@types"
 export const SITE: Site = {
   NAME: "Erick Christian",
   DESCRIPTION:
-    "Software engineer working on the web, browsers, and open source. I write about what I build.",
+    "Software engineer working on whatever funny thing I'm thinking that day.",
   EMAIL: "erickchristian48@gmail.com",
 }
 

@@ -6,7 +6,8 @@
   "scripts": {
     "astro": "astro",
     "build": "astro build",
-    "check": "bun run typecheck && bun run lint && bun run format && bun run build",
+    "check": "bun run contrast && bun run typecheck && bun run lint && bun run format && bun run build",
+    "contrast": "bun scripts/check-contrast.ts",
     "dev": "astro dev",
     "dev:network": "astro dev --host",
     "format": "oxfmt --check",
@@ -15,26 +16,27 @@
     "lint:fix": "oxlint --fix",
     "preview": "astro preview",
     "preview:network": "astro preview --host",
-    "typecheck": "astro sync && tsc --noEmit --runExternalCode"
+    "typecheck": "astro sync && tsc --noEmit --runExternalCode",
+    "verify": "bun .agents/skills/verify-site/check.mjs"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.5",
     "@astrojs/mdx": "^8.1.1",
     "@astrojs/rss": "^4.0.19",
-    "@astrojs/sitemap": "^3.7.4",
-    "@fontsource/inter": "^5.3.0",
-    "@fontsource/lora": "^5.3.0",
-    "@tailwindcss/typography": "^0.5.20",
-    "@tailwindcss/vite": "^4.3.3",
-    "astro": "^7.4.2",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.7.0",
-    "tailwindcss": "^4.3.3"
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "astro": "^7.4.2"
   },
   "devDependencies": {
     "@astrojs/compiler-rs": "^0.5.2",
     "@astrojs/ts-content-mapper": "^0.2.0",
+    "@fontsource/plus-jakarta-sans": "^5.3.0",
+    "@resvg/resvg-wasm": "^2.6.2",
+    "@types/node": "^26.6.6",
     "oxfmt": "^0.74.0",
     "oxlint": "^1.89.0",
+    "playwright": "^1.64.1",
+    "satori": "^0.63.2",
     "typescript": "7.1.0-beta"
   }
 }

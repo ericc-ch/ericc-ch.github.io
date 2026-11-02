@@ -1,42 +1,15 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: Array<ClassValue>) {
-  return twMerge(clsx(inputs))
+/** "2026-04-07" as "2026/04/07", the site's date format. */
+export function formatDate(day: string): string {
+  return day.replaceAll("-", "/")
 }
 
-export function formatDate(date: Date) {
-  return Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
-  }).format(date)
+export function readingTime(body: string | undefined): string {
+  if (!body) return ""
+
+  const words = body.trim().split(/\s+/).length
+  return `${Math.max(1, Math.round(words / 200))} min read`
 }
 
-export function readingTime(html: string | undefined) {
-  if (!html) return ""
-
-  const textOnly = html.replace(/<[^>]+>/g, "")
-  const wordCount = textOnly.split(/\s+/).length
-  const readingTimeMinutes = (wordCount / 200 + 1).toFixed()
-  return `${readingTimeMinutes} min read`
-}
-
-export function dateRange(startDate: Date, endDate?: Date | string): string {
-  const startMonth = startDate.toLocaleString("default", { month: "short" })
-  const startYear = startDate.getFullYear().toString()
-  let endMonth
-  let endYear
-
-  if (endDate) {
-    if (typeof endDate === "string") {
-      endMonth = ""
-      endYear = endDate
-    } else {
-      endMonth = endDate.toLocaleString("default", { month: "short" })
-      endYear = endDate.getFullYear().toString()
-    }
-  }
-
-  return `${startMonth} ${startYear} - ${endMonth} ${endYear}`
+export function dateRange(start: string, end: string): string {
+  return start === end ? start : `${start} - ${end}`
 }

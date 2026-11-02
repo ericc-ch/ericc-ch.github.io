@@ -1,10 +1,10 @@
 ---
 title: "Noxtara MCP & CLI"
 description: "MCP server and CLI for the Noxtara security platform"
-date: "May 13 2026"
+createdAt: "2026-05-13"
+published: true
 demoURL: "https://www.npmjs.com/package/@noxtara/cli"
 repoURL: "https://github.com/xcidic/noxtara-mcp"
-draft: false
 ---
 
 Built at Xcidic for Noxtara. The Noxtara frontend was a team effort, but these two I built myself.

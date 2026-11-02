@@ -1,10 +1,10 @@
 ---
 title: "tinybrowser"
 description: "Headless browser for AI agents"
-date: "Aug 21 2026"
+createdAt: "2026-08-21"
+published: true
 demoURL: ""
 repoURL: "https://github.com/ericc-ch/tinybrowser"
-draft: false
 ---
 
 A headless browser built for AI agents, shipped as a single binary of about 11MB. Speaks both CDP and WebDriver, so existing automation tools can drive it.

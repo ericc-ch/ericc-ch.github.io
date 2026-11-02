@@ -1,10 +1,10 @@
 ---
 title: "VSCode Lit HTML"
 description: "Syntax highlighting for tagged template literals"
-date: "May 12 2025"
+createdAt: "2025-05-12"
+published: true
 demoURL: "https://open-vsx.org/extension/ericc-ch/vscode-lit-html"
 repoURL: "https://github.com/ericc-ch/vscode-lit-html"
-draft: false
 ---
 
 Maintained fork of an unmaintained VSCode extension, adding syntax highlighting for tagged CSS template literals in JavaScript and TypeScript.

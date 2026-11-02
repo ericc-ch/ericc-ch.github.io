@@ -1,8 +1,8 @@
 ---
 title: "Thank God My PC Broke"
 description: "A reflection on burnout, AI madness, and why it's okay to slow down."
-date: "Apr 7 2026"
-draft: false
+createdAt: "2026-04-07"
+published: true
 ---
 
 My PC broke at the start of last month (March 2026). It sucked. I couldn't do any work. RAM prices were (still are) crazy. I hadn't been keeping up with hardware news to know what to build, so I had to research for a bit (a lot, actually).

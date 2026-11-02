@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# verification evidence
+.audit/
+
 # generated types
 .astro/
 

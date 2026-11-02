@@ -1,6 +1,6 @@
 ---
 title: "Twofactr"
-description: " Secure, client-only 2FA"
+description: "Secure, client-only 2FA"
 createdAt: "2024-06-18"
 published: true
 demoURL: "https://twofactr.pages.dev/"

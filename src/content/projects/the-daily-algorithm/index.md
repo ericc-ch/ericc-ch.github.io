@@ -1,6 +1,6 @@
 ---
 title: "The Daily Algorithm"
-description: "Fully automated content pipeline for YouTube shorts"
+description: "Fully automated content pipeline for YouTube Shorts"
 createdAt: "2025-01-17"
 published: true
 demoURL: ""

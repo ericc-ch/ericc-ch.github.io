@@ -1,6 +1,6 @@
 ---
 title: "Copilot API"
-description: "Turn GitHub Copilot into OpenAI/Anthropic API compatible server"
+description: "Turn GitHub Copilot into an OpenAI/Anthropic API-compatible server"
 createdAt: "2025-01-11"
 published: true
 demoURL: ""

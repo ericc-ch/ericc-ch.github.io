@@ -438,7 +438,7 @@ const rows = [
   ["the sitemap carries lastmod", sitemap.includes("<lastmod>"), "sitemap.xml"],
   [
     "a listing names the site",
-    listingTitle === "Posts · Erick Christian",
+    listingTitle === "Posts - Erick Christian",
     listingTitle ?? "no title",
   ],
   ["an unpublished post fits 320", sink.overflow <= 0, `${sink.overflow}px`],

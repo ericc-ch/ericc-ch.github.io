@@ -2,8 +2,7 @@ import type { Site, Socials } from "@types"
 
 export const SITE: Site = {
   NAME: "Erick Christian",
-  DESCRIPTION:
-    "Software engineer working on whatever funny thing I'm thinking that day.",
+  DESCRIPTION: "Software engineer working on whatever funny thing I'm thinking about that day.",
   EMAIL: "erickchristian48@gmail.com",
 }
 

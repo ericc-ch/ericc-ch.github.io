@@ -1,6 +1,6 @@
 ---
 title: "Sludge AI"
-description: "TikTok/Youtube Shorts content automation using LLM"
+description: "TikTok/YouTube Shorts content automation using an LLM"
 createdAt: "2024-03-15"
 published: false
 repoURL: "https://github.com/ericc-ch/sludge-ai"

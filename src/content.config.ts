@@ -10,7 +10,7 @@ const blog = defineCollection({
   schema: z
     .object({
       title: z.string(),
-      /** Append "· Erick Christian" to the page title. */
+      /** Append " - Erick Christian" to the page title. */
       titleSuffix: z.boolean().default(false),
       description: z.string(),
       createdAt: calendarDay,

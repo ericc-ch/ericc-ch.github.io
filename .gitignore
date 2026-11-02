@@ -7,6 +7,9 @@ dist/
 # generated types
 .astro/
 
+# alchemy local state and logs
+.alchemy/
+
 # dependencies
 node_modules/
 

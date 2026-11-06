@@ -4,8 +4,8 @@ import { Stack } from "alchemy/Stack"
 import * as Effect from "effect/Effect"
 
 // The site is a Worker with static assets: `bun run build` writes dist, and
-// Cloudflare's asset layer serves it. Only prod owns the domain, so a preview
-// stage cannot take ericc.ch from the live site.
+// Cloudflare's asset layer serves it. This stack only deploys to prod, so any
+// other stage fails before it can touch Cloudflare.
 export default Alchemy.Stack(
   "ericc-ch",
   {
@@ -14,6 +14,11 @@ export default Alchemy.Stack(
   },
   Effect.gen(function* () {
     const stack = yield* Stack
+    if (stack.stage !== "prod") {
+      return yield* Effect.die(
+        new Error(`ericc-ch only deploys to prod; got "${stack.stage}". Pass --stage prod.`),
+      )
+    }
 
     const site = yield* Cloudflare.Website.StaticSite("Website", {
       command: "bun run build",
@@ -21,7 +26,8 @@ export default Alchemy.Stack(
       assets: {
         notFoundHandling: "404-page",
       },
-      ...(stack.stage === "prod" ? { domain: "ericc.ch", workersDev: false } : {}),
+      domain: "ericc.ch",
+      workersDev: false,
     })
 
     return { url: site.url }

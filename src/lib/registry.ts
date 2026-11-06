@@ -13,5 +13,5 @@ export const REGISTRY_ITEMS = THEMES.map((theme) => ({
   name: theme.name,
   type: "registry:theme",
   title: `${theme.label} theme`,
-  description: `The ${theme.label.toLowerCase()} palette from ericc.ch. Six monochrome tokens; the variable names are not shadcn's.`,
+  description: `The ${theme.label.toLowerCase()} palette from ericc.ch. Six monochrome tokens.`,
 }))

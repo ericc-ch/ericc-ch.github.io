@@ -1,25 +1,21 @@
 import type { APIRoute, GetStaticPaths } from "astro"
-import { REGISTRY_ITEMS, THEMES } from "@lib/registry"
+import { REGISTRY_ITEMS } from "@lib/registry"
 
 export const getStaticPaths = (() =>
-  THEMES.map((theme) => ({
-    params: { name: theme.name },
-    props: { theme },
+  REGISTRY_ITEMS.map((item) => ({
+    params: { name: item.name },
+    props: { item },
   }))) satisfies GetStaticPaths
 
 export const GET: APIRoute = ({ props }) => {
-  const { theme } = props as { theme: (typeof THEMES)[number] }
+  const { item } = props as { item: (typeof REGISTRY_ITEMS)[number] }
 
-  const item = {
-    $schema: "https://ui.shadcn.com/schema/registry-item.json",
-    ...REGISTRY_ITEMS.find((entry) => entry.name === theme.name),
-    cssVars: {
-      light: theme.palette,
-      dark: theme.palette,
-    },
-  }
-
-  return new Response(JSON.stringify(item, null, 2), {
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-  })
+  return new Response(
+    JSON.stringify(
+      { $schema: "https://ui.shadcn.com/schema/registry-item.json", ...item },
+      null,
+      2,
+    ),
+    { headers: { "Content-Type": "application/json; charset=utf-8" } },
+  )
 }

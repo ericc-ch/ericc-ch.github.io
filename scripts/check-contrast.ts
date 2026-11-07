@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs"
-import { parsePalettes, type Palette } from "../src/lib/palette.ts"
+import { parseTokens, type Palette } from "../src/lib/tokens.ts"
 
-const CSS = "src/styles/themes.css"
+const CSS = "src/styles/tokens.css"
 
 function toRgb(hex: string): [number, number, number] {
   const match = /^#([0-9a-f]{6})$/i.exec(hex)
@@ -33,17 +33,17 @@ function contrast(palette: Palette, foreground: string, background: string): num
 }
 
 const PAIRS: Array<{ label: string; fg: string; bg: string; min: number }> = [
-  { label: "body text", fg: "--fg-0", bg: "--bg-0", min: 7 },
-  { label: "meta text", fg: "--fg-1", bg: "--bg-0", min: 7 },
-  { label: "code text", fg: "--fg-0", bg: "--bg-1", min: 7 },
-  { label: "text on selection", fg: "--fg-0", bg: "--bg-2", min: 7 },
-  { label: "meta on selection", fg: "--fg-1", bg: "--bg-2", min: 4.5 },
-  { label: "hairline on page", fg: "--fg-2", bg: "--bg-0", min: 1.2 },
-  { label: "hairline on surface", fg: "--fg-2", bg: "--bg-1", min: 1.2 },
-  { label: "hairline on selection", fg: "--fg-2", bg: "--bg-2", min: 1.2 },
+  { label: "body text", fg: "fg-0", bg: "bg-0", min: 7 },
+  { label: "meta text", fg: "fg-1", bg: "bg-0", min: 7 },
+  { label: "code text", fg: "fg-0", bg: "bg-1", min: 7 },
+  { label: "text on selection", fg: "fg-0", bg: "bg-2", min: 7 },
+  { label: "meta on selection", fg: "fg-1", bg: "bg-2", min: 4.5 },
+  { label: "hairline on page", fg: "fg-2", bg: "bg-0", min: 1.2 },
+  { label: "hairline on surface", fg: "fg-2", bg: "bg-1", min: 1.2 },
+  { label: "hairline on selection", fg: "fg-2", bg: "bg-2", min: 1.2 },
 ]
 
-const { light, dark } = parsePalettes(readFileSync(CSS, "utf8"))
+const { light, dark } = parseTokens(readFileSync(CSS, "utf8"))
 const failures: Array<string> = []
 
 for (const [name, palette] of [
@@ -72,7 +72,7 @@ for (const [name, palette] of [
   ["light", light],
   ["dark", dark],
 ] as const) {
-  const body = contrast(palette, "--fg-0", "--bg-0")
-  const meta = contrast(palette, "--fg-1", "--bg-0")
+  const body = contrast(palette, "fg-0", "bg-0")
+  const meta = contrast(palette, "fg-1", "bg-0")
   console.log(`  ${name.padEnd(5)} body ${body.toFixed(1)}:1  meta ${meta.toFixed(1)}:1`)
 }

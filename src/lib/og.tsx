@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { Resvg, initWasm } from "@resvg/resvg-wasm"
 import satori from "satori"
-import { parsePalettes } from "@lib/palette"
+import { parseTokens } from "@lib/tokens"
 
 export interface OgCard {
   title: string
@@ -65,7 +65,7 @@ function fonts() {
  * @returns PNG bytes, ready to be returned from an Astro endpoint.
  */
 export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
-  const { light } = parsePalettes(readFileSync("src/styles/themes.css", "utf8"))
+  const { light } = parseTokens(readFileSync("src/styles/tokens.css", "utf8"))
 
   await initResvg()
 
@@ -76,8 +76,8 @@ export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
         position: "relative",
         width: `${WIDTH}px`,
         height: `${HEIGHT}px`,
-        background: light["--bg-0"],
-        color: light["--fg-0"],
+        background: light["bg-0"],
+        color: light["fg-0"],
         fontFamily: "Plus Jakarta Sans",
       }}
     >
@@ -88,7 +88,7 @@ export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
             left: `${PADDING}px`,
             top: "74px",
             fontSize: "28px",
-            color: light["--fg-1"],
+            color: light["fg-1"],
           }}
         >
           {card.label}
@@ -118,7 +118,7 @@ export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
 
         {card.subtitle ? (
           <div
-            style={{ marginTop: "24px", fontSize: "30px", lineHeight: 1.4, color: light["--fg-1"] }}
+            style={{ marginTop: "24px", fontSize: "30px", lineHeight: 1.4, color: light["fg-1"] }}
           >
             {card.subtitle}
           </div>
@@ -133,7 +133,7 @@ export async function renderOgImage(card: OgCard): Promise<Uint8Array> {
             bottom: "40px",
             fontFamily: "JetBrains Mono",
             fontSize: "24px",
-            color: light["--fg-1"],
+            color: light["fg-1"],
           }}
         >
           {card.date}

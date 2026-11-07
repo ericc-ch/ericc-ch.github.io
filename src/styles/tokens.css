@@ -1,0 +1,38 @@
+/*
+ * All design tokens.
+ *
+ * This file is the source of truth for the site and for the shadcn registry.
+ * Add a token here and it is published at https://ericc.ch/r/tokens.json.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Colour: Monochrome. Each token is one light-dark() pair. */
+  --bg-0: light-dark(#fcfcfc, #111111);
+  --bg-1: light-dark(#f2f2f2, #1a1a1a);
+  --bg-2: light-dark(#e8e8e8, #242424);
+  --fg-0: light-dark(#111111, #ededed);
+  --fg-1: light-dark(#575757, #a3a3a3);
+  --fg-2: light-dark(#cfcfcf, #333333);
+
+  /* Type: Plus Jakarta Sans for text, JetBrains Mono for code and time. */
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --text-sm: 0.875rem; /* code blocks and their caption bar */
+  --text-base: clamp(0.95rem, 0.9326rem + 0.087vw, 1rem);
+  --text-lg: clamp(1.30625rem, 1.2823rem + 0.1196vw, 1.375rem);
+  --text-xl: clamp(1.425rem, 1.3989rem + 0.1304vw, 1.5rem);
+  --text-2xl: clamp(1.6625rem, 1.6321rem + 0.1522vw, 1.75rem);
+  --measure: 50ch;
+
+  /* Space: A 4px grid for boxes. Text rhythm stays in em. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-12: 3rem;
+  --gutter: var(--space-5);
+}

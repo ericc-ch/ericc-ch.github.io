@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro"
-import { REGISTRY_ITEMS } from "@lib/registry"
+import { REGISTRY_INDEX } from "@lib/registry"
 
 export const GET: APIRoute = ({ site }) => {
   const origin = site ?? new URL("https://ericc.ch")
@@ -8,7 +8,7 @@ export const GET: APIRoute = ({ site }) => {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "ericc",
     homepage: origin.href,
-    items: REGISTRY_ITEMS,
+    items: REGISTRY_INDEX,
   }
 
   return new Response(JSON.stringify(index, null, 2), {

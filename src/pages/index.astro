@@ -1,26 +1,22 @@
 ---
-import { getCollection } from "astro:content";
-import Base from "@layouts/Base.astro";
-import { SITE, SOCIALS } from "@consts";
-import { getPublishedPosts } from "@lib/posts";
-import { dateRange, formatDate } from "@lib/utils";
+import { getCollection } from "astro:content"
+import Base from "@layouts/Base.astro"
+import { SITE, SOCIALS } from "@consts"
+import { getPublishedPosts } from "@lib/posts"
+import { dateRange, formatDate } from "@lib/utils"
 
-const posts = await getPublishedPosts();
-const latest = posts.slice(0, 3);
+const posts = await getPublishedPosts()
+const latest = posts.slice(0, 3)
 
 const work = (await getCollection("work"))
-  .sort((first, second) =>
-    second.data.dateEnd.localeCompare(first.data.dateEnd),
-  )
-  .slice(0, 3);
+  .sort((first, second) => second.data.dateEnd.localeCompare(first.data.dateEnd))
+  .slice(0, 3)
 
-const projectIds = ["tinybrowser", "copilot-api"];
+const projectIds = ["tinybrowser", "copilot-api"]
 
 const projects = (await getCollection("projects"))
-  .filter(
-    (project) => project.data.published && projectIds.includes(project.id),
-  )
-  .sort((a, b) => projectIds.indexOf(a.id) - projectIds.indexOf(b.id));
+  .filter((project) => project.data.published && projectIds.includes(project.id))
+  .sort((a, b) => projectIds.indexOf(a.id) - projectIds.indexOf(b.id))
 ---
 
 <Base>
@@ -30,8 +26,7 @@ const projects = (await getCollection("projects"))
     <section class="lede">
       <p>Hi there! I'm a software engineer.</p>
       <p>
-        Currently building{" "}
-        <a href="https://github.com/ericc-ch/tinybrowser">tinybrowser</a>.
+        Currently building{" "} <a href="https://github.com/ericc-ch/tinybrowser">tinybrowser</a>.
       </p>
     </section>
 
@@ -39,19 +34,13 @@ const projects = (await getCollection("projects"))
       <h2 class="section-title">Projects</h2>
       <ul class="entry-list">
         {projects.map((project) => {
-          const href = project.data.repoURL || project.data.demoURL;
-          return (
-            <li>
-              <div class="entry-main">
-                {href ? (
-                  <a href={href}>{project.data.title}</a>
-                ) : (
-                  <span>{project.data.title}</span>
-                )}
-              </div>
-              <span class="entry-detail">{project.data.description}</span>
-            </li>
-          );
+          const href = project.data.repoURL || project.data.demoURL
+          return <li>
+            <div class="entry-main">
+              {href ? <a href={href}>{project.data.title}</a> : <span>{project.data.title}</span>}
+            </div>
+            <span class="entry-detail">{project.data.description}</span>
+          </li>
         })}
       </ul>
     </section>
@@ -59,33 +48,29 @@ const projects = (await getCollection("projects"))
     <section class="section">
       <h2 class="section-title">Work</h2>
       <ul class="entry-list">
-        {work.map((entry) => (
-          <li>
-            <div class="entry-main">
-              <span>{entry.data.company}</span>
-              <span class="entry-when">
-                {dateRange(entry.data.dateStart, entry.data.dateEnd)}
-              </span>
-            </div>
-            <span class="entry-detail">{entry.data.role}</span>
-          </li>
-        ))}
+        {work.map((entry) => <li>
+          <div class="entry-main">
+            <span>{entry.data.company}</span>
+            <span class="entry-when">
+              {dateRange(entry.data.dateStart, entry.data.dateEnd)}
+            </span>
+          </div>
+          <span class="entry-detail">{entry.data.role}</span>
+        </li>)}
       </ul>
     </section>
 
     <section class="section">
       <h2 class="section-title">Latest posts</h2>
       <ul class="entry-list">
-        {latest.map((post) => (
-          <li>
-            <div class="entry-main">
-              <a href={`/posts/${post.id}/`}>{post.data.title}</a>
-              <time datetime={post.data.createdAt}>
-                {formatDate(post.data.createdAt)}
-              </time>
-            </div>
-          </li>
-        ))}
+        {latest.map((post) => <li>
+          <div class="entry-main">
+            <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+            <time datetime={post.data.createdAt}>
+              {formatDate(post.data.createdAt)}
+            </time>
+          </div>
+        </li>)}
       </ul>
       <p class="more">
         <a href="/posts/">All posts</a>
@@ -95,13 +80,11 @@ const projects = (await getCollection("projects"))
     <section class="section">
       <h2 class="section-title">Elsewhere</h2>
       <ul class="inline-list">
-        {SOCIALS.map((social) => (
-          <li>
-            <a href={social.HREF} rel="me">
-              {social.NAME}
-            </a>
-          </li>
-        ))}
+        {SOCIALS.map((social) => <li>
+          <a href={social.HREF} rel="me">
+            {social.NAME}
+          </a>
+        </li>)}
         <li>
           <a href={`mailto:${SITE.EMAIL}`}>Email</a>
         </li>

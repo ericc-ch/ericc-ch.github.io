@@ -8,10 +8,12 @@ It reads as a page, not an application. Nothing moves and nothing animates. Thre
 controls: the theme toggle, the table of contents and the copy buttons.
 
 The mood is a printed essay or a well-typeset man page: quiet, monochrome, typographic. Text
-is the interface, so every element that is not words has to earn its place.
+is the interface, so anything that is not words needs a job: a control, a code block, or a
+rule between rows.
 
-It is also the brand basis for two future surfaces — a tinybrowser landing page and a Web
-Platform Tests results page — so these rules are meant to survive without this content.
+It is also the brand basis for everything I build, not just this site. The tinybrowser
+landing page and a Web Platform Tests results page are the next surfaces, so these rules are
+meant to survive without this content.
 
 ## Non-negotiables
 
@@ -37,6 +39,10 @@ Code and the favicon are the only places other colours appear. Code uses a Shiki
 for how it sits next to the page rather than for contrast; the favicon is the avatar.
 Everything else is this palette.
 
+Tokens do not get retyped. The palette is published as a shadcn registry at
+`ericc.ch/r/registry.json`, one theme per mode; install it with the shadcn CLI instead of
+copying hex values ([registry docs](https://ui.shadcn.com/docs/registry)).
+
 ## Typography
 
 Plus Jakarta Sans for text, JetBrains Mono for code and dates. No second text face, no icons.
@@ -45,8 +51,8 @@ Sizes form a short fluid ladder: it gives way a little on narrow screens and rea
 on wide ones. Code is a fixed step below body. One line height everywhere, set once. Two
 weights: regular for text, semibold for headings and `strong`.
 
-Hierarchy comes from size and ink intensity. Weight is reserved for headings and `strong`, and
-nothing is decorated to stand out.
+Hierarchy comes from size and ink intensity. Weight is reserved for headings and `strong`;
+nothing else gets weight, colour or a box.
 
 ## Layout
 
